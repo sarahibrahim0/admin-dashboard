@@ -1,0 +1,75 @@
+<p-toast></p-toast>
+
+
+<div class="card shadow-sm border-0  h-50  " style="width: 60rem;">
+    <div class="card-body ">
+        <h5 class="card-title fw-bold">Categories</h5>
+
+        <h6 class="card-subtitle mb-2 text-muted">List of all categories</h6>
+
+        <div class="row  bg-secondary bg-gradient bg-opacity-10 h-25 position-relative">
+            <div class=" col-2 h-20 position-absolute  top-50 start-0 translate-middle-y">
+
+                <button (click)="onSubmit()" type="button" class="btn btn-danger btn-sm col-9 mb-2"
+                 [disabled]="form.invalid" *ngIf="!editMode; else edit">
+                    <strong>+</strong>
+                    Create</button>
+
+                <ng-template #edit>
+                    <button (click)="editSubmit()" type="button" class="btn btn-danger btn-sm col-9 mb-2"
+                        [disabled]="form.invalid" [disabled]="form.invalid">
+                        <strong>+</strong>
+                        Update</button>
+                </ng-template>
+
+                <button (click)="onCancel()"    type="button" class="btn btn-danger btn-sm col-9 "> <strong>+</strong> Cancel</button>
+
+            </div>
+        </div>
+
+
+        <!--Form-->
+
+        <form [formGroup]="form">
+
+            <div class="form-group row mb-4 mt-2">
+                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="name" placeholder="name" formControlName="name">
+                    <span *ngIf="form.controls['name'].invalid && form.controls['name'].touched "> name is
+                        invalid</span>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="icon" class="col-sm-2 col-form-label">Icon</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="icon" placeholder="icon" formControlName="icon">
+                    <span *ngIf="form.controls['icon'].invalid  && form.controls['icon'].touched "> icon is
+                        invalid</span>
+
+                </div>
+            </div>
+
+            <div class="form-group row mt-4">
+                <label for="color" class="col-sm-2 col-form-label">Color</label><br>
+                <div class="col-sm-10">
+
+                    <p-colorPicker formControlName="color"></p-colorPicker>
+
+
+                </div>
+            </div>
+
+
+
+        </form>
+
+
+    </div>
+</div>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-danger"
+acceptButtonStyleClass="p-button-danger"></p-confirmDialog>
+
+

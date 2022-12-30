@@ -12,11 +12,13 @@ import { CategoriesComponent } from './pages/categories/categories.component';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CategoriesFormComponent } from 'src/app/pages/categories-form/categories-form.component';
+import { CategoriesFormComponent } from 'src/app/pages/categories/categories-form/categories-form.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {ColorPickerModule} from 'primeng/colorpicker';
-import {TableModule} from 'primeng/table';
+import { ColorPickerModule } from 'primeng/colorpicker';
+import { TableModule } from 'primeng/table';
+import { ProductsListComponent } from './pages/products/products-list/products-list.component';
+import { ProductFormComponent } from './pages/products/product-form/product-form.component';
 
 
 
@@ -32,6 +34,8 @@ import {TableModule} from 'primeng/table';
     DashboardComponent,
     CategoriesComponent,
     CategoriesFormComponent,
+    ProductsListComponent,
+    ProductFormComponent,
 
   ],
   imports: [
@@ -50,7 +54,7 @@ import {TableModule} from 'primeng/table';
   ]
 
   ,
-  providers: [MessageService, ConfirmationService ],
+  providers: [MessageService, ConfirmationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

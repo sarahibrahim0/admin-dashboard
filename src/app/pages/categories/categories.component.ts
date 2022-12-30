@@ -1,5 +1,5 @@
 import { MessageService, ConfirmationService, ConfirmEventType } from 'primeng/api';
-import { CategoriesService } from './../../services/categories-service.service';
+import { CategoriesService } from '../../services/categories/categories-service.service';
 import { Component } from '@angular/core';
 import { Category } from 'src/app/models/category';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ export class CategoriesComponent {
   constructor(private categoriesService: CategoriesService,
     private MessageService: MessageService,
     private ConfirmService: ConfirmationService,
-    private router : Router) {
+    private router: Router) {
   }
 
   categories: Category[]
@@ -37,7 +37,7 @@ export class CategoriesComponent {
         return this.categoriesService.deleteCategories(id).subscribe({
           next: (category: Category) => {
             console.log(category)
-            this.MessageService.add({ severity: 'success', summary: 'success', detail: `Category ${category.name} Is Deleted`});
+            this.MessageService.add({ severity: 'success', summary: 'success', detail: `Category ${category.name} Is Deleted` });
             this.getCategories()
 
           },
@@ -69,6 +69,6 @@ export class CategoriesComponent {
   editCategory(id: string) {
     this.router.navigateByUrl(`categories/form/${id}`)
 
-}
+  }
 
 }

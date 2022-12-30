@@ -1,4 +1,4 @@
-import { CategoriesService } from '../../services/categories-service.service';
+import { CategoriesService } from '../../../services/categories/categories-service.service';
 import { Component, Injectable } from '@angular/core';
 import { Location } from '@angular/common';
 
@@ -30,7 +30,7 @@ export class CategoriesFormComponent {
     this.form = this.formBuilder.group({
       name: ['', Validators.required],
       icon: ['', Validators.required],
-      color : ['#fff']
+      color: ['#fff']
     })
 
     this._checkEditMode()
@@ -51,7 +51,7 @@ export class CategoriesFormComponent {
     }
     return this.CategoriesService.postCategories(category).subscribe(
       {
-        next: (category : Category) => {
+        next: (category: Category) => {
           this.MessageService.add({ severity: 'success', summary: 'success', detail: `Category ${category.name} Is Created` });
           console.log(category)
           timer(1600).subscribe(() => {
@@ -113,7 +113,7 @@ export class CategoriesFormComponent {
 
             next: (category: Category) => {
               this.MessageService.add({ severity: 'success', summary: 'success', detail: `Category ${category.name} updated` });
-console.log(category.color)
+              console.log(category.color)
             },
 
             error: (err) => { console.log(err) }

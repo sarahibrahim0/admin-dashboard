@@ -1,0 +1,66 @@
+<p-toast></p-toast>
+
+
+<div class="card shadow-sm border-0 " style="width: 60rem;">
+    <div class="card-body ">
+        <h5 class="card-title fw-bold">Products</h5>
+        <h6 class="card-subtitle mb-2 text-muted">List of all products</h6>
+
+        <!-- <div class="container "> -->
+        <div class="row  bg-secondary bg-gradient bg-opacity-10  position-relative" style="height:4rem;">
+            <div class=" col-3 position-absolute  top-50 start-0 translate-middle-y ">
+                <button routerLink="/product/form" type="button" class="btn btn-danger btn-sm col-9 ">
+                    <strong>+</strong> New</button>
+            </div>
+        </div>
+
+
+
+
+        <p-table [value]="products">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="name" style="color: black;">name <p-sortIcon field="name"></p-sortIcon></th>
+                    <th>image</th>
+                    <th pSortableColumn="price">price <p-sortIcon field="price"></p-sortIcon></th>
+                    <th pSortableColumn="stock">stock <p-sortIcon field="stock"></p-sortIcon></th>
+                    <th pSortableColumn="category">category <p-sortIcon field="category"></p-sortIcon></th>
+                    <th pSortableColumn="created">created at<p-sortIcon field="created"></p-sortIcon></th>
+
+                    <th>color</th>
+
+
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product>
+                <tr>
+                    <td>{{product.name}}</td>
+                    <td>{{product.image}}</td>
+                    <td>{{product.price}}</td>
+                    <td>{{product.countInStock}}</td>
+                    <td>{{product.category}}</td>
+                    <td>{{product.dateCreated}}</td>
+
+
+                    <td> <i class="pi" [ngClass]="'pi-'+ product.icon"> </i></td>
+                    <td>
+                        <i class="pi pi-circle-on" style="font-size: 2rem" [ngStyle]="{ color: product.color }"></i>
+                    </td>
+                    <td> <button (click)="editProduct(product._id)" type="button" class="btn btn-danger me-2">Edit
+                        </button>
+                        <button (click)="deleteProduct(product._id)" type="button" class="btn btn-danger ">Delete
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+
+
+
+    </div>
+</div>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-danger"
+    acceptButtonStyleClass="p-button-danger"></p-confirmDialog>

@@ -1,3 +1,7 @@
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Category } from 'src/app/models/category';
+import { Router } from '@angular/router';
+import { ProductsServiceService } from './../../../services/products/products-service.service';
 import { Product } from './../../../models/product';
 import { Component, OnInit } from '@angular/core';
 
@@ -10,13 +14,56 @@ export class ProductsListComponent implements OnInit {
 
   products: Product[] = [];
 
-  constructor() { }
+  constructor(private productService : ProductsServiceService ,
+    private router : Router,
+    private ConfirmService: ConfirmationService,
+    private MessageService: MessageService) { }
 
   ngOnInit(): void {
+
+    this.getProducts();
+
   }
 
-  editProduct(ProductId: string) { }
-  
-  deleteProduct(ProductId: string) { }
+  getProducts(){
+    this.productService.getProducts().subscribe(products=>{
+      this.products = products;
+      console.log(products)
+    })
+  }
+
+  editProduct(ProductId: string) {
+  this.router.navigateByUrl('/product/form')
+  }
+
+
+
+  deleteProduct(ProductId: string) {
+
+    this.ConfirmService.confirm({
+      message: 'Do you want to delete this product?',
+      header: 'Delete Product',
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        return this.productService.deleteProduct(ProductId).subscribe({
+          next: (product: Product) => {
+            this.MessageService.add({ severity: 'success', summary: 'success', detail: `Product ${product.name} Is Deleted` });
+            this.getProducts()
+
+          },
+          error: (error) => {
+            this.MessageService.add({ severity: 'error', summary: 'error', detail: 'Product Is Not Deleted' });
+
+          }
+        })
+      },
+      reject: (type) => {
+
+      }
+
+
+    });
+  }
+
 
 }

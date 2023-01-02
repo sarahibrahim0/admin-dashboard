@@ -19,6 +19,12 @@ import { ColorPickerModule } from 'primeng/colorpicker';
 import { TableModule } from 'primeng/table';
 import { ProductsListComponent } from './pages/products/products-list/products-list.component';
 import { ProductFormComponent } from './pages/products/product-form/product-form.component';
+import {InputNumberModule} from 'primeng/inputnumber';
+import {DropdownModule} from 'primeng/dropdown';
+import {EditorModule} from 'primeng/editor';
+
+
+
 
 
 
@@ -50,8 +56,9 @@ import { ProductFormComponent } from './pages/products/product-form/product-form
     ToastModule,
     ConfirmDialogModule,
     ColorPickerModule,
-
-  ]
+    InputNumberModule,
+    DropdownModule,
+EditorModule  ]
 
   ,
   providers: [MessageService, ConfirmationService],

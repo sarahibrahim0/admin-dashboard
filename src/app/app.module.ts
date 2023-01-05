@@ -22,6 +22,7 @@ import { ProductFormComponent } from './pages/products/product-form/product-form
 import {InputNumberModule} from 'primeng/inputnumber';
 import {DropdownModule} from 'primeng/dropdown';
 import {EditorModule} from 'primeng/editor';
+import { UsersListComponent } from './pages/users/users-list/users-list.component';
 
 
 
@@ -42,6 +43,7 @@ import {EditorModule} from 'primeng/editor';
     CategoriesFormComponent,
     ProductsListComponent,
     ProductFormComponent,
+    UsersListComponent,
 
   ],
   imports: [

@@ -21,6 +21,8 @@ export class ProductFormComponent implements OnInit {
   icon: string;
   editMode: boolean = false;
   categories = []
+  src: string | ArrayBuffer
+  isSubmitted : boolean = false;
 
   constructor(private formBuilder: FormBuilder, private CategoriesService: CategoriesService,
     private MessageService: MessageService,
@@ -38,55 +40,30 @@ export class ProductFormComponent implements OnInit {
 
   }
 
-  getForm(){
-
+  private getForm() {
     this.form = this.formBuilder.group({
       name: ['', Validators.required],
-      color: ['#fff'],
-      description: [''],
-      richDescription: [''],
-      image: [''],
-      images: [''],
       brand: ['', Validators.required],
       price: ['', Validators.required],
       category: ['', Validators.required],
       countInStock: ['', Validators.required],
-      rating: [''],
-      numReviews: [''],
-      isFeatured: [''],
-      dateCreated: [''],
+      description: [''],
+      richDescription: [''],
+      image: ['', Validators.required],
+      isFeatured: [false]
     })
   }
 
-  private getCategories(){
-    this.CategoriesService.getCategories().subscribe(categoriesArr=>{
+  private getCategories() {
+    this.CategoriesService.getCategories().subscribe(categoriesArr => {
       this.categories = categoriesArr;
     })
   }
 
-  onSubmit() {
 
+  private addProduct(productForm : FormData){
 
-    const product: Product =
-    {
-      name: this.form.controls['name'].value,
-      image: this.form.controls['image'].value,
-      price: this.form.controls['price'].value,
-      brand: this.form.controls['brand'].value,
-      category: this.form.controls['category'].value,
-      countInStock: this.form.controls['countInStock'].value,
-      description: this.form.controls['description'].value,
-      richDescription: this.form.controls['richDescription'].value,
-      images: this.form.controls['images'].value,
-      dateCreated: this.form.controls['dateCreated'].value,
-      rating: this.form.controls['rating'].value,
-      numReviews: this.form.controls['numReviews'].value,
-      isFeatured: this.form.controls['isFeatured'].value,
-
-
-
-    }
-    return this.productService.postProduct(product).subscribe(
+    return this.productService.postProduct(productForm).subscribe(
       {
         next: (product: Product) => {
           this.MessageService.add({ severity: 'success', summary: 'success', detail: `Product ${product.name} Is Created` });
@@ -97,7 +74,7 @@ export class ProductFormComponent implements OnInit {
         },
 
         error: (error) => {
-          this.MessageService.add({ severity: 'error', summary: 'error', detail: 'Product Is Not Created' });
+          this.MessageService.add({ severity: 'error', summary: 'error', detail: error.error });
 
         }
 
@@ -106,40 +83,52 @@ export class ProductFormComponent implements OnInit {
     )
   }
 
+
+
+  private createFormData(){
+
+  }
+
+  onSubmit() {
+
+    this.isSubmitted = true;
+  const productFormData = new FormData();
+ Object.keys(this.productForm).map((key) => {
+  productFormData.append(key, this.productForm[key].value);
+  })
+
+  this.addProduct(productFormData);
+
+
+  }
+
+
+
+
   private _checkEditMode() {
     this.ActivatedRoute.params.subscribe(params => {
       if (params['id']) {
         this.editMode = true;
         const id = params['id']
         this.productService.getProductById(id).subscribe(resProduct => {
-
+        // this.CategoriesService.getCategoryById()
           const product = resProduct;
           if (product) {
             this.form.controls['name'].setValue(resProduct.name);
-
-            this.form.controls['image'].setValue(resProduct.image);
-
-              this.form.controls['price'].setValue(resProduct.price)
-
-              this.form.controls['brand'].setValue(resProduct.brand)
-
-              this.form.controls['category'].setValue(resProduct.category)
-
-              this.form.controls['countInStock'].setValue(resProduct.countInStock)
-
-              this.form.controls['description'].setValue(resProduct.description)
-
-              this.form.controls['richDescription'].setValue(resProduct.richDescription)
-
-              this.form.controls['images'].setValue(resProduct.images)
-
-              this.form.controls['dateCreated'].setValue(resProduct.dateCreated)
-
-              this.form.controls['rating'].setValue(resProduct.rating)
-
-              this.form.controls['numReviews'].setValue(resProduct.numReviews)
-
-              this.form.controls['isFeatured'].setValue(resProduct.isFeatured)
+            this.form.controls['price'].setValue(resProduct.price)
+            this.form.controls['brand'].setValue(resProduct.brand)
+            this.form.controls['category'].setValue(resProduct.category._id)
+            this.form.controls['countInStock'].setValue(resProduct.countInStock)
+            // this.form.controls['description'].setValue(resProduct.description)
+            this.form.controls['richDescription'].setValue(resProduct.richDescription)
+            // this.form.controls['images'].setValue(resProduct.images)
+            // this.form.controls['dateCreated'].setValue(resProduct.dateCreated)
+            // this.form.controls['rating'].setValue(resProduct.rating)
+            // this.form.controls['numReviews'].setValue(resProduct.numReviews)
+            this.form.controls['isFeatured'].setValue(resProduct.isFeatured)
+            this.src = resProduct.image
+            this.productForm['image'].setValidators([]);
+            this.productForm['image'].updateValueAndValidity();
 
 
           }
@@ -159,13 +148,16 @@ export class ProductFormComponent implements OnInit {
       icon: 'pi pi-info-circle',
       accept: () => {
         this.ActivatedRoute.params.subscribe(params => {
-          this.productService.editProduct(params['id'], {
 
-            name: this.form.controls['name'].value,
-            image: this.form.controls['image'].value,
+  const productFormData = new FormData();
+  Object.keys(this.productForm).map((key) => {
+   productFormData.append(key, this.productForm[key].value);
+   })
 
+          this.productService.editProduct(params['id'],
+        productFormData
 
-          }).subscribe({
+          ).subscribe({
 
             next: (product: Product) => {
               this.MessageService.add({ severity: 'success', summary: 'success', detail: `Category ${product.name} updated` });
@@ -188,9 +180,32 @@ export class ProductFormComponent implements OnInit {
 
 
 
+
+  onUpload(event) {
+    const file = event.target.files[0]
+    if (file) {
+      this.form.patchValue({'image' : file});
+      this.form.get('image').updateValueAndValidity;
+
+      const fileReader = new FileReader();
+      fileReader.onload = () => {  //after the file is read successfully
+        this.src = fileReader.result
+      }
+      fileReader.readAsDataURL(file);
+      console.log(this.form.controls['image'].value)
+    }
+  }
+
+
+
   onCancel() {
     this.location.back()
 
+  }
+
+
+  get productForm() {
+    return this.form.controls;
   }
 
 }

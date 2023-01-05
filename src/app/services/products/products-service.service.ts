@@ -13,8 +13,8 @@ export class ProductsServiceService {
 
   api = `${environment.apiUrl}products`
 
-  postProduct(product : Product) : Observable<Product> {
-    return this.http.post<Product>(`${this.api}`, product);
+  postProduct(product : FormData) : Observable<Product> {
+    return this.http.post<Product>(`http://localhost:3000/api/v1/products`, product);
   }
 
   getProducts() : Observable<Product[]> {
@@ -29,7 +29,7 @@ export class ProductsServiceService {
     return this.http.delete<Product>(`${this.api}/${id}`);
   }
 
-  editProduct(id: string , product: Product): Observable<Product> {
+  editProduct(id: string , product: FormData): Observable<Product> {
     return this.http.put<Product>(`${this.api}/${id}`, product);
   }
 

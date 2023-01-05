@@ -7,6 +7,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { NgModule } from '@angular/core';
 import { ProductsListComponent } from './pages/products/products-list/products-list.component';
 import { ProductFormComponent } from './pages/products/product-form/product-form.component';
+import { UsersListComponent } from './pages/users/users-list/users-list.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,10 @@ const routes: Routes = [
       { path: 'categories/form/:id', component: CategoriesFormComponent },
       { path: 'products', component: ProductsListComponent },
       { path: 'product/form', component: ProductFormComponent},
+      { path: 'product/form/:id', component: ProductFormComponent},
+      { path: 'users', component: UsersListComponent },
+
+
 
 
 

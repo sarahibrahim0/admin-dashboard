@@ -33,7 +33,7 @@ export class ProductsListComponent implements OnInit {
   }
 
   editProduct(ProductId: string) {
-  this.router.navigateByUrl('/product/form')
+  this.router.navigateByUrl(`product/form/${ProductId}`)
   }
 
 
@@ -47,6 +47,7 @@ export class ProductsListComponent implements OnInit {
       accept: () => {
         return this.productService.deleteProduct(ProductId).subscribe({
           next: (product: Product) => {
+            console.log(product)
             this.MessageService.add({ severity: 'success', summary: 'success', detail: `Product ${product.name} Is Deleted` });
             this.getProducts()
 

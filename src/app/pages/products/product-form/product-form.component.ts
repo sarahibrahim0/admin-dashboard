@@ -85,9 +85,6 @@ export class ProductFormComponent implements OnInit {
 
 
 
-  private createFormData(){
-
-  }
 
   onSubmit() {
 

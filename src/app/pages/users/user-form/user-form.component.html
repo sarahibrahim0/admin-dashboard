@@ -1,0 +1,154 @@
+<p-toast></p-toast>
+
+
+<div class="card shadow-sm border-0   " style="width: 60rem; height:100rem;">
+
+
+    <div class="card-body ">
+        <h5 class="card-title fw-bold">users</h5>
+
+
+        <div class="row  bg-secondary bg-gradient bg-opacity-10  position-relative">
+            <div class=" col-2 h-20 position-absolute  top-50 start-0 translate-middle-y">
+
+                <button (click)="onSubmit()" type="button" class="btn btn-danger btn-sm col-9 mb-2"
+                    *ngIf="!editMode; else edit">
+                    <strong>+</strong>
+                    Create</button>
+
+                <ng-template #edit>
+                    <button (click)="editSubmit()" type="button" class="btn btn-danger btn-sm col-9 mb-2">
+                        <strong>+</strong>
+                        Update</button>
+                </ng-template>
+
+                <button (click)="onCancel()" type="button" class="btn btn-danger btn-sm col-9 "> <strong>+</strong>
+                    Cancel</button>
+
+            </div>
+        </div>
+
+
+        <!--Form-->
+
+        <form [formGroup]="form">
+
+            <div class="form-group row mb-4 mt-2">
+                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="name" placeholder="name" formControlName="name">
+                    <span *ngIf="form.controls['name'].invalid && form.controls['name'].touched "> name is
+                        invalid</span>
+
+                </div>
+            </div>
+
+            <div class="form-group row mb-4 mt-2">
+                <label for="email" class="col-sm-2 col-form-label">email</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="email" placeholder="email" formControlName="email">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="password" class="col-sm-2 col-form-label">password</label>
+                <div class="col-sm-10">
+                    <div class="field col-12 md:col-3">
+                        <input formControlName="password" mode="decimal" inputId="password">
+
+                    </div>
+                    <span *ngIf="form.controls['password'] && form.controls['password'].touched "> password is
+                        invalid</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="phone" class="col-sm-2 col-form-label">phone</label>
+                <div class="col-sm-10">
+                    <div class="field col-12 md:col-3">
+                        <input formControlName="phone" mode="decimal" inputId="phone">
+
+                    </div>
+                    <span *ngIf="form.controls['phone'] && form.controls['phone'].touched "> phone is
+                        invalid</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="street" class="col-sm-2 col-form-label">street</label>
+                <div class="col-sm-10">
+                    <div class="field col-12 md:col-3">
+                        <input formControlName="street" mode="decimal" inputId="street">
+
+                    </div>
+                    <span *ngIf="form.controls['street'] && form.controls['street'].touched "> street is
+                        invalid</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="apartment" class="col-sm-2 col-form-label">apartment</label>
+                <div class="col-sm-10">
+                    <div class="field col-12 md:col-3">
+                        <input formControlName="apartment" mode="decimal" inputId="apartment">
+
+                    </div>
+                    <span *ngIf="form.controls['apartment'] && form.controls['apartment'].touched "> apartment is
+                        invalid</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="city" class="col-sm-2 col-form-label">city</label>
+                <div class="col-sm-10">
+                    <div class="field col-12 md:col-3">
+                        <input formControlName="city" mode="decimal" inputId="city">
+
+                    </div>
+                    <span *ngIf="form.controls['city'] && form.controls['city'].touched "> city is
+                        invalid</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="zipCode" class="col-sm-2 col-form-label">zipCode</label>
+                <div class="col-sm-10">
+                    <div class="field col-12 md:col-3">
+                        <input formControlName="zipCode" mode="decimal" inputId="zipCode">
+
+                    </div>
+                    <span *ngIf="form.controls['zipCode'] && form.controls['zipCode'].touched "> zipCode is
+                        invalid</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="isAdmin" class="col-sm-2 col-form-label">isAdmin</label>
+                <div class="col-sm-10">
+                    <div class="field col-12 md:col-3">
+                        <input formControlName="isAdmin" mode="decimal" inputId="isAdmin">
+
+                    </div>
+                    <span *ngIf="form.controls['isAdmin].invalid '] && form.controls['isAdmin'].touched "> price is
+                        invalid</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="country" class="col-sm-2 col-form-label">country</label>
+                <div class="col-sm-10">
+                    <div class="field col-12 md:col-3">
+                        <input formControlName="country" mode="decimal" inputId="country">
+                    </div>
+                    <span *ngIf="form.controls['country'].invalid  && form.controls['country'].touched "> country is
+                        invalid</span>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-danger"
+    acceptButtonStyleClass="p-button-danger"></p-confirmDialog>

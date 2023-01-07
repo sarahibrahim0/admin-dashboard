@@ -24,6 +24,8 @@ import {DropdownModule} from 'primeng/dropdown';
 import {EditorModule} from 'primeng/editor';
 import { UsersListComponent } from './pages/users/users-list/users-list.component';
 import { UserFormComponent } from './pages/users/user-form/user-form.component';
+import { OrdersListComponent } from './pages/orders/orders-list/orders-list.component';
+import { OrderDetailsComponent } from './pages/orders/order-details/order-details.component';
 
 
 
@@ -46,6 +48,8 @@ import { UserFormComponent } from './pages/users/user-form/user-form.component';
     ProductFormComponent,
     UsersListComponent,
     UserFormComponent,
+    OrdersListComponent,
+    OrderDetailsComponent,
 
   ],
   imports: [

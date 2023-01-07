@@ -6,6 +6,10 @@ import { UsersService } from './../../../services/users/users.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import * as countriesList from 'i18n-iso-countries'
+
+declare function require(name:string);
+
 
 @Component({
   selector: 'app-user-form',
@@ -16,6 +20,9 @@ export class UserFormComponent implements OnInit {
 
   form: FormGroup;
   editMode: boolean = false;
+  countries = [];
+
+
 
   constructor(private formBuilder: FormBuilder,
     private ActivatedRoute: ActivatedRoute,
@@ -28,6 +35,7 @@ export class UserFormComponent implements OnInit {
   ngOnInit(): void {
     this.initiateForm();
     this._checkEditMode();
+    this.getCountries();
   }
 
   private initiateForm() {
@@ -59,7 +67,7 @@ export class UserFormComponent implements OnInit {
             this.form.controls['name'].setValue(resUser.name);
             this.form.controls['email'].setValue(resUser.email);
             this.form.controls['isAdmin'].setValue(resUser.isAdmin);
-            this.form.controls['country'].setValue(resUser.country);
+            this.form.controls['country'].setValue(resUser.country[1]);
             this.form.controls['password'].setValidators([]);
             this.form.controls['password'].updateValueAndValidity;
             this.form.controls['phone'].setValue(resUser.phone);
@@ -140,7 +148,7 @@ export class UserFormComponent implements OnInit {
           ).subscribe({
 
             next: (user: User) => {
-              this.MessageService.add({ severity: 'success', summary: 'success', detail: `Category ${user.name} updated` });
+              this.MessageService.add({ severity: 'success', summary: 'success', detail: `User ${user.name} updated` });
             },
 
             error: (error) => {
@@ -167,5 +175,16 @@ export class UserFormComponent implements OnInit {
 
   onCancel() {
     this.Location.back();
+  }
+
+  private getCountries(){
+  countriesList.registerLocale(require("i18n-iso-countries/langs/en.json"));
+ this.countries = Object.entries(countriesList.getNames("en", {select: "official"})).map(country=>{
+  
+return {
+  id : country[0],
+  name : country[1]
+}
+  })
   }
 }

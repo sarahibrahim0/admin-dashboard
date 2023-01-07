@@ -14,7 +14,7 @@ export class ProductsServiceService {
   api = `${environment.apiUrl}products`
 
   postProduct(product : FormData) : Observable<Product> {
-    return this.http.post<Product>(`http://localhost:3000/api/v1/products`, product);
+    return this.http.post<Product>(`${this.api}`, product);
   }
 
   getProducts() : Observable<Product[]> {

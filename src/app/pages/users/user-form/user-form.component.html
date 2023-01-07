@@ -134,7 +134,7 @@
                 </div>
             </div>
 
-            <div class="form-group row">
+            <!-- <div class="form-group row">
                 <label for="country" class="col-sm-2 col-form-label">country</label>
                 <div class="col-sm-10">
                     <div class="field col-12 md:col-3">
@@ -143,7 +143,13 @@
                     <span *ngIf="form.controls['country'].invalid  && form.controls['country'].touched "> country is
                         invalid</span>
                 </div>
-            </div>
+            </div> -->
+            <p-dropdown [options]="countries"  formControlName="country" [filter]="true" filterBy="name"
+             placeholder="Country" optionLabel="name"
+             optionValue="name"
+              [showClear]="true"></p-dropdown>
+
+
 
         </form>
 

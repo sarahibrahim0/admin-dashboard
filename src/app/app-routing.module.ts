@@ -9,6 +9,7 @@ import { ProductsListComponent } from './pages/products/products-list/products-l
 import { ProductFormComponent } from './pages/products/product-form/product-form.component';
 import { UsersListComponent } from './pages/users/users-list/users-list.component';
 import { UserFormComponent } from './pages/users/user-form/user-form.component';
+import { OrdersListComponent } from './pages/orders/orders-list/orders-list.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,8 @@ const routes: Routes = [
       { path: 'users', component: UsersListComponent },
       { path: 'user/form', component: UserFormComponent},
       { path: 'user/form/:id', component: UserFormComponent},
+      { path: 'orders', component: OrdersListComponent },
+
 
 
 

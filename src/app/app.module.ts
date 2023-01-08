@@ -26,6 +26,8 @@ import { UsersListComponent } from './pages/users/users-list/users-list.componen
 import { UserFormComponent } from './pages/users/user-form/user-form.component';
 import { OrdersListComponent } from './pages/orders/orders-list/orders-list.component';
 import { OrderDetailsComponent } from './pages/orders/order-details/order-details.component';
+import { TagModule } from 'primeng/tag';
+
 
 
 
@@ -66,7 +68,9 @@ import { OrderDetailsComponent } from './pages/orders/order-details/order-detail
     ColorPickerModule,
     InputNumberModule,
     DropdownModule,
-EditorModule  ]
+EditorModule,
+TagModule
+  ]
 
   ,
   providers: [MessageService, ConfirmationService],

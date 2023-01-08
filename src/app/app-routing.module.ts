@@ -11,6 +11,7 @@ import { UsersListComponent } from './pages/users/users-list/users-list.componen
 import { UserFormComponent } from './pages/users/user-form/user-form.component';
 import { OrdersListComponent } from './pages/orders/orders-list/orders-list.component';
 
+
 const routes: Routes = [
   {
     path: '', component: ShellComponent, children: [
@@ -26,6 +27,7 @@ const routes: Routes = [
       { path: 'user/form', component: UserFormComponent},
       { path: 'user/form/:id', component: UserFormComponent},
       { path: 'orders', component: OrdersListComponent },
+
 
 
 

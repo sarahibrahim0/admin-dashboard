@@ -27,6 +27,11 @@ import { UserFormComponent } from './pages/users/user-form/user-form.component';
 import { OrdersListComponent } from './pages/orders/orders-list/orders-list.component';
 import { OrderDetailsComponent } from './pages/orders/order-details/order-details.component';
 import { TagModule } from 'primeng/tag';
+import {CardModule} from 'primeng/card';
+import {FieldsetModule} from 'primeng/fieldset';
+
+
+
 
 
 
@@ -69,7 +74,9 @@ import { TagModule } from 'primeng/tag';
     InputNumberModule,
     DropdownModule,
 EditorModule,
-TagModule
+TagModule,
+CardModule,
+FieldsetModule
   ]
 
   ,

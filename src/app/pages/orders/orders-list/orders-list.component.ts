@@ -1,14 +1,16 @@
+import { Router } from '@angular/router';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { OrdersService } from './../../../services/orders/orders.service';
 import { Order } from './../../../models/order';
 import { Component, OnInit } from '@angular/core';
 
 
-const orderStatus ={
-0 :{label: 'pending', color : 'primary'},
-1 :{label: 'processed', color : 'warning'},
-2 :{label: 'shipped', color : 'warning'},
-3 :{label: 'delivered', color : 'success'},
-4 :{label: 'failed', color : 'danger'},
+const orderStatus = {
+  0: { label: 'pending', color: 'primary' },
+  1: { label: 'processed', color: 'warning' },
+  2: { label: 'shipped', color: 'warning' },
+  3: { label: 'delivered', color: 'success' },
+  4: { label: 'failed', color: 'danger' },
 }
 
 
@@ -22,23 +24,58 @@ const orderStatus ={
 
 export class OrdersListComponent implements OnInit {
 
-  orders : Order[] = []
+  orders: Order[] = []
 
-  order_status = orderStatus;
+  order_Status = orderStatus;
 
-  constructor(private OrdersService : OrdersService) { }
+  constructor(private OrdersService: OrdersService,
+    private ConfirmService: ConfirmationService,
+    private MessageService: MessageService,
+    private router: Router) { }
 
   ngOnInit(): void {
 
-    this.showOrder()
+    this.getOrders()
 
   }
 
-  deleteOrder(){}
 
-  showOrder(){
-   return this.OrdersService.getOrders().subscribe(ordersRes=>{
+  private getOrders() {
+    return this.OrdersService.getOrders().subscribe(ordersRes => {
       this.orders = ordersRes
     })
+  }
+
+
+  deleteOrder(orderId: string) {
+
+    this.ConfirmService.confirm({
+      message: 'Do you want to delete this Order?',
+      header: 'Delete Order',
+      icon: 'pi pi-info-circle',
+      accept: async() => {
+        await this.OrdersService.deleteOrder(orderId).subscribe({
+          next:async (order: Order) => {
+            this.MessageService.add({ severity: 'success', summary: 'success', detail: `Order Is Deleted` });
+            this.getOrders()
+
+          },
+          error: (error) => {
+            this.MessageService.add({ severity: 'error', summary: 'error', detail:error.error.error});
+            console.log(error)
+
+          }
+        })
+      },
+      reject: (type) => { }
+    });
+  }
+
+
+
+
+
+  showOrder(orderId: string) {
+  this.router.navigateByUrl(`orders/${orderId}`);
   }
 }

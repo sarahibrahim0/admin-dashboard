@@ -1,3 +1,4 @@
+import { OrderDetailsComponent } from './pages/orders/order-details/order-details.component';
 import { CategoriesFormComponent } from 'src/app/pages/categories/categories-form/categories-form.component';
 import { RouterModule, Routes } from '@angular/router';
 import { CategoriesComponent } from './pages/categories/categories.component';
@@ -27,6 +28,9 @@ const routes: Routes = [
       { path: 'user/form', component: UserFormComponent},
       { path: 'user/form/:id', component: UserFormComponent},
       { path: 'orders', component: OrdersListComponent },
+      { path: 'orders/:id', component: OrderDetailsComponent },
+
+
 
 
 

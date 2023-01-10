@@ -1,8 +1,6 @@
 <p-toast></p-toast>
 
 
-
-
 <p-table [value]="orders">
     <ng-template pTemplate="header">
         <tr>
@@ -32,11 +30,14 @@
             <td>{{order.city}}</td>
             <td>{{order.zip}}</td>
             <td>{{order.country }}</td>
-            <td>{{order.status}} <p-tag></p-tag></td>
+            <td>
+                <p-tag [value]="order_Status[order.status]?.label" [severity]="order_Status[order.status]?.color">
+                </p-tag>
+            </td>
             <td>{{order.phone}}</td>
             <td>{{order.totalPrice}}</td>
             <td>{{order.user?.name }}</td>
-            <td>{{order.dateCreated | date : 'short'}}</td>
+            <td>{{order.dateOrdered | date : 'short'}}</td>
 
 
 
@@ -44,9 +45,9 @@
             <td>
                 {{order.color}}
             </td>
-            <td> <button (click)="deleteOrder()" type="button" class="btn btn-danger m-2">Edit
+            <td> <button (click)="showOrder(order.id)" type="button" class="btn btn-danger m-2">View
                 </button>
-                <button (click)="showOrder()" type="button" class="btn btn-danger ">Delete
+                <button (click)="deleteOrder(order.id)" type="button" class="btn btn-danger ">Delete
                 </button>
             </td>
         </tr>
@@ -58,3 +59,6 @@
 
 <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-danger"
     acceptButtonStyleClass="p-button-danger"></p-confirmDialog>
+
+
+

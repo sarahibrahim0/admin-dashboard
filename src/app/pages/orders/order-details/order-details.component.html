@@ -1,1 +1,35 @@
-<p>order-details works!</p>
+
+<p-toast></p-toast>
+
+<p-card
+[header]="'View Order'"
+subheader="'you can edit your order here'"
+styleClass="mb-3"
+></p-card>
+
+
+<p-fieldset legend="order details" styleClass="mb-4" [toggleable]="true">
+    Content
+</p-fieldset>
+
+
+<p-fieldset legend="order items"  styleClass="mb-4" [toggleable]="true ">
+    Content
+</p-fieldset>
+
+
+
+<p-fieldset legend="order address" [toggleable]="true" styleClass="mb-4">
+    Content
+</p-fieldset>
+
+
+
+
+
+<p-dropdown (onChange)="updateStatus($event)" [options]="orderStatuses" [(ngModel)]="selectedStatus" placeholder="Select status" optionLabel="name" optionValue="id" [showClear]="true"></p-dropdown>
+
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-danger"
+acceptButtonStyleClass="p-button-danger"></p-confirmDialog>
+

@@ -1,4 +1,20 @@
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { Location } from '@angular/common';
+import { Order } from './../../../models/order';
+import { OrdersService } from './../../../services/orders/orders.service';
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+
+
+
+const orderStatus = {
+  0: { label: 'pending', color: 'primary' },
+  1: { label: 'processed', color: 'warning' },
+  2: { label: 'shipped', color: 'warning' },
+  3: { label: 'delivered', color: 'success' },
+  4: { label: 'failed', color: 'danger' },
+}
+
 
 @Component({
   selector: 'app-order-details',
@@ -7,9 +23,82 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrderDetailsComponent implements OnInit {
 
-  constructor() { }
+  returnedOrder : Order
+  orderStatuses = []
+  selectedStatus : any
+  constructor(private ActivatedRoute : ActivatedRoute,
+    private ordersService : OrdersService,
+    private MessageService:  MessageService,
+    private ConfirmService : ConfirmationService) { }
 
   ngOnInit(): void {
+    this.mapOrderStatus();
+    this.getOrderDetails();
+
+  }
+
+  private getOrderDetails(){
+    this.ActivatedRoute.params.subscribe((params)=>{
+      if(params['id']){
+        const id = params['id'];
+        this.ordersService.getOrderById(id).subscribe(orderRes=>{
+          this.returnedOrder = orderRes;
+          console.log(this.returnedOrder);
+          this.selectedStatus = orderRes.status
+
+        })
+
+      }
+    })
+  }
+
+  private mapOrderStatus(){
+   this.orderStatuses =   Object.keys(orderStatus).map(key=>{
+      return {
+        id: key,
+        name: orderStatus[key].label
+      }
+    })
+  }
+
+
+  updateStatus($event){
+
+
+    const updatedStatus  = $event.value
+    console.log(updatedStatus)
+
+
+    this.ConfirmService.confirm({
+      message: 'Do you want to update this order status?',
+      header: 'update order status',
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        return this.ordersService.editOrderStatus(this.returnedOrder.id ,{ status: updatedStatus}).subscribe({
+             next: (updatedOrder: Order) => {
+            this.MessageService.add({ severity: 'success', summary: 'success', detail: `order status is: ${orderStatus[updatedOrder.status].label} ` });
+
+          },
+          error: (error) => {
+            this.MessageService.add({ severity: 'error', summary: 'error', detail: 'order status Is Not updated' });
+
+          }
+        })
+      },
+      reject: (type) => {
+      }
+
+
+    });
+
+
+
+
+
+
+
+
+
   }
 
 }

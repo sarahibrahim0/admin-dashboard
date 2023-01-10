@@ -37,8 +37,8 @@
                         style="font-size: 2rem"
                         [ngStyle]="{ color: category.color }"
                       ></i></td>
-                    <td > <button (click)="editCategory(category._id)" type="button" class="btn btn-danger me-2">Edit </button>
-                        <button (click)="deleteCategory(category._id)" type="button" class="btn btn-danger ">Delete </button>
+                    <td > <button (click)="editCategory(category.id)" type="button" class="btn btn-danger me-2">Edit </button>
+                        <button (click)="deleteCategory(category.id)" type="button" class="btn btn-danger ">Delete </button>
                     </td>
                 </tr>
             </ng-template>
@@ -56,40 +56,3 @@ acceptButtonStyleClass="p-button-danger"></p-confirmDialog>
 
 
 
-
-
-
-
-<!--
-
-
-<table class="table card-text h-auto ">
-    <thead>
-        <tr>
-            <th  pSortableColumn="name">name</th>
-            <th >icon</th>
-            <th >color</th>
-            <th ></th>
-
-
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let category of categories" class="">
-
-            <td >{{category.name}}</td>
-            <td>
-                <i class="pi" [ngClass]="'pi-'+ category.icon"> </i>
-            </td>
-            <td >{{category.color}}</td>
-
-
-            <td > <button (click)="editCategory(category._id)" type="button" class="btn btn-danger me-2">Edit </button>
-                <button (click)="deleteCategory(category._id)" type="button" class="btn btn-danger ">Delete </button>
-            </td>
-
-        </tr>
-
-
-    </tbody>
-</table> -->

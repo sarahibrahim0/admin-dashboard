@@ -32,4 +32,11 @@ export class OrdersService {
   editOrder(id: string , order: Order): Observable<Order> {
     return this.http.put<Order>(`${this.api}/${id}`, order);
   }
+
+
+
+  editOrderStatus(orderId : string , orderStatus : any) : Observable<Order>
+  {
+        return this.http.put<Order>(`${this.api}/${orderId}`, orderStatus);
+  }
 }

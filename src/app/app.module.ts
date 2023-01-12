@@ -1,3 +1,4 @@
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
@@ -10,7 +11,7 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { CategoriesComponent } from './pages/categories/categories.component';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CategoriesFormComponent } from 'src/app/pages/categories/categories-form/categories-form.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -29,6 +30,10 @@ import { OrderDetailsComponent } from './pages/orders/order-details/order-detail
 import { TagModule } from 'primeng/tag';
 import {CardModule} from 'primeng/card';
 import {FieldsetModule} from 'primeng/fieldset';
+import { LoginComponent } from './pages/login/login/login.component';
+import { RegisterComponent } from './pages/register/register/register.component';
+import { AdminInterceptor } from './interceptors/admin.interceptor';
+
 
 
 
@@ -57,6 +62,8 @@ import {FieldsetModule} from 'primeng/fieldset';
     UserFormComponent,
     OrdersListComponent,
     OrderDetailsComponent,
+    LoginComponent,
+    RegisterComponent,
 
   ],
   imports: [
@@ -80,7 +87,10 @@ FieldsetModule
   ]
 
   ,
-  providers: [MessageService, ConfirmationService],
+  providers: [MessageService, ConfirmationService,
+    {provide: HTTP_INTERCEPTORS, useClass: AdminInterceptor ,  multi: true},
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,68 @@
+
+
+<form [formGroup]="registerForm">
+
+    <div class="p-grid p-mt-6">
+
+        <div class="p-col-12">
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon"><i class="pi pi-lock"></i></span>
+              <input
+                type="name"
+                formControlName="name"
+                pInputText
+                placeholder="name"
+              />
+            </div>
+      <div class="p-col-12">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+          <input type="text" formControlName="email" pInputText placeholder="Email" />
+        </div>
+
+      </div>
+      <div class="p-col-12">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="pi pi-lock"></i></span>
+          <input
+            type="password"
+            formControlName="password"
+            pInputText
+            placeholder="Password"
+          />
+        </div>
+        <div class="p-col-12">
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon"><i class="pi pi-lock"></i></span>
+              <input
+                type="phone"
+                formControlName="phone"
+                pInputText
+                placeholder="phone"
+              />
+            </div>
+
+
+            <!-- <div class="p-col-12">
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon"><i class="pi pi-lock"></i></span>
+                  <input
+                    type="isAdmin"
+                    formControlName="isAdmin"
+                    pInputText
+                    placeholder="isAdmin"
+                  />
+                </div>
+
+      </div> -->
+      <div class="p-col-12">
+        <p-button label="Submit" styleClass="full-btn" (onClick)="register()"></p-button>
+      </div>
+
+      </div>
+      </div>
+      </div>
+
+
+      </div>
+      </form>

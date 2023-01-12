@@ -1,0 +1,34 @@
+<!-- <form [formGroup]="loginForm"  (ngSubmit)="login()">
+    <input type="email"  formControlName="email" class="m-3">
+    <input type="text"  formControlName="password" class="m-3">
+    <button type="submit">log in</button>
+</form> -->
+
+
+<form [formGroup]="loginForm">
+    <div class="p-grid p-mt-6">
+      <div class="p-col-12">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+          <input type="text" formControlName="email" pInputText placeholder="Email" />
+        </div>
+
+      </div>
+      <div class="p-col-12">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="pi pi-lock"></i></span>
+          <input
+            type="password"
+            formControlName="password"
+            pInputText
+            placeholder="Password"
+          />
+        </div>
+
+      </div>
+      <div class="p-col-12">
+        <p-button label="Submit" styleClass="full-btn" (onClick)="login()"></p-button>
+      </div>
+
+      </div>
+  </form>

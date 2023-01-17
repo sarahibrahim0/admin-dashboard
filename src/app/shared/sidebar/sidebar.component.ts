@@ -1,5 +1,5 @@
 import { LoginService } from './../../services/login/login.service';
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild , Renderer2 } from '@angular/core';
 import { Route, Router } from '@angular/router';
 
 @Component({
@@ -9,8 +9,11 @@ import { Route, Router } from '@angular/router';
 })
 export class SidebarComponent {
 
+  bg : boolean = true;
+
   constructor(private loginService: LoginService,
-    private router: Router)
+    private router: Router
+    )
 
   {}
 

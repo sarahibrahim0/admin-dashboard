@@ -1,76 +1,49 @@
-<div class="container-fluid ">
-    <div class="row flex-nowrap">
-        <div class="col-auto px-sm-2 px-0 bg-light text-white fw-bold">
-            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                <a routerLink="/dashboard" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-                    <span class="fs-5 d-none d-sm-inline">
-                        <!-- <img src="assets//png-transparent-retail-computer-icons-e-commerce-sales-mega-offer-miscellaneous-service-logo.png"
-                            class="inline-block"> -->
-                            Dashboard
-                    </span>
-                </a>
-                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                    <!-- <li class="nav-item">
-                        <a routerLink="/dashboard" class="nav-link align-middle px-0 text-danger">
-                          <span class="ms-1 d-none d-sm-inline">Dashboard</span>
-                        </a>
-                    </li> -->
-                    <li>
-                        <a routerLink="/products" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-danger">
-                            <!-- <i class="fs-4 bi-speedometer2"></i> -->
-                             <span class="ms-1 d-none d-sm-inline">Products</span>
-                        </a>
+<div class="d-flex flex-column w-100 vh-100 py-4 px-3 fs-5 ">
 
-                    </li>
+    <ul class="d-flex
+                flex-column
+                w-20
+                h-95
+                flex-wrap
+                align-items-start
+                justify-content-evenly
+                list-unstyled
+                rounded-4
+                bg-primary
+                px-4
+                position-fixed"
+                id="menu">
 
-                    <li>
-                        <a routerLink="/categories" class="nav-link px-0 align-middle text-danger">
-                            <!-- <i class="fs-4 bi-table"></i> -->
-                            <span class="ms-1 d-none d-sm-inline">Categories</span></a>
-                    </li>
-                    <li>
-                        <a routerLink="/orders" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-danger">
-                            <!-- <i class="fs-4 bi-bootstrap"></i> -->
-                            <span class="ms-1 d-none d-sm-inline">Orders</span></a>
+        <li class="align-self-center w-100 h-6 rounded-2 px-4 " >
+            <h3 class="text-white pb-3 ">Admin Dashboard
+            </h3>
+            <hr class=" text-white">
+        </li>
 
-                    </li>
-                    <li>
-                        <a routerLink="/users" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-danger">
-                            <!-- <i class="fs-4 bi-grid"></i> -->
-                            <span class="ms-1 d-none d-sm-inline">Users</span> </a>
-                    </li>
+        <li class="bg w-100 h-9 text-white rounded-2 px-4  py-3 cursor-pointer" routerLink="/dashboard" routerLinkActive="tog">
+                <span class=""> <i class="bi bi-columns pe-1"></i>dashboard</span>
+        </li>
 
+        <li  class="bg w-100 h-9 text-white rounded-2 px-4 py-3 cursor-pointer" routerLink="/products" routerLinkActive="tog" >
+                <span class=""><i class="bi bi-tags pe-2"></i>Products</span>
+        </li>
 
-                    <li>
-                        <a href="" (click)="logOut()" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-danger">
-                            <!-- <i class="fs-4 bi-grid"></i> -->
-                            <span class="ms-1 d-none d-sm-inline">Log Out</span> </a>
-                    </li>
-                </ul>
-                <!-- <hr> -->
+        <li  class=" bg w-100 h-9 text-white rounded-2 px-4 py-3 cursor-pointer" routerLink="/categories" routerLinkActive="tog">
+                <span class=""><i class="bi bi-card-list pe-2"></i>Categories</span>
+        </li>
+        <li class=" bg w-100 h-9 text-white rounded-2 px-4 py-3 cursor-pointer" routerLink="/orders" routerLinkActive="tog">
+                <span class=""><i class="bi bi-bag-heart pe-2"></i>Orders</span>
+        </li>
+        <li  class=" bg w-100 h-9 text-white rounded-2 px-4 py-3 cursor-pointer"  routerLink="/users"  routerLinkActive="tog">
+                <span class=""> <i class="bi bi-people pe-2"></i>Users</span>
+        </li>
 
-                <!-- <div class="dropdown pb-4">
-                    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle text-danger"
-                        id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30"
-                            class="rounded-circle">
-                        <span class="d-none d-sm-inline mx-1">Admin </span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow bg-light fw-bold " aria-labelledby="dropdownUser1">
-                        <li><a class="dropdown-item fw-bold  text-danger" href="#">New project...</a></li>
-                        <li><a class="dropdown-item  fw-bold text-danger" href="#">Settings</a></li>
-                        <li><a class="dropdown-item fw-bold text-danger" href="#">Profile</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item fw-bold text-danger" href="#">Sign out</a></li>
-                    </ul>
-                </div> -->
+        <li class=" bg w-100 h-6 text-white rounded-2 px-4 py-3 cursor-pointer" routerLinkActive="tog" (click)="logOut()">
+                <span class=""><i class="bi bi-arrow-down-square pe-2"></i>Log Out</span>
+        </li>
+    </ul>
 
-
-            </div>
-
-        </div>
-    </div>
 </div>
+
+
 

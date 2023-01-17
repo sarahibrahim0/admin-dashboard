@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { RegisterService } from './../../../services/register/register.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
@@ -11,7 +12,8 @@ export class RegisterComponent implements OnInit {
   registerForm : FormGroup;
 
   constructor(private formBuilder: FormBuilder,
-    private registerService: RegisterService) { }
+    private registerService: RegisterService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.initiateForm();
@@ -45,7 +47,13 @@ export class RegisterComponent implements OnInit {
    phone: this.registerForm.controls['phone'].value,
    name: this.registerForm.controls['name'].value,
    isAdmin: this.registerForm.controls['isAdmin'].value}
-   ).subscribe({next:(user)=> {console.log(user)}})
+   ).subscribe({next:(user)=>
+
+    {console.log(user)
+      this.router.navigate(['/login'])
+
+
+    }})
 
   }
 

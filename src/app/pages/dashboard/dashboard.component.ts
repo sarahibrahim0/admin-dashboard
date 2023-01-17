@@ -1,5 +1,6 @@
+import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, DoCheck, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -7,7 +8,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit{
 
   productsCount: number
   usersCount: number
@@ -23,7 +24,10 @@ export class DashboardComponent implements OnInit {
     this.getUsers();
     this.getOrders();
     this.getTotalSales();
-  }
+    this.getViews()
+
+    }
+
 
   private getProducts(){
 
@@ -64,5 +68,14 @@ export class DashboardComponent implements OnInit {
     })
 
   }
+
+  private getViews(){
+   return this.http.get(`http://localhost:3000/api/v1/session`).subscribe(result=>{
+
+   console.log(result['message']);
+
+  })
+  }
+
 
 }

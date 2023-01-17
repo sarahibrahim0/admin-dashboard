@@ -1,0 +1,165 @@
+
+.bg:hover{
+  background-image: linear-gradient(195deg, #42424a 0%, #191919 100%);
+  }
+
+  .tog{
+      background-color: #de2768;
+      background-image: none
+  }
+
+
+  .tog:hover{
+
+      background-color: #e6145db9;
+
+      background-image: none
+  }
+
+
+
+
+$theme-colors: (
+    "primary": #232325,
+    "danger" : #de2768,
+    "light" : #f0f2f5
+  );
+
+  $position-values: (
+  0: 2%,
+  10: 13%,
+  50: 50%,
+  100: 100%
+);
+
+
+@import "../node_modules/bootstrap/scss/_functions.scss";
+@import "../node_modules/bootstrap/scss/_variables.scss";
+@import "../node_modules/bootstrap/scss/_maps.scss";
+@import "../node_modules/bootstrap/scss/_mixins.scss";
+@import "../node_modules/bootstrap/scss/_utilities.scss";
+
+
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "width": map-merge(
+      map-get($utilities, "width"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "width"), "values"),
+          (20: 21.5%),
+        ),
+      ),
+    ),
+  ),
+
+);
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "width": map-merge(
+      map-get($utilities, "width"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "width"), "values"),
+          (90: 95%),
+        ),
+      ),
+    ),
+  ),
+
+);
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "height": map-merge(
+      map-get($utilities, "height"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "height"), "values"),
+          (95: 96%),
+        ),
+      ),
+    ),
+  )
+);
+
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "height": map-merge(
+      map-get($utilities, "height"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "height"), "values"),
+          (9: 9%),
+        ),
+      ),
+    ),
+  )
+);
+
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "height": map-merge(
+      map-get($utilities, "height"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "height"), "values"),
+          (15: 15%),
+        ),
+      ),
+    ),
+  )
+);
+
+
+
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "height": map-merge(
+      map-get($utilities, "height"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "height"), "values"),
+          (2: 8%),
+        ),
+      ),
+    ),
+  )
+);
+
+
+
+
+
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "height": map-merge(
+      map-get($utilities, "height"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "height"), "values"),
+          (70: 70%),
+        ),
+      ),
+    ),
+  )
+);
+
+
+
+
+
+@import "bootstrap/scss/utilities/api";

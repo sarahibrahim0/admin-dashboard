@@ -33,6 +33,7 @@ import {FieldsetModule} from 'primeng/fieldset';
 import { LoginComponent } from './pages/login/login/login.component';
 import { RegisterComponent } from './pages/register/register/register.component';
 import { AdminInterceptor } from './interceptors/admin.interceptor';
+import { OnClickBgDirective } from './directives/on-click-bg.directive';
 
 
 
@@ -64,6 +65,7 @@ import { AdminInterceptor } from './interceptors/admin.interceptor';
     OrderDetailsComponent,
     LoginComponent,
     RegisterComponent,
+    OnClickBgDirective,
 
   ],
   imports: [

@@ -14,6 +14,9 @@ const orderStatus = {
 }
 
 
+
+
+
 @Component({
   selector: 'app-orders-list',
   templateUrl: './orders-list.component.html',
@@ -62,7 +65,6 @@ export class OrdersListComponent implements OnInit {
           },
           error: (error) => {
             this.MessageService.add({ severity: 'error', summary: 'error', detail:error.error.error});
-            console.log(error)
 
           }
         })

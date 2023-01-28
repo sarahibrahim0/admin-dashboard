@@ -1,8 +1,12 @@
-<div class="d-flex flex-column w-100 vh-100 py-4 px-3 fs-5 ">
+<div class="d-lg-flex col-lg-12  flex-column  vh-100  fs-5 d-none lh-sm " >
 
-    <ul class="d-flex
+        <ul class="
+                d-lg-flex
                 flex-column
-                w-20
+                col-lg-3
+                col-xl-3
+                col-md-3
+                col-sm-3
                 h-95
                 flex-wrap
                 align-items-start
@@ -10,40 +14,56 @@
                 list-unstyled
                 rounded-4
                 bg-primary
+                pt-3
                 px-4
-                position-fixed"
-                id="menu">
 
-        <li class="align-self-center w-100 h-6 rounded-2 px-4 " >
-            <h3 class="text-white pb-3 ">Admin Dashboard
-            </h3>
-            <hr class=" text-white">
-        </li>
+                position-fixed" id="menu" style="min-width: 10rem;">
 
-        <li class="bg w-100 h-9 text-white rounded-2 px-4  py-3 cursor-pointer" routerLink="/dashboard" routerLinkActive="tog">
-                <span class=""> <i class="bi bi-columns pe-1"></i>dashboard</span>
-        </li>
+                <li class="align-self-center  w-100 h-6 rounded-2 text-center text-nowrap">
+                        <span class="text-white pb-3 text-nowrap fs-5  ">Admin Dashboard
+                        </span>
+                        <hr class=" text-white">
+                </li>
 
-        <li  class="bg w-100 h-9 text-white rounded-2 px-4 py-3 cursor-pointer" routerLink="/products" routerLinkActive="tog" >
-                <span class=""><i class="bi bi-tags pe-2"></i>Products</span>
-        </li>
+                <li class="bg   text-nowrap             col-lg-12
+        col-xl-12
+        col-md-12
+        col-sm-12 h-9 text-white rounded-2 px-4  py-3 cursor-pointer" routerLink="/dashboard" routerLinkActive="tog">
+                        <span class=""> <i class="bi bi-columns pe-1"></i>dashboard</span>
+                </li>
 
-        <li  class=" bg w-100 h-9 text-white rounded-2 px-4 py-3 cursor-pointer" routerLink="/categories" routerLinkActive="tog">
-                <span class=""><i class="bi bi-card-list pe-2"></i>Categories</span>
-        </li>
-        <li class=" bg w-100 h-9 text-white rounded-2 px-4 py-3 cursor-pointer" routerLink="/orders" routerLinkActive="tog">
-                <span class=""><i class="bi bi-bag-heart pe-2"></i>Orders</span>
-        </li>
-        <li  class=" bg w-100 h-9 text-white rounded-2 px-4 py-3 cursor-pointer"  routerLink="/users"  routerLinkActive="tog">
-                <span class=""> <i class="bi bi-people pe-2"></i>Users</span>
-        </li>
+                <li class="bg  text-nowrap              col-lg-12
+        col-xl-12
+        col-md-12
+        col-sm-12 h-9 text-white rounded-2 px-4 py-3 cursor-pointer" routerLink="/products" routerLinkActive="tog">
+                        <span class=""><i class="bi bi-tags pe-2"></i>Products</span>
+                </li>
 
-        <li class=" bg w-100 h-6 text-white rounded-2 px-4 py-3 cursor-pointer" routerLinkActive="tog" (click)="logOut()">
-                <span class=""><i class="bi bi-arrow-down-square pe-2"></i>Log Out</span>
-        </li>
-    </ul>
+                <li class=" bg   text-nowrap              col-lg-12
+        col-xl-12
+        col-md-12
+        col-sm-12 h-9 text-white rounded-2 px-4 py-3 cursor-pointer" routerLink="/categories" routerLinkActive="tog">
+                        <span class=""><i class="bi bi-card-list pe-2"></i>Categories</span>
+                </li>
+                <li class=" bg   text-nowrap             col-lg-12
+        col-xl-12
+        col-md-12
+        col-sm-12 h-9 text-white rounded-2 px-4 py-3 cursor-pointer" routerLink="/orders" routerLinkActive="tog">
+                        <span class=""><i class="bi bi-bag-heart pe-2"></i>Orders</span>
+                </li>
+                <li class=" bg   text-nowrap             col-lg-12
+        col-xl-12
+        col-md-12
+        col-sm-12 h-9 text-white rounded-2 px-4 py-3 cursor-pointer" routerLink="/users" routerLinkActive="tog">
+                        <span class=""> <i class="bi bi-people pe-2"></i>Users</span>
+                </li>
+
+                <li class=" bg       text-nowrap         col-lg-12
+        col-xl-12
+        col-md-12
+        col-sm-12 h-6 text-white rounded-2 px-4 py-3 cursor-pointer" routerLinkActive="tog" (click)="logOut()">
+                        <span class=""><i class="bi bi-arrow-down-square pe-2"></i>Log Out</span>
+                </li>
+        </ul>
 
 </div>
-
-
-

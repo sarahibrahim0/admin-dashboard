@@ -1,5 +1,4 @@
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Category } from 'src/app/models/category';
 import { Router } from '@angular/router';
 import { ProductsServiceService } from './../../../services/products/products-service.service';
 import { Product } from './../../../models/product';
@@ -28,7 +27,6 @@ export class ProductsListComponent implements OnInit {
   getProducts(){
     this.productService.getProducts().subscribe(products=>{
       this.products = products;
-      console.log(products)
     })
   }
 
@@ -39,6 +37,7 @@ export class ProductsListComponent implements OnInit {
 
 
   deleteProduct(ProductId: string) {
+    console.log('hi')
 
     this.ConfirmService.confirm({
       message: 'Do you want to delete this product?',
@@ -47,7 +46,6 @@ export class ProductsListComponent implements OnInit {
       accept: () => {
         return this.productService.deleteProduct(ProductId).subscribe({
           next: (product: Product) => {
-            console.log(product)
             this.MessageService.add({ severity: 'success', summary: 'success', detail: `Product ${product.name} Is Deleted` });
             this.getProducts()
 

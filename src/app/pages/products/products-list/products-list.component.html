@@ -1,67 +1,87 @@
+
 <p-toast></p-toast>
-
-
-<div class="card shadow-sm border-0 ">
-    <div class="card-body ">
-        <h5 class="card-title fw-bold">Products</h5>
-        <h6 class="card-subtitle mb-2 text-muted">List of all products</h6>
-
-        <!-- <div class="container "> -->
-        <div class="row  bg-secondary bg-gradient bg-opacity-10  position-relative" style="height:4rem;">
-            <div class=" col-3 position-absolute  top-50 start-0 translate-middle-y ">
-                <button routerLink="/product/form" type="button" class="btn btn-danger btn-sm col-9 ">
-                    <strong>+</strong> New</button>
-            </div>
-        </div>
-
-
-
-            <p-table [value]="products">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th pSortableColumn="name" style="color: black;">name <p-sortIcon field="name"></p-sortIcon></th>
-                        <th>image</th>
-                        <th pSortableColumn="price">price <p-sortIcon field="price"></p-sortIcon></th>
-                        <th pSortableColumn="stock">stock <p-sortIcon field="stock"></p-sortIcon></th>
-                        <th pSortableColumn="category">category <p-sortIcon field="category"></p-sortIcon></th>
-                        <th pSortableColumn="created">created at<p-sortIcon field="created"></p-sortIcon></th>
-
-                        <th>color</th>
-                        <th></th>
-                        <th></th>
-
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-product>
-                    <tr>
-                        <td>{{product.name}}</td>
-                        <td>
-                            <img [src]="product.image"  style="width:10px">
-                        </td>
-                        <td>{{product.price}}</td>
-                        <td>{{product.countInStock}}</td>
-                        <td>{{product.category?.name}}</td>
-                        <td>{{product.dateCreated | date : 'short'}}</td>
-
-
-                        <!-- <td> <i class="pi" [ngClass]="'pi-'+ product.icon"> </i></td> -->
-                        <td>
-                            <i class="pi pi-circle-on" style="font-size: 2rem" [ngStyle]="{ color: product.color }"></i>
-                        </td>
-                        <td> <button (click)="editProduct(product._id)" type="button" class="btn btn-danger m-2">Edit
-                            </button>
-                            <button (click)="deleteProduct(product._id)" type="button" class="btn btn-danger ">Delete
-                            </button>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-
+<div class="container-fluid  h-100 fs-5 col-lg-12 lh-sm col-md-12 col-sm-12 ">
+    <div class="row mb-5 px-3">
+        <div class="col-lg-12 col-sm-12 h-25">
+                <nav aria-label="breadcrumb" class="nav justify-content-between pb-3 col-sm-12  col-lg-12 text-nowrap" >
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-secondary fw-bold text-nowrap" routerLink="/">Home</li>
+                        <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-pinky btn-pinky fw-bold text-nowrap" routerLink="/products">products</li>
+                    </ol>
+                    <button routerLink="/product/form" type="button" class="btn btn-pinky fw-bold lh-sm">
+                        <strong>+</strong> New</button>
+                </nav>
 
 
 
     </div>
-</div>
+    </div>
 
-<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-danger"
-    acceptButtonStyleClass="p-button-danger"></p-confirmDialog>
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-md-12">
+            <div class="d-table rounded-4 fs-5 bg-white col-lg-12 col-sm-6 col-md-11  shadow-sm pt-7 position-relative table-responsive " style="min-height: 100vh"  >
+                <div class= "w-90 d-flex flex-row align-items-center rounded-3 bg-pinky shadow position-absolute top-3 start-50 translate-middle-x px-4"
+                style=" height: 7rem;" >
+                    <span class="fs-5 fw-bold text-white">Products Table</span>
+                </div>
+                <table class="table fs-5 table-borderless  col-lg-12 col-md-12 col-sm-12  rounded-4 text-secondary table-responsive  ">
+                    <thead class="align-text-bottom ">
+                        <tr class="border-bottom  ">
+
+                            <th scope="col " class="ps-9 fs-5  align-bottom text-nowrap lh-sm ">name</th>
+                            <th scope="col-5" class=" text-start fs-5    align-bottom text-nowrap lhsm ">image</th>
+                            <th scope="col" class=" text-start fs-5   align-bottom text-nowrap lh-sm ">price</th>
+                            <th scope="col" class=" text-start fs-5   align-bottom text-nowrap lh-sm ">stock</th>
+                            <th scope="col" class="text-start  fs-5   align-bottom text-nowrap lh-sm">category</th>
+                            <th scope="col-2" class="text-start fs-5  text-nowrap align-bottom lh-sm">created at</th>
+                            <th scope="col" class="pe-9 fs-5 text-nowrap text-end align-bottom lh-sm"></th>
+
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr *ngFor="let product of products" class="border-top">
+
+                            <td class="text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">{{product.name}}</td>
+
+                            <td style="max-height: 2rem; max-width: 2rem;"> <img [src]="product.image" class="rounded-4 object-fit-contain w-100 "  >
+                            </td>
+                            <td class="text-start fs-5   align-middle lh-sm  text-nowrap ">
+                                {{product.price | currency : 'EGP': 'symbol' : '1.0-0' }}
+                            </td>
+                            <td class="text-start fs-5    lh-sm align-middle  text-nowrap ">
+                                {{product.countInStock}}
+
+                            </td>
+                            <td class=" text-start fs-5   lh-sm  align-middle  text-nowrap ">
+                                {{product.category?.name}}
+                            </td>
+                            <td class="text-start fs-5   lh-sm align-middle ">
+                                {{product.dateCreated | date : 'short'}}
+                            </td>
+
+
+                            <td class="text-end  fs-5   pe-9 align-middle  text-nowrap  lh-sm ">
+                                <button (click)="editProduct(product.id)" type="button" class="btn btn-pinky me-2">Edit
+                                </button>
+                                <button (click)="deleteProduct(product.id)" type="button" class="btn btn-pinky ">Delete
+                                </button>
+                            </td>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+        </div>
+
+        </div>
+    </div>
+
+
+        </div>
+
+
+<p-confirmDialog [style]="{width: '36vw'}" [baseZIndex]="10000" rejectButtonStyleClass=""
+acceptButtonStyleClass=""></p-confirmDialog>
+
+
+

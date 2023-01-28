@@ -14,6 +14,7 @@ export class UsersListComponent implements OnInit {
 
   users: User[] = []
 
+
   constructor(private router: Router, private userService: UsersService,
     private ConfirmService: ConfirmationService,
     private MessageService: MessageService) { }
@@ -30,10 +31,6 @@ export class UsersListComponent implements OnInit {
 
   editUser(userId) {
     this.router.navigateByUrl(`user/form/${userId}`)
-
-
-
-
   }
 
   deleteUser(userId) {

@@ -1,34 +1,34 @@
-<!-- <form [formGroup]="loginForm"  (ngSubmit)="login()">
-    <input type="email"  formControlName="email" class="m-3">
-    <input type="text"  formControlName="password" class="m-3">
-    <button type="submit">log in</button>
-</form> -->
+
+<div class="container-fluid w-100 vh-100 bg-light p-4 d-flex flex-row justify-content-center align-items-center text-primary  "
+style="background-image:url( '../assets/photo-1497294815431-9365093b7331.png');">
+<span class="grediant w-100 h-100"></span>
+  <form [formGroup]="loginForm" class="bg-white shadow h-lg-50 h-70 col-lg-3 col-md-7  col-sm-9 rounded pt-6 ps-4 pe-4 position-relative mt-4 d-flex flex-column align-items-center justify-content-evenly">
+    <div class= "d-flex flex-column justify-content-center align-items-center pt-2 rounded-3 bg-pinky shadow position-absolute z-index-2 top-2 start-50 w-90 translate-middle-x px-4"
+    style=" height: 10rem;">
+    <span class="text-white fw-bold fs-4">Sign In</span>
+    <div class="col-7 d-flex flex-row align-items-center justify-content-between mt-2 ">
+      <span class=""><i class="bi bi-google fs-5 text-white cursor-pointer shadow "></i></span>
+      <span><i class="bi bi-github fs-5  text-white cursor-pointer shadow"></i></span>
+      <span><i class="bi bi-facebook fs-5 text-white cursor-pointer shadow"></i></span>
+    </div>
+
+  </div>
+<div class="h-80 d-flex flex-column justify-content-start ">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" formControlName="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted ">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group mt-2">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" formControlName="password"  id="exampleInputPassword1" placeholder="Password">
+  </div>
+
+  <button type="submit" class="btn btn-pinky mt-4 col-12 " (click)="login()">Sign In</button>
 
 
-<form [formGroup]="loginForm">
-    <div class="p-grid p-mt-6">
-      <div class="p-col-12">
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
-          <input type="text" formControlName="email" pInputText placeholder="Email" />
-        </div>
+</div>
 
-      </div>
-      <div class="p-col-12">
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon"><i class="pi pi-lock"></i></span>
-          <input
-            type="password"
-            formControlName="password"
-            pInputText
-            placeholder="Password"
-          />
-        </div>
 
-      </div>
-      <div class="p-col-12">
-        <p-button label="Submit" styleClass="full-btn" (onClick)="login()"></p-button>
-      </div>
-
-      </div>
   </form>
+</div>

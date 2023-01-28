@@ -2,7 +2,7 @@ import { OrderItem } from './order-item';
 import { User } from './user';
 export class Order {
   id?: string;
-  orderItems?: OrderItem;
+  orderItems?: OrderItem[];
   shippingAddress1?: string;
   shippingAddress2?: string;
   city?: string;

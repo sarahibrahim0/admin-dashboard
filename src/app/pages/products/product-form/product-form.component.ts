@@ -20,9 +20,11 @@ export class ProductFormComponent implements OnInit {
   name: string;
   icon: string;
   editMode: boolean = false;
-  categories = []
+  categories : Category [] = [];
   src: string | ArrayBuffer
   isSubmitted : boolean = false;
+  categoryId : string
+  currentProduct : Product
 
   constructor(private formBuilder: FormBuilder, private CategoriesService: CategoriesService,
     private MessageService: MessageService,
@@ -36,6 +38,7 @@ export class ProductFormComponent implements OnInit {
     this.getForm();
     this._checkEditMode();
     this.getCategories();
+
 
 
   }
@@ -88,7 +91,13 @@ export class ProductFormComponent implements OnInit {
 
   onSubmit() {
 
+    console.log(this.categoryId);
+    console.log(this.productForm['category'].value)
+
     this.isSubmitted = true;
+    if(this.productForm['category'].value !== this.categoryId && this.categoryId !== undefined ){
+      this.form.controls['category'].setValue(this.categoryId);
+    }
   const productFormData = new FormData();
  Object.keys(this.productForm).map((key) => {
   productFormData.append(key, this.productForm[key].value);
@@ -111,10 +120,13 @@ export class ProductFormComponent implements OnInit {
         // this.CategoriesService.getCategoryById()
           const product = resProduct;
           if (product) {
+
+            this.currentProduct = product;
+
             this.form.controls['name'].setValue(resProduct.name);
             this.form.controls['price'].setValue(resProduct.price)
             this.form.controls['brand'].setValue(resProduct.brand)
-            this.form.controls['category'].setValue(resProduct.category._id)
+            this.form.controls['category'].setValue(resProduct.category?._id)
             this.form.controls['countInStock'].setValue(resProduct.countInStock)
             // this.form.controls['description'].setValue(resProduct.description)
             this.form.controls['richDescription'].setValue(resProduct.richDescription)
@@ -126,6 +138,8 @@ export class ProductFormComponent implements OnInit {
             this.src = resProduct.image
             this.productForm['image'].setValidators([]);
             this.productForm['image'].updateValueAndValidity();
+
+
 
 
           }
@@ -143,9 +157,20 @@ export class ProductFormComponent implements OnInit {
       message: 'Do you want to update this product?',
       header: 'Update Product',
       icon: 'pi pi-info-circle',
-      accept: () => {
-        this.ActivatedRoute.params.subscribe(params => {
 
+      accept: () => {
+
+
+
+        console.log(this.categoryId);
+        console.log(this.productForm['category'].value)
+if(this.productForm['category'].value !== this.categoryId && this.categoryId !== undefined ){
+  console.log(this.categoryId);
+  console.log(this.productForm['category'].value)
+  this.form.controls['category'].setValue(this.categoryId)
+}
+
+  this.ActivatedRoute.params.subscribe(params => {
   const productFormData = new FormData();
   Object.keys(this.productForm).map((key) => {
    productFormData.append(key, this.productForm[key].value);
@@ -176,7 +201,9 @@ export class ProductFormComponent implements OnInit {
   }
 
 
-
+sendId(id){
+this.categoryId = id;
+}
 
   onUpload(event) {
     const file = event.target.files[0]
@@ -189,7 +216,6 @@ export class ProductFormComponent implements OnInit {
         this.src = fileReader.result
       }
       fileReader.readAsDataURL(file);
-      console.log(this.form.controls['image'].value)
     }
   }
 

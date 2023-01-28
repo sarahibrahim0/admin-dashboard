@@ -33,7 +33,6 @@ export class DashboardComponent implements OnInit{
 
     return this.http.get(`${environment.apiUrl}products/get/count`).subscribe(count=>{
       this.productsCount = count['productCount'];
-      console.log(count)
     })
 
   }
@@ -43,7 +42,6 @@ export class DashboardComponent implements OnInit{
 
     return this.http.get(`${environment.apiUrl}users/get/count`).subscribe(count=>{
       this.usersCount = count['userCount'];
-      console.log(count)
     })
 
   }
@@ -54,7 +52,6 @@ export class DashboardComponent implements OnInit{
 
     return this.http.get(`${environment.apiUrl}orders/get/count`).subscribe(count=>{
       this.ordersCount = count['orderCount'];
-      console.log(count)
     })
 
   }
@@ -64,7 +61,6 @@ export class DashboardComponent implements OnInit{
 
     return this.http.get(`${environment.apiUrl}orders/get/totalsales`).subscribe(count=>{
       this.totalSales = count['totalsales'];
-      console.log(count)
     })
 
   }
@@ -72,7 +68,6 @@ export class DashboardComponent implements OnInit{
   private getViews(){
    return this.http.get(`http://localhost:3000/api/v1/session`).subscribe(result=>{
 
-   console.log(result['message']);
 
   })
   }

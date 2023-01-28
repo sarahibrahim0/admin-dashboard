@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
    this.loginForm.controls['password'].value).subscribe({next:(user)=>
     {console.log(user);
     this.loginService.setToken(user.token);
-    this.router.navigate(['/'])
+    this.router.navigate(['/dashboard'])
 
   }})
 

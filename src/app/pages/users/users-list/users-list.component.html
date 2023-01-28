@@ -1,107 +1,175 @@
+<!--
+
+
+
 
 <p-toast></p-toast>
-
-
-<div class="card shadow-sm border-0 ">
-    <div class="card-body ">
-        <h5 class="card-title fw-bold">Users</h5>
-        <h6 class="card-subtitle mb-2 text-muted">List of all Users</h6>
-
-        <!-- <div class="container "> -->
-        <div class="row  bg-secondary bg-gradient bg-opacity-10  position-relative" style="height:4rem;">
-            <div class=" col-3 position-absolute  top-50 start-0 translate-middle-y ">
-                <button routerLink="/user/form" type="button" class="btn btn-danger btn-sm col-9 ">
+<div class="container-fluid  h-100 fs-5 w-100  ">
+    <div class="row mb-5">
+        <div class="col-12 h-100  ">
+            <nav aria-label="breadcrumb" class="d-flex justify-content-between pb-3  ">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item fs-5 cursor-pointer text-secondary fw-bold" routerLink="/">Home</li>
+                    <li class="breadcrumb-item fs-5 cursor-pointer text-pinky fw-bold" routerLink="/users">Users
+                    </li>
+                </ol>
+                <button routerLink="/user/form" type="button" class="btn btn-pinky fw-bold ">
                     <strong>+</strong> New</button>
+            </nav>
+</div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+
+            <div class="rounded-4 fs-5 bg-white shadow-sm pt-7 w-100 position-relative " style="min-height: 100vh;">
+
+                <div class="w-90 d-flex flex-row align-items-center rounded-3 bg-pinky shadow position-absolute  top-3 start-50 translate-middle-x px-4"
+                    style=" height: 7rem;">
+                    <span class="fs-5 fw-bold text-white">Users Table</span>
+                </div>
+
+                <table class="table fs-5 table-borderless rounded-4 text-secondary w-100">
+                    <thead class="align-text-bottom ">
+                        <tr class="border-bottom  ">
+
+                            <th scope="col " class="ps-9 text-start align-middle" >name</th>
+                            <th scope="col" class=" text-start align-middle">email</th>
+                            <th scope="col" class=" text-start align-middle">isAdmin</th>
+                            <th scope="col" class=" text-start align-middle">country</th>
+                            <th scope="col" class="pe-9 text-end align-middle"></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of users" class="border-top">
+                            <td class="ps-9 text-start align-middle">
+                                {{user.name}}
+                            </td>
+                            <td class=" text-start align-middle">
+                                {{user.email}}
+
+                            </td>
+                            <td class=" text-start align-middle"  *ngIf="user.isAdmin === true; else f">
+                                <span class="badge text-bg-success">yes</span>
+                            </td>
+                            <ng-template #f>
+                                <td class="text-start align-middle">
+                                    <span class="badge text-bg-danger">No</span>
+                                </td>
+                          </ng-template>
+                            <td class=" align-middle text-start">
+                                {{user.country}}
+                            </td>
+
+
+                            <td class="text-end pe-4 align-middle">
+                                <button (click)="editUser(user.id)" type="button" class="btn btn-pinky me-2">Edit
+                                </button>
+                                <button (click)="deleteUser(user.id)" type="button" class="btn btn-pinky ">Delete
+                                </button>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                                 </table>
             </div>
         </div>
+    </div>
+</div>
+
+<p-confirmDialog [style]="{width: '36vw'}" [baseZIndex]="10000" rejectButtonStyleClass=""
+acceptButtonStyleClass=""></p-confirmDialog>
+
+ -->
 
 
 
 
-        <p-table [value]="users">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th pSortableColumn="name" style="color: black;">name <p-sortIcon field="name"></p-sortIcon></th>
-                    <th>email</th>
-                    <th>phone</th>
-                    <th>password</th>
-                    <th>street</th>
-                    <th>apartment</th>
-                    <th>zip code</th>
-                    <th>city</th>
-                    <th>isAdmin</th>
-                    <th>country</th>
-
-                    <th></th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-user>
-                <tr>
-                    <td>{{user.name}}</td>
-                    <td> {{user.email}}</td>
-                    <td> {{user.phone}}</td>
-                    <td> {{user.password}}</td>
-                    <td>{{  user.street}}</td>
-                    <td>{{  user.apartment}}</td>
-                    <td>{{  user.zip}}</td>
-                    <td>{{  user.city}}</td>
-                    <td>{{  user.isAdmin}}</td>
-                    <td>
-                         {{ user.country }}
-                    <td >
-                        <button (click)="editUser(user._id)" type="button" class="btn btn-danger me-2">Edit </button>
-                        <button (click)="deleteUser(user._id)" type="button" class="btn btn-danger ">Delete </button>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-
+<p-toast></p-toast>
+<div class="container-fluid  h-100 fs-5 col-12  ">
+    <div class="row mb-5 px-3">
+        <div class="col-lg-12 col-sm-12 h-25">
+                <nav aria-label="breadcrumb" class="nav  justify-content-between pb-3 col-sm-12 w-100 col-lg-12" >
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-secondary fw-bold lh-sm" routerLink="/">Home</li>
+                        <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-pinky fw-bold lh-sm" routerLink="/users">Users</li>
+                    </ol>
+                    <button routerLink="/user/form" type="button" class="btn btn-pinky fw-bold lh-sm">
+                        <strong>+</strong> New</button>
+                </nav>
 
 
 
     </div>
-</div>
+    </div>
 
-<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-danger"
-acceptButtonStyleClass="p-button-danger"></p-confirmDialog>
+    <div class="row">
+        <div class="col-lg-12 col-sm-12">
+            <div class="d-table rounded-4 fs-5 bg-white col-lg-12 col-sm-12  w-100 shadow-sm pt-7 position-relative table-responsive " style="min-height: 100vh" >
+                <div class= "w-90 d-flex flex-row align-items-center rounded-3 bg-pinky shadow position-absolute top-3 start-50 translate-middle-x px-4"
+                style=" height: 7rem;" >
+                    <span class="fs-5 fw-bold text-white">Users Table</span>
+                </div>
+                <table class="table fs-5 table-borderless  col-lg-12 col-sm-12  rounded-4 text-secondary table-responsive  ">
+                    <thead class="align-text-bottom ">
+                        <tr class="border-bottom  ">
 
+                            <th scope="col " class="ps-9 fs-5  align-bottom text-nowrap lh-sm ">name</th>
+                            <th scope="col-5" class=" text-start fs-5    align-bottom text-nowrap lhsm ">email</th>
+                            <th scope="col" class=" text-start fs-5   align-bottom text-nowrap lh-sm ">is admin</th>
+                            <th scope="col" class=" text-start fs-5   align-bottom text-nowrap lh-sm ">country</th>
+                            <th scope="col" class="pe-9 fs-5   text-end align-bottom lh-sm"></th>
 
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr *ngFor="let user of users" class="border-top">
 
-
-
-
-
-
-<!--
-
-
-<table class="table card-text h-auto ">
-    <thead>
-        <tr>
-            <th  pSortableColumn="name">name</th>
-            <th >icon</th>
-            <th >color</th>
-            <th ></th>
-
-
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let category of categories" class="">
-
-            <td >{{category.name}}</td>
-            <td>
-                <i class="pi" [ngClass]="'pi-'+ category.icon"> </i>
-            </td>
-            <td >{{category.color}}</td>
+                            <td class="text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">{{user.name}}</td>
 
 
-            <td > <button (click)="editCategory(category._id)" type="button" class="btn btn-danger me-2">Edit </button>
-                <button (click)="deleteCategory(category._id)" type="button" class="btn btn-danger ">Delete </button>
-            </td>
+                            <td class="text-start fs-5   align-middle lh-sm  text-nowrap ">
+                                {{user.email  }}
+                            </td>
+                            <td class="text-start fs-5    lh-sm align-middle  text-nowrap " *ngIf="user.isAdmin === true; else f">
+                                <span class="badge text-bg-success">yes</span>
+                            </td>
+                            <ng-template #f>
+                                <td class="text-start align-middle">
+                                    <span class="badge text-bg-danger">No</span>
+                                </td>
+                          </ng-template>
 
-        </tr>
+                            <td class=" text-start fs-5   lh-sm  align-middle  text-nowrap ">
+                                {{user.country}}
+                            </td>
 
 
-    </tbody>
-</table> -->
+
+                            <td class="text-end  fs-5   pe-9 align-middle  text-nowrap  lh-sm ">
+                                <button (click)="editUser(user.id)" type="button" class="btn btn-pinky me-2">Edit
+                                </button>
+                                <button (click)="deleteUser(user.id)" type="button" class="btn btn-pinky ">Delete
+                                </button>
+                            </td>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+        </div>
+
+        </div>
+    </div>
+
+
+        </div>
+
+
+<p-confirmDialog [style]="{width: '36vw'}" [baseZIndex]="10000" rejectButtonStyleClass=""
+acceptButtonStyleClass=""></p-confirmDialog>
+
+
+
+

@@ -51,19 +51,8 @@ export class CategoriesComponent {
 
 
 
-        // switch(type) {
-        //   case ConfirmEventType.REJECT:
-        //       this.MessageService.add({severity:'error', summary:'Rejected', detail:'You have rejected'});
-        //   break;
-        //   case ConfirmEventType.CANCEL:
-        //       this.MessageService.add({severity:'warn', summary:'Cancelled', detail:'You have cancelled'});
-        //   break;}
-
-
-      }
-
-
-    });
+    }
+   } );
   }
 
   editCategory(id: string) {

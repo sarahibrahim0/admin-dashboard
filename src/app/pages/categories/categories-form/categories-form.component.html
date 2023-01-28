@@ -1,75 +1,96 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <p-toast></p-toast>
-
-
-<div class="card shadow-sm border-0  h-50  " style="width: 60rem;">
-    <div class="card-body ">
-        <h5 class="card-title fw-bold">Categories</h5>
-
-        <h6 class="card-subtitle mb-2 text-muted">List of all categories</h6>
-
-        <div class="row  bg-secondary bg-gradient bg-opacity-10 h-25 position-relative">
-            <div class=" col-2 h-20 position-absolute  top-50 start-0 translate-middle-y">
-
-                <button (click)="onSubmit()" type="button" class="btn btn-danger btn-sm col-9 mb-2"
-                 [disabled]="form.invalid" *ngIf="!editMode; else edit">
-                    <strong>+</strong>
-                    Create</button>
-
-                <ng-template #edit>
-                    <button (click)="editSubmit()" type="button" class="btn btn-danger btn-sm col-9 mb-2"
-                        [disabled]="form.invalid" [disabled]="form.invalid">
+<div class="container-fluid  text-nowrap  h-100 fs-5 col-12  ">
+    <div class="row mb-5 px-3">
+        <div class="col-12 text-nowrap">
+            <nav aria-label="breadcrumb" class="nav justify-content-between pb-3 col-sm-12  col-lg-12 text-nowrap">
+                <ol class="breadcrumb text-wrap col-sm-8">
+                    <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-secondary fw-bold lh-sm text-wrap" routerLink="/">Home</li>
+                    <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-pinky fw-bold lh-sm text-wrap" routerLink="/categories">
+                        Categories
+                    </li>
+                    <li class="breadcrumb-item fs-5 nav-fill cursor-pointer text-pinky fw-bold lh-sm text-wrap"
+                       >Category Details
+                    </li>
+                </ol>
+                <div>
+                    <button (click)="onSubmit()" type="button" class="btn btn-pinky fw-bold me-2"
+                        *ngIf="!editMode; else edit">
                         <strong>+</strong>
-                        Update</button>
-                </ng-template>
+                        Create</button>
+                    <ng-template #edit>
+                        <button (click)="editSubmit()" type="button" class="btn btn-pinky fw-bold me-2">Update</button>
+                    </ng-template>
 
-                <button (click)="onCancel()"    type="button" class="btn btn-danger btn-sm col-9 "> <strong>+</strong> Cancel</button>
+                    <button (click)="onCancel()" type="button" class="btn btn-pinky fw-bold "> Cancel</button>
+                </div>
+            </nav>
 
-            </div>
+</div></div>
+
+            <!--Form-->
+
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+            <form [formGroup]="form" class="bg-pinky rounded-4 p-4 grid text-white fw-bold">
+
+
+<div class="g-col-6">
+    <div>
+        <label for="name" class="col-form-label">Name</label>
+        <div class="col-12">
+            <input type="text" class="form-control" id="name" placeholder="name" formControlName="name">
+            <span class="text-primary fw-normal"
+                *ngIf="form.controls['name'].invalid && form.controls['name'].touched "> name is
+                invalid</span>
         </div>
+    </div>
+
+    <div>
+        <label for="brand" class="col-form-label">icon</label>
+        <div class="col-12">
+            <input type="text" class="form-control" id="icon" placeholder="brand" formControlName="icon">
+            <span class="primary  fw-normal"
+                *ngIf="form.controls['icon'].invalid && form.controls['icon'].touched "> icon name is
+                invalid</span>
+        </div>
+    </div>
 
 
-        <!--Form-->
-
-        <form [formGroup]="form">
-
-            <div class="form-group row mb-4 mt-2">
-                <label for="name" class="col-sm-2 col-form-label">Name</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="name" placeholder="name" formControlName="name">
-                    <span *ngIf="form.controls['name'].invalid && form.controls['name'].touched "> name is
-                        invalid</span>
-
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="icon" class="col-sm-2 col-form-label">Icon</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="icon" placeholder="icon" formControlName="icon">
-                    <span *ngIf="form.controls['icon'].invalid  && form.controls['icon'].touched "> icon is
-                        invalid</span>
-
-                </div>
-            </div>
-
-            <div class="form-group row mt-4">
-                <label for="color" class="col-sm-2 col-form-label">Color</label><br>
-                <div class="col-sm-10">
-
-                    <p-colorPicker formControlName="color"></p-colorPicker>
+    <div class="">
+        <label for="color" class=" col-form-label">Color</label><br>
+        <div class="col-12">
+            <p-colorPicker  formControlName="color"  [inline]="true"></p-colorPicker>
 
 
-                </div>
-            </div>
+        </div>
+    </div>
+
+    </div>
 
 
-
-        </form>
-
-
+            </form>
+        </div>
     </div>
 </div>
 
-<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-danger"
-acceptButtonStyleClass="p-button-danger"></p-confirmDialog>
+
+<p-confirmDialog [style]="{width: '36vw'}" [baseZIndex]="10000" rejectButtonStyleClass=""
+acceptButtonStyleClass=""></p-confirmDialog>
 
 

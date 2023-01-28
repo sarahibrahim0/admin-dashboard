@@ -27,15 +27,18 @@ import { UsersListComponent } from './pages/users/users-list/users-list.componen
 import { UserFormComponent } from './pages/users/user-form/user-form.component';
 import { OrdersListComponent } from './pages/orders/orders-list/orders-list.component';
 import { OrderDetailsComponent } from './pages/orders/order-details/order-details.component';
-import { TagModule } from 'primeng/tag';
 import {CardModule} from 'primeng/card';
 import {FieldsetModule} from 'primeng/fieldset';
 import { LoginComponent } from './pages/login/login/login.component';
 import { RegisterComponent } from './pages/register/register/register.component';
 import { AdminInterceptor } from './interceptors/admin.interceptor';
 import { OnClickBgDirective } from './directives/on-click-bg.directive';
-
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ButtonModule } from "primeng/button";
+import { OrderItemComponent } from './pages/orders/order-item/order-item.component';
+import { SocialLoginModule,
+  SocialAuthServiceConfig} from '@abacritt/angularx-social-login'
+import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 
 
 
@@ -66,7 +69,7 @@ import { OnClickBgDirective } from './directives/on-click-bg.directive';
     LoginComponent,
     RegisterComponent,
     OnClickBgDirective,
-
+    OrderItemComponent,
   ],
   imports: [
     BrowserModule,
@@ -83,14 +86,30 @@ import { OnClickBgDirective } from './directives/on-click-bg.directive';
     InputNumberModule,
     DropdownModule,
 EditorModule,
-TagModule,
 CardModule,
-FieldsetModule
+FieldsetModule,
+NgbModule,
+ButtonModule,
+SocialLoginModule,
+
   ]
 
   ,
   providers: [MessageService, ConfirmationService,
     {provide: HTTP_INTERCEPTORS, useClass: AdminInterceptor ,  multi: true},
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('7014429512-6k4317v3shsosgmg0d7umfmun902km2m.apps.googleusercontent.com'),
+          },
+        ],
+      } as SocialAuthServiceConfig,
+    },
+
 
   ],
   bootstrap: [AppComponent]

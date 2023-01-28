@@ -1,4 +1,4 @@
-import { timer } from 'rxjs';
+import { timer, BehaviorSubject } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { User } from './../../../models/user';
 import { Location } from '@angular/common';
@@ -21,7 +21,11 @@ export class UserFormComponent implements OnInit {
   form: FormGroup;
   editMode: boolean = false;
   countries = [];
-
+  currentUser : User;
+  countryName : string
+  adminValue : boolean
+  countryAdmin
+  userCountry : BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
 
   constructor(private formBuilder: FormBuilder,
@@ -36,6 +40,7 @@ export class UserFormComponent implements OnInit {
     this.initiateForm();
     this._checkEditMode();
     this.getCountries();
+
   }
 
   private initiateForm() {
@@ -64,10 +69,21 @@ export class UserFormComponent implements OnInit {
         this.userService.getUserById(id).subscribe(resUser => {
           const user = resUser;
           if (user) {
+
+            // if(user.isAdmin === true){
+            //   this.adminValue = true;
+            // }
+            // else{
+            //   this.adminValue = false;
+            // }
+
+
+            this.currentUser = user;
             this.form.controls['name'].setValue(resUser.name);
             this.form.controls['email'].setValue(resUser.email);
             this.form.controls['isAdmin'].setValue(resUser.isAdmin);
-            this.form.controls['country'].setValue(resUser.country[1]);
+            this.form.controls['country'].setValue(resUser.country);
+            // this.userCountry.next(this.userForm['country'].value)
             this.form.controls['password'].setValidators([]);
             this.form.controls['password'].updateValueAndValidity;
             this.form.controls['phone'].setValue(resUser.phone);
@@ -129,6 +145,19 @@ export class UserFormComponent implements OnInit {
       header: 'Update User',
       icon: 'pi pi-info-circle',
       accept: () => {
+
+        this.userCountry.subscribe(value=>{
+        this.countryAdmin = value
+        // this.form.controls['country'].setValue(this.countryAdmin);
+        })
+
+        // this.sendCountryName();
+        console.log(this.userForm['name'].value);
+
+
+       if (this.userForm['country'].value !== this.countryName && this.countryName !== undefined ){
+        this.form.controls['country'].setValue(this.countryName);
+       }
         this.ActivatedRoute.params.subscribe(params => {
           this.userService.editUser(params['id'],
             {
@@ -180,11 +209,24 @@ export class UserFormComponent implements OnInit {
   private getCountries(){
   countriesList.registerLocale(require("i18n-iso-countries/langs/en.json"));
  this.countries = Object.entries(countriesList.getNames("en", {select: "official"})).map(country=>{
-  
+
 return {
   id : country[0],
   name : country[1]
 }
   })
+  }
+
+
+
+
+
+  sendCountryName(countryName){
+
+this.countryName = countryName;
+  }
+
+  get userForm (){
+    return this.form.controls;
   }
 }

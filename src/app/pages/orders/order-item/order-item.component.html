@@ -1,0 +1,40 @@
+<div class="d-table rounded-4 fs-5 bg-white shadow-sm pt-3 pb-3 col-lg-12 col-sm-12  w-100 shadow-sm  table-responsive  "
+>
+<table class="table fs-5 table-borderless  col-lg-12 col-sm-12  rounded-4 text-secondary table-responsive">
+    <thead class="align-text-bottom ">
+        <tr class="border-bottom  ">
+            <th scope="col " class=" ps-9 fs-5  align-bottom text-nowrap lh-sm">item name</th>
+            <th scope="col" class=" ps-9 fs-5  align-bottom text-nowrap lh-sm">item brand</th>
+            <th scope="col" class=" ps-9 fs-5  align-bottom text-nowrap lh-sm">item category</th>
+            <th scope="col" class=" ps-9 fs-5  align-bottom text-nowrap lh-sm">item quantity</th>
+            <th scope="col" class=" ps-9 fs-5  align-bottom text-nowrap lh-sm">item price</th>
+            <th scope="col" class=" pe-9 fs-5   text-end align-bottom lh-sm text-nowrap">total price</th>
+
+
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="border-top" *ngFor="let item of orderItem">
+            <td class=" text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">
+                {{item?.product?.name}}
+            </td>
+            <td class=" text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">
+                {{item?.product?.brand}}
+            </td>
+            <td class=" text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">
+                {{item?.product?.category?.name}}
+            </td>
+            <td class=" text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">
+                {{item?.quantity}}
+            </td>
+            <td class=" text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">
+                {{item?.product?.price | currency : 'EGP': 'symbol' : '1.0-0' }}
+            </td>
+            <td class=" text-end  fs-5   pe-9 align-middle  text-nowrap  lh-sm">
+                {{item?.quantity * item?.product?.price  | currency : 'EGP': 'symbol' : '1.0-0' }}
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>

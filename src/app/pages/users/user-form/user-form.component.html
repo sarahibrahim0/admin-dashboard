@@ -1,160 +1,166 @@
+
 <p-toast></p-toast>
-
-
-<div class="card shadow-sm border-0   " style="width: 60rem; height:100rem;">
-
-
-    <div class="card-body ">
-        <h5 class="card-title fw-bold">users</h5>
-
-
-        <div class="row  bg-secondary bg-gradient bg-opacity-10  position-relative">
-            <div class=" col-2 h-20 position-absolute  top-50 start-0 translate-middle-y">
-
-                <button (click)="onSubmit()" type="button" class="btn btn-danger btn-sm col-9 mb-2"
-                    *ngIf="!editMode; else edit">
-                    <strong>+</strong>
-                    Create</button>
-
-                <ng-template #edit>
-                    <button (click)="editSubmit()" type="button" class="btn btn-danger btn-sm col-9 mb-2">
+<div class="container-fluid h-100 fs-5 col-12 text-secondary lh-sm ">
+    <div class="row mb-5 px-3">
+        <div class="col-lg-12 col-sm-12 h-25">
+            <nav aria-label="breadcrumb" class="nav justify-content-between pb-3 mb-3 text-nowrap ">
+                <ol class="breadcrumb text-nowrap col-sm-8">
+                    <li class="breadcrumb-item fs-5 nav-fill cursor-pointer text-secondary fw-bold lh-sm text-nowrap" routerLink="/">Home</li>
+                    <li class="breadcrumb-item fs-5 nav-fill cursor-pointer text-pinky fw-bold lh-sm text-nowrap" routerLink="/users">
+                        Users
+                    </li>
+                    <li class="breadcrumb-item fs-5 nav-fill cursor-pointer text-pinky fw-bold lh-sm text-nowrap"
+                       >User Details
+                    </li>
+                </ol>
+                <div>
+                    <button (click)="onSubmit()" type="button" class="btn btn-pinky fw-bold me-2"
+                        *ngIf="!editMode; else edit">
                         <strong>+</strong>
-                        Update</button>
-                </ng-template>
+                        Create</button>
+                    <ng-template #edit>
+                        <button (click)="editSubmit()" type="button" class="btn btn-pinky fw-bold me-2">Update</button>
+                    </ng-template>
 
-                <button (click)="onCancel()" type="button" class="btn btn-danger btn-sm col-9 "> <strong>+</strong>
-                    Cancel</button>
-
-            </div>
-        </div>
-
+                    <button (click)="onCancel()" type="button" class="btn btn-pinky fw-bold "> Cancel</button>
+                </div>
+            </nav>
+</div>
+</div>
+<div class="row ">
+    <div class="col-lg-12 col-sm-12">
 
         <!--Form-->
 
-        <form [formGroup]="form">
+        <form [formGroup]="form" class="bg-pinky rounded-4 p-4  grid text-white fw-bold  vh-100 ">
+            <div class="g-col-6">
 
-            <div class="form-group row mb-4 mt-2">
-                <label for="name" class="col-sm-2 col-form-label">Name</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="name" placeholder="name" formControlName="name">
-                    <span *ngIf="form.controls['name'].invalid && form.controls['name'].touched "> name is
+    <div>
+        <label for="name" class="col-form-label">Name</label>
+        <div class="col-12">
+            <input type="text" class="form-control" id="name" placeholder="name" formControlName="name">
+            <span class="text-primary fw-normal"
+                *ngIf="form.controls['name'].invalid && form.controls['name'].touched "> name is
+                invalid</span>
+        </div>
+    </div>
+            <div>
+                <label for="email" class="col-form-label">email</label>
+                <div class="col-12">
+                    <input type="email" class="form-control" id="email" placeholder="email" formControlName="email">
+                    <span class="text-primary fw-normal"
+                        *ngIf="form.controls['email'].invalid && form.controls['email'].touched "> email is
                         invalid</span>
-
                 </div>
             </div>
 
-            <div class="form-group row mb-4 mt-2">
-                <label for="email" class="col-sm-2 col-form-label">email</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="email" placeholder="email" formControlName="email">
+            <div>
+                <label for="password" class="col-form-label">password</label>
+                <div class="col-12">
+                    <input type="password" class="form-control" id="password" placeholder="password" formControlName="password">
+                    <span class="text-primary fw-normal"
+                        *ngIf="form.controls['password'].invalid && form.controls['password'].touched "> password is
+                        invalid</span>
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label for="password" class="col-sm-2 col-form-label">password</label>
-                <div class="col-sm-10">
-                    <div class="field col-12 md:col-3">
-                        <input formControlName="password" mode="decimal" inputId="password">
 
+            <div>
+                <label for="phone" class="col-form-label">phone</label>
+                <div class="col-12">
+                    <input type="tel" class="form-control" id="phone" placeholder="phone" formControlName="phone">
+                    <span class="text-primary fw-normal"
+                        *ngIf="form.controls['phone'].invalid && form.controls['phone'].touched "> phone is invalid</span>
+                </div>
+            </div>
+
+            <div>
+                <label for="flexSwitchCheckDefault" class="form-check-label col-form-label" >is admin</label>
+                <div class="form-check form-switch ">
+                    <input [value]="adminValue" placeholder="isAdmin"
+                     formControlName="isAdmin" class="form-check-input"
+                      type="checkbox" role="switch" unchecked id="flexSwitchCheckDefault"
+                     >
+                  </div>
+            </div>
+
+            </div>
+            <div class="g-col-6">
+
+                <div>
+                    <label for="street" class="col-form-label">street</label>
+                    <div class="col-12">
+                        <input type="text" class="form-control" id="street" placeholder="street" formControlName="street">
+                        <span class="text-primary fw-normal"
+                        *ngIf="form.controls['street'].invalid && form.controls['street'].touched ">
+                             street is invalid
+                        </span>
                     </div>
-                    <span *ngIf="form.controls['password'] && form.controls['password'].touched "> password is
-                        invalid</span>
                 </div>
+
+
+                <div>
+                    <label for="apartment" class="col-form-label">apartment"</label>
+                    <div class="col-12">
+                        <input type="text" class="form-control" id="apartment" placeholder="apartment" formControlName="apartment">
+                        <span class="text-primary fw-normal"
+                        *ngIf="form.controls['apartment'].invalid && form.controls['apartment'].touched ">
+                             apartment is invalid
+                        </span>
+                    </div>
+                </div>
+
+
+
+                <div>
+                    <label for="zipCode" class="col-form-label">zipCode"</label>
+                    <div class="col-12">
+                        <input placeholder="zipCode" formControlName="zipCode" class="form-control" id="zipCode" type="text" inputmode="numeric">
+                        <span class="text-primary fw-normal"
+                        *ngIf="form.controls['zipCode'].invalid && form.controls['zipCode'].touched ">
+                             isAdmin is invalid
+                        </span>
+                    </div>
+                </div>
+
+
+
+              <div class="dropdown mt-2 " ngbDropdown>
+                <label class="col-12">Country</label>
+                <button ngbDropdownToggle class="btn btn-pinky fs-5 bg-white text-secondary dropdown-toggle mt-2  " type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+Admin Country
+                </button>
+                <ul ngbDropdownMenu>
+                    <li>
+                        <a class="dropdown-item"
+                         ngbDropdownItem
+                         *ngFor="let country of countries;"
+                            (click)="sendCountryName(country.name)"
+                            [ngClass]="{ 'selected' :country?.name == currentUser?.country}"
+
+                            >{{country.name}}
+
+                        </a>
+                    </li>
+                </ul>
+
             </div>
 
-            <div class="form-group row">
-                <label for="phone" class="col-sm-2 col-form-label">phone</label>
-                <div class="col-sm-10">
-                    <div class="field col-12 md:col-3">
-                        <input formControlName="phone" mode="decimal" inputId="phone">
 
-                    </div>
-                    <span *ngIf="form.controls['phone'] && form.controls['phone'].touched "> phone is
-                        invalid</span>
-                </div>
+
+
             </div>
-
-            <div class="form-group row">
-                <label for="street" class="col-sm-2 col-form-label">street</label>
-                <div class="col-sm-10">
-                    <div class="field col-12 md:col-3">
-                        <input formControlName="street" mode="decimal" inputId="street">
-
-                    </div>
-                    <span *ngIf="form.controls['street'] && form.controls['street'].touched "> street is
-                        invalid</span>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="apartment" class="col-sm-2 col-form-label">apartment</label>
-                <div class="col-sm-10">
-                    <div class="field col-12 md:col-3">
-                        <input formControlName="apartment" mode="decimal" inputId="apartment">
-
-                    </div>
-                    <span *ngIf="form.controls['apartment'] && form.controls['apartment'].touched "> apartment is
-                        invalid</span>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="city" class="col-sm-2 col-form-label">city</label>
-                <div class="col-sm-10">
-                    <div class="field col-12 md:col-3">
-                        <input formControlName="city" mode="decimal" inputId="city">
-
-                    </div>
-                    <span *ngIf="form.controls['city'] && form.controls['city'].touched "> city is
-                        invalid</span>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="zipCode" class="col-sm-2 col-form-label">zipCode</label>
-                <div class="col-sm-10">
-                    <div class="field col-12 md:col-3">
-                        <input formControlName="zipCode" mode="decimal" inputId="zipCode">
-
-                    </div>
-                    <span *ngIf="form.controls['zipCode'] && form.controls['zipCode'].touched "> zipCode is
-                        invalid</span>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="isAdmin" class="col-sm-2 col-form-label">isAdmin</label>
-                <div class="col-sm-10">
-                    <div class="field col-12 md:col-3">
-                        <input formControlName="isAdmin" mode="decimal" inputId="isAdmin">
-
-                    </div>
-                    <span *ngIf="form.controls['isAdmin].invalid '] && form.controls['isAdmin'].touched "> price is
-                        invalid</span>
-                </div>
-            </div>
-
-            <!-- <div class="form-group row">
-                <label for="country" class="col-sm-2 col-form-label">country</label>
-                <div class="col-sm-10">
-                    <div class="field col-12 md:col-3">
-                        <input formControlName="country" mode="decimal" inputId="country">
-                    </div>
-                    <span *ngIf="form.controls['country'].invalid  && form.controls['country'].touched "> country is
-                        invalid</span>
-                </div>
-            </div> -->
-            <p-dropdown [options]="countries"  formControlName="country" [filter]="true" filterBy="name"
-             placeholder="Country" optionLabel="name"
-             optionValue="name"
-              [showClear]="true"></p-dropdown>
-
-
 
         </form>
 
-    </div>
-</div>
+        </div>
+        </div>
+        </div>
 
-<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-danger"
-    acceptButtonStyleClass="p-button-danger"></p-confirmDialog>
+<p-confirmDialog [style]="{width: '36vw'}" [baseZIndex]="10000" rejectButtonStyleClass=""
+acceptButtonStyleClass=""></p-confirmDialog>
+
+
+
+

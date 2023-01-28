@@ -1,45 +1,54 @@
+@import "../node_modules/bootstrap/scss/functions";
 
-.bg:hover{
-  background-image: linear-gradient(195deg, #42424a 0%, #191919 100%);
-  }
-
-  .tog{
-      background-color: #de2768;
-      background-image: none
-  }
+$primary :#232325;
+$light : #eff1f4;
+$spacer : 1rem;
 
 
-  .tog:hover{
+@import "../node_modules/bootstrap/scss/variables";
 
-      background-color: #e6145db9;
+$spacers: (
+  0: 0,
+  1: $spacer * .25,
+  2: $spacer * .5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
+  6:$spacer * 6,
+  7:$spacer * 7,
+  8:$spacer * 8,
+  9: $spacer * 2.5,
 
-      background-image: none
-  }
 
 
-
-
-$theme-colors: (
-    "primary": #232325,
-    "danger" : #de2768,
-    "light" : #f0f2f5
-  );
-
-  $position-values: (
-  0: 2%,
-  10: 13%,
-  50: 50%,
-  100: 100%
 );
 
 
-@import "../node_modules/bootstrap/scss/_functions.scss";
-@import "../node_modules/bootstrap/scss/_variables.scss";
-@import "../node_modules/bootstrap/scss/_maps.scss";
-@import "../node_modules/bootstrap/scss/_mixins.scss";
-@import "../node_modules/bootstrap/scss/_utilities.scss";
+$position-values: (
+  0: 0%,
+  15:-7%,
+5: -4%,
+3:-2%,
+7:3%,
+2:-10%,
+50: 50%,
+100: 100%
+);
 
 
+
+
+@import "../node_modules/bootstrap/scss/maps";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/root";
+
+@import "../node_modules/bootstrap/scss/utilities";
+@import "../node_modules/bootstrap/scss/reboot";
+@import "../node_modules/bootstrap/scss/type";
+@import "../node_modules/bootstrap/scss/images";
+@import "../node_modules/bootstrap/scss/containers";
+@import "../node_modules/bootstrap/scss/grid";
+@import "../node_modules/bootstrap/scss/helpers";
 
 $utilities: map-merge(
   $utilities,
@@ -65,7 +74,7 @@ $utilities: map-merge(
       (
         values: map-merge(
           map-get(map-get($utilities, "width"), "values"),
-          (90: 95%),
+          (90: 93%),
         ),
       ),
     ),
@@ -140,6 +149,23 @@ $utilities: map-merge(
 
 
 
+$utilities: map-merge(
+  $utilities,
+  (
+    "height": map-merge(
+      map-get($utilities, "height"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "height"), "values"),
+          (17: 16%),
+        ),
+      ),
+    ),
+  )
+);
+
+
+
 
 
 
@@ -159,7 +185,114 @@ $utilities: map-merge(
 );
 
 
+$utilities: map-merge(
+  $utilities,
+  (
+    "height": map-merge(
+      map-get($utilities, "height"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "height"), "values"),
+          (80: 80%),
+        ),
+      ),
+    ),
+  )
+);
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "cursor": (
+      property: cursor,
+      values: auto default pointer wait text move help not-allowed
+    ),
+  )
+);
+
+
+.p-button:enabled{
+  background-color: #de2768!important;
+  border: 0px solid black;
+  box-shadow: 0px 0px red;
+}
+
+.p-button:hover{
+  background-color: #bd2158!important;
+  border: 0px solid black;
+  box-shadow: 0px 0px red;
+}
+
+.p-inputtext:enabled:hover{
+
+  border: 0px solid black;
+  box-shadow: 0px 0px red;
+
+}
+
+.p-inputtext:enabled:focus{
+
+  border: 0px solid black;
+  box-shadow: 0px 0px red;
+
+}
+
+.p-inputtext:enabled{
+
+  border: 0px solid black;
+  box-shadow: 0px 0px red;
+
+}
+
+
+.bg:hover{
+  background-image: linear-gradient(195deg, #42424a 0%, #191919 100%);
+  }
 
 
 
-@import "bootstrap/scss/utilities/api";
+  .tog{
+      background-image: linear-gradient(195deg, #EC407A 0%, #D81B60 100%);
+  }
+
+
+  .tog:hover{
+    background-image: linear-gradient(195deg, #EC407A 0%, #7d002e 100%);
+  }
+
+.dropdown-item:active{
+    background-color: #de2768!important;
+  }
+
+.selected{
+  background-color: #f67da8!important;
+}
+
+.dropdown-menu { max-height: 11.25rem; overflow-y: auto; min-width: 100% !important; background-attachment: local, local, scroll, scroll; }
+
+.dropdown-item { white-space: normal; }
+
+
+
+@import "../node_modules/bootstrap/scss/utilities/api";
+
+
+$grid-breakpoints: (
+  xxs:320px,
+  xs: 375px,
+  sm: 425px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1440px,
+  xxl: 2560px
+);
+
+$container-max-widths: (
+  xxs:320px,
+  xs: 375px,
+  sm: 425px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1440px,
+  xxl: 2560px
+);

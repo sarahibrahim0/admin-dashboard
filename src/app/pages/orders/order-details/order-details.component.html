@@ -1,35 +1,138 @@
-
 <p-toast></p-toast>
 
-<p-card
-[header]="'View Order'"
-subheader="'you can edit your order here'"
-styleClass="mb-3"
-></p-card>
+<div class="container-fluid  h-100 fs-5 lh-sm col-12">
+    <div class="row mb-4 px-3">
+        <div class="col-lg-12 col-sm-12 h-25">
+            <nav aria-label="breadcrumb" class="nav  justify-content-between pb-3 col-sm-12  col-lg-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-secondary fw-bold lh-sm"
+                        routerLink="/">Home</li>
+                    <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-pinky fw-bold lh-sm"
+                        routerLink="/orders">Orders</li>
+                    <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-pinky fw-bold lh-sm">Order Details</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="row gy-3">
+
+        <div class="order-details col-12 h-100 ">
+            <p class="w-100 d-flex flex-row justify-content-center">
+                <button class="btn btn-pinky btn-lg col-5 " type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+                    Order Details </button>
+            </p>
+            <div class="collapse col-lg-12 col-sm-12 show" id="collapseExample">
+                <div class=" d-table rounded-4 fs-5 bg-white col-lg-12 col-sm-12  w-100 shadow-sm  table-responsive ">
+                    <table class="table fs-5 table-borderless col-lg-12 col-sm-12  rounded-4 text-secondary table-responsive">
+                        <thead class="align-text-bottom ">
+                            <tr class="border-bottom  ">
+                                <th scope="col " class="ps-9 fs-5  align-bottom text-nowrap lh-sm">order id</th>
+                                <th scope="col" class=" ps-9 fs-5  align-bottom text-nowrap lh-sm">order date</th>
+                                <th scope="col" class="ps-9 fs-5  align-bottom text-nowrap lh-sm">status</th>
+                                <th scope="col" class="pe-9 fs-5   text-end align-bottom lh-sm text-nowrap ">total price</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-top">
+                                <td class="text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">{{returnedOrder?.id}}</td>
+                                <td class="text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">
+                                    {{returnedOrder?.dateOrdered | date : 'short'}}
+                                </td>
+                                <td class=" d-flex flex-row text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">
+                                    <div class="dropdown   me-2 " ngbDropdown>
+                                        <button ngbDropdownToggle class="btn btn-secondary dropdown-toggle  " type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            order Status
+                                        </button>
+                                        <ul ngbDropdownMenu>
+                                            <li>
+                                                <a class="dropdown-item" ngbDropdownItem
+                                                    *ngFor="let status of orderStatuses;"
+                                                    (click)="sendStatusName(status.id)"
+                                                    [ngClass]="{ 'selected' : status ===  orderStatuses[returnedOrder?.status]}">{{status?.name}}
+                                                </a>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                    <button style="height: 2rem;" class="btn btn-pinky btn-sm "
+                                        (click)="updateStatus()">update</button>
+                                </td>
+                                <td class="text-end  fs-5   pe-9 align-middle  text-nowrap  lh-sm">
+                                    {{returnedOrder?.totalPrice}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
 
-<p-fieldset legend="order details" styleClass="mb-4" [toggleable]="true">
-    Content
-</p-fieldset>
 
 
-<p-fieldset legend="order items"  styleClass="mb-4" [toggleable]="true ">
-    Content
-</p-fieldset>
+        <!--second section / order items-->
 
 
 
-<p-fieldset legend="order address" [toggleable]="true" styleClass="mb-4">
-    Content
-</p-fieldset>
+        <div class="order-details col-12 h-100   ">
+            <p class="col-12 d-flex flex-row justify-content-center">
+                <button class="btn btn-pinky btn-lg col-5" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseExample2" aria-expanded="true" aria-controls="collapseExample2">
+                    Order Items </button>
+            </p>
+            <div class="collapse w-100 show" id="collapseExample2">
+                <app-order-item [orderItem]="returnedOrder?.orderItems"></app-order-item>
+
+            </div>
+        </div>
 
 
 
+        <!--third one / order address-->
 
+        <div class="order-details col-12 h-100 lh-sm">
+            <p class="col-12 d-flex flex-row justify-content-center">
+                <button class="btn btn-pinky btn-lg col-5 " type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseExample3" aria-expanded="true" aria-controls="collapseExample3">
+                    Order Details </button>
+            </p>
+            <div class="collapse w-100 show" id="collapseExample3">
+                <div class="d-table rounded-4 fs-5 bg-white shadow-sm pt-3 pb-3 col-lg-12 col-sm-12  w-100 shadow-sm  table-responsive">
+                    <table class="table fs-5 table-borderless  col-lg-12 col-sm-12  rounded-4 text-secondary table-responsive">
+                        <thead class="align-text-bottom ">
+                            <tr class="border-bottom  ">
+                                <th scope="col-3" class=" ps-9 fs-5  align-bottom text-nowrap lh-sm ">Address</th>
+                                <th scope="col-3" class=" ps-9 fs-5  align-bottom text-nowrap lh-sm ">Address2</th>
+                                <th scope="col-3" class="ps-9 fs-5  align-bottom text-nowrap lh-sm ">name</th>
+                                <th scope="col-3" class=" pe-9 fs-5   text-end align-bottom lh-sm">contact</th>
 
-<p-dropdown (onChange)="updateStatus($event)" [options]="orderStatuses" [(ngModel)]="selectedStatus" placeholder="Select status" optionLabel="name" optionValue="id" [showClear]="true"></p-dropdown>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-top">
+                                <td class="text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">{{returnedOrder?.shippingAddress1}}</td>
+                                <td class="text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">
+                                    {{returnedOrder?.shippingAddress2}}
+                                </td>
+                                <td class=" d-flex flex-row  align-items-center text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">
+                                    {{returnedOrder?.user?.name}}
+                                </td>
+                                <td class="text-end  fs-5   pe-9 align-middle  text-nowrap  lh-sm">
+                                    {{returnedOrder?.phone}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
+    </div>
 
-<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-danger"
-acceptButtonStyleClass="p-button-danger"></p-confirmDialog>
+</div>
 
+<p-confirmDialog [style]="{width: '36vw'}" [baseZIndex]="10000" rejectButtonStyleClass=""
+    acceptButtonStyleClass=""></p-confirmDialog>

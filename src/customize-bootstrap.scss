@@ -58,7 +58,7 @@ $utilities: map-merge(
       (
         values: map-merge(
           map-get(map-get($utilities, "width"), "values"),
-          (20: 21.5%),
+          (20: 23%),
         ),
       ),
     ),

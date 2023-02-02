@@ -12,6 +12,7 @@ export class LoginComponent implements OnInit {
 
 
   loginForm : FormGroup;
+  error : string
 
   constructor(private formBuilder: FormBuilder,
     private loginService: LoginService,
@@ -40,7 +41,13 @@ export class LoginComponent implements OnInit {
     this.loginService.setToken(user.token);
     this.router.navigate(['/dashboard'])
 
-  }})
+  },
+  error:(error)=>{
+
+    this.error = error.message
+
+
+}})
 
   }
 

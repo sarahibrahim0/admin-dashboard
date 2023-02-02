@@ -25,7 +25,7 @@ style="background-image:url( '../assets/photo-1497294815431-9365093b7331.png');"
   </div>
 
   <button type="submit" class="btn btn-pinky mt-4 col-12 " (click)="login()">Sign In</button>
-
+  <small *ngIf="error"   class="text-danger align-self-center mt-3"> Wrong Email or Password</small>
 
 </div>
 

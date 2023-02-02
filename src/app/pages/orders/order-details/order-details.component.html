@@ -1,8 +1,8 @@
 <p-toast></p-toast>
 
 <div class="container-fluid  h-100 fs-5 lh-sm col-12">
-    <div class="row mb-4 px-3">
-        <div class="col-lg-12 col-sm-12 h-25">
+    <div class="row ">
+        <div class="col-lg-12 col-sm-12 h-25  mb-4">
             <nav aria-label="breadcrumb" class="nav  justify-content-between pb-3 col-sm-12  col-lg-12">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-secondary fw-bold lh-sm"
@@ -13,8 +13,6 @@
                 </ol>
             </nav>
         </div>
-    </div>
-    <div class="row gy-3">
 
         <div class="order-details col-12 h-100 ">
             <p class="w-100 d-flex flex-row justify-content-center">
@@ -22,8 +20,8 @@
                     data-bs-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
                     Order Details </button>
             </p>
-            <div class="collapse col-lg-12 col-sm-12 show" id="collapseExample">
-                <div class=" d-table rounded-4 fs-5 bg-white col-lg-12 col-sm-12  w-100 shadow-sm  table-responsive ">
+            <div class="collapse col-lg-12 col-sm-12 show table-responsive " id="collapseExample">
+                <div class=" d-table rounded-4 fs-5 bg-white col-lg-12 col-sm-12  w-100 shadow-sm ">
                     <table class="table fs-5 table-borderless col-lg-12 col-sm-12  rounded-4 text-secondary table-responsive">
                         <thead class="align-text-bottom ">
                             <tr class="border-bottom  ">
@@ -46,7 +44,7 @@
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                             order Status
                                         </button>
-                                        <ul ngbDropdownMenu>
+                                        <ul ngbDropdownMenu class="">
                                             <li>
                                                 <a class="dropdown-item" ngbDropdownItem
                                                     *ngFor="let status of orderStatuses;"
@@ -83,7 +81,7 @@
                     data-bs-target="#collapseExample2" aria-expanded="true" aria-controls="collapseExample2">
                     Order Items </button>
             </p>
-            <div class="collapse w-100 show" id="collapseExample2">
+            <div class="collapse w-100 show table-responsive" id="collapseExample2">
                 <app-order-item [orderItem]="returnedOrder?.orderItems"></app-order-item>
 
             </div>
@@ -99,7 +97,7 @@
                     data-bs-target="#collapseExample3" aria-expanded="true" aria-controls="collapseExample3">
                     Order Details </button>
             </p>
-            <div class="collapse w-100 show" id="collapseExample3">
+            <div class="collapse w-100 show table-responsive" id="collapseExample3">
                 <div class="d-table rounded-4 fs-5 bg-white shadow-sm pt-3 pb-3 col-lg-12 col-sm-12  w-100 shadow-sm  table-responsive">
                     <table class="table fs-5 table-borderless  col-lg-12 col-sm-12  rounded-4 text-secondary table-responsive">
                         <thead class="align-text-bottom ">

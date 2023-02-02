@@ -1,49 +1,64 @@
-<!-- <p-toast></p-toast>
 
-<div class="container-fluid h-100 fs-5 w-100  ">
-    <div class="row mb-5">
-        <div class="col-12 h-25 ">
-            <nav aria-label="breadcrumb" class="d-flex justify-content-between pb-3 ">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item fs-5 cursor-pointer text-secondary fw-bold" routerLink="/">Home</li>
-                    <li class="breadcrumb-item fs-5 cursor-pointer text-pinky fw-bold" routerLink="/categories">Categories</li>
+<p-toast></p-toast>
+<div class="container-fluid  vh-100 fs-5 col-12 lh-sm ">
+    <div class="row mb-5 px-3 ">
+        <div class="col-lg-12 col-sm-12 h-25">
+            <nav aria-label="breadcrumb" class="nav  justify-content-between pb-3 col-sm-12 col-lg-12text-nowrap ">
+                <ol class="breadcrumb text-nowrap">
+                    <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-secondary fw-bold lh-sm text-nowrap"
+                        routerLink="/">Home</li>
+                    <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-pinky fw-bold lh-sm  text-nowrap"
+                        routerLink="/categories">Categories</li>
                 </ol>
-                <button routerLink="/categories/form" type="button" class="btn btn-pinky fw-bold ">
+                <button routerLink="/categories/form" type="button" class="btn btn-pinky fw-bold lh-sm text-nowrap ">
                     <strong>+</strong> New</button>
             </nav>
-            </div>
-            </div>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="col-12">
+    <div class="row h-100 justify-content-center">
+        <div class="col-lg-12 col-sm-12 h-100">
+            <div class="vh-100 d-table rounded-4 fs-5 bg-white col-lg-12 col-sm-12  w-100 shadow-sm pt-7 position-relative table-responsive ">
+                <div class="col-lg-11 col-sm-10 d-flex flex-row align-items-center rounded-3 bg-pinky shadow position-absolute top-3 start-50 translate-middle-x px-4"
+                    style=" height: 7rem;">
+                    <span class="fs-5 fw-bold text-white"> Categories Table</span>
+                </div>
 
-            <div class="d-table table-responsive rounded-4 fs-5 bg-white shadow-sm pt-7 w-100 position-relative " style="min-height: 100vh;">
-            <div class= "w-90 d-flex flex-row align-items-center rounded-3 bg-pinky shadow position-absolute  top-3 start-50 translate-middle-x px-4"
-            style=" height: 7rem;">
-                <span class="fs-5 fw-bold text-white">Categories Table</span>
-            </div>
-
-            <table class="table fs-5 table-borderless rounded-4 text-secondary w-100"  >
-                <thead class="align-text-bottom  ">
+                <div class="table-responsive w-100 h-100">
+                <table
+                class="table fs-5 table-borderless  col-lg-12 col-sm-12  rounded-4 text-secondary  ">
+                <thead class="align-text-bottom ">
                     <tr class="border-bottom  ">
-                        <th scope="col" class=" ps-9 text-start align-middle">name</th>
-                        <th scope="col " class="text-start align-middle">icon</th>
-                        <th scope="col" class="text-start align-middle">color</th>
-                        <th scope="col" class="pe-9 text-end align-middle" ></th>
+
+                        <th scope="col " class="ps-9 fs-5  align-bottom text-nowrap lh-sm ">name</th>
+                        <th scope="col-5" class=" text-start fs-5    align-bottom text-nowrap lh-sm ">icon</th>
+                        <th scope="col" class=" text-start fs-5   align-bottom text-nowrap lh-sm ">color</th>
+                        <th scope="col" class="pe-9 fs-5   text-end align-bottom lh-sm"></th>
                     </tr>
                 </thead>
-                <tbody >
+                <tbody>
                     <tr *ngFor="let category of categories" class="border-top">
-                        <td class="ps-9 text-start align-middle ">{{category.name}}</td>
-                        <td class=" text-start align-middle"> <i class="pi" [ngClass]="'pi-'+ category.icon"> </i></td>
-                        <td class=" text-start align-middle">
-                            <i class="pi pi-circle-on fs-2" [ngStyle]="{ color: category.color }"></i>
+
+                        <td class="text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">{{category?.name}}</td>
+
+
+
+                        <td class="text-start fs-5    lh-sm align-middle  text-nowrap ">
+                            <i class="pi" [ngClass]="'pi-'+ category?.icon"> </i>
                         </td>
 
-                        <td class="text-end pe-9  align-middle">
-                            <button (click)="editCategory(category._id)" type="button" class="btn btn-pinky me-2">Edit
+
+                        <td class=" text-start fs-5   lh-sm  align-middle  text-nowrap ">
+                            <i class="pi pi-circle-on fs-2" [ngStyle]="{ color: category?.color }"></i>
+                        </td>
+
+
+                        <td class="text-end  fs-5   pe-9 align-middle  text-nowrap  lh-sm ">
+                            <button (click)="editCategory(category._id)" type="button"
+                                class="btn btn-pinky me-2">Edit
                             </button>
-                            <button (click)="deleteCategory(category._id)" type="button" class="btn btn-pinky ">Delete
+                            <button (click)="deleteCategory(category._id)" type="button"
+                                class="btn btn-pinky ">Delete
                             </button>
                         </td>
 
@@ -51,84 +66,8 @@
                 </tbody>
 
             </table>
-        </div>
-        </div>
-
-    </div>
-
-</div>
- <div class=" d-flex flex-column pt-4 h-100 pb-2 fs-5 w-100 pe-2 "></div> -->
-
-
-<p-toast></p-toast>
-<div class="container-fluid  h-100 fs-5 col-12 lg-sm ">
-    <div class="row mb-5 px-3">
-        <div class="col-lg-12 col-sm-12 h-25">
-            <nav aria-label="breadcrumb" class="nav  justify-content-between pb-3 col-sm-12 w-100 col-lg-12">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-secondary fw-bold lh-sm"
-                        routerLink="/">Home</li>
-                    <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-pinky fw-bold lh-sm"
-                        routerLink="/categories">Categories</li>
-                </ol>
-                <button routerLink="/categories/form" type="button" class="btn btn-pinky fw-bold lh-sm">
-                    <strong>+</strong> New</button>
-            </nav>
-
-
-
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12 col-sm-12">
-            <div class="d-table rounded-4 fs-5 bg-white col-lg-12 col-sm-12  w-100 shadow-sm pt-7 position-relative table-responsive "
-                style="min-height: 100vh">
-                <div class="w-90 d-flex flex-row align-items-center rounded-3 bg-pinky shadow position-absolute top-3 start-50 translate-middle-x px-4"
-                    style=" height: 7rem;">
-                    <span class="fs-5 fw-bold text-white"> Categories Table</span>
                 </div>
-                <table
-                    class="table fs-5 table-borderless  col-lg-12 col-sm-12  rounded-4 text-secondary table-responsive  ">
-                    <thead class="align-text-bottom ">
-                        <tr class="border-bottom  ">
 
-                            <th scope="col " class="ps-9 fs-5  align-bottom text-nowrap lh-sm ">name</th>
-                            <th scope="col-5" class=" text-start fs-5    align-bottom text-nowrap lhsm ">icon</th>
-                            <th scope="col" class=" text-start fs-5   align-bottom text-nowrap lh-sm ">color</th>
-                            <th scope="col" class="pe-9 fs-5   text-end align-bottom lh-sm"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let category of categories" class="border-top">
-
-                            <td class="text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">{{category?.name}}</td>
-
-
-
-                            <td class="text-start fs-5    lh-sm align-middle  text-nowrap ">
-                                <i class="pi" [ngClass]="'pi-'+ category?.icon"> </i>
-                            </td>
-
-
-                            <td class=" text-start fs-5   lh-sm  align-middle  text-nowrap ">
-                                <i class="pi pi-circle-on fs-2" [ngStyle]="{ color: category?.color }"></i>
-                            </td>
-
-
-                            <td class="text-end  fs-5   pe-9 align-middle  text-nowrap  lh-sm ">
-                                <button (click)="editCategory(category._id)" type="button"
-                                    class="btn btn-pinky me-2">Edit
-                                </button>
-                                <button (click)="deleteCategory(category._id)" type="button"
-                                    class="btn btn-pinky ">Delete
-                                </button>
-                            </td>
-
-                        </tr>
-                    </tbody>
-
-                </table>
             </div>
 
         </div>

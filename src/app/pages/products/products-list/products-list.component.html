@@ -17,69 +17,67 @@
     </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-12 col-sm-12 col-md-12">
-            <div class="d-table rounded-4 fs-5 bg-white col-lg-12 col-sm-6 col-md-11  shadow-sm pt-7 position-relative table-responsive " style="min-height: 100vh"  >
-                <div class= "w-90 d-flex flex-row align-items-center rounded-3 bg-pinky shadow position-absolute top-3 start-50 translate-middle-x px-4"
+    <div class="row ">
+        <div class="col-lg-12 col-sm-12 col-md-12 h-100">
+            <div class=" vh-100 rounded-4 fs-5 bg-white col-lg-12 col-sm-12 shadow-sm pt-7 position-relative"  >
+                <div class= "col-lg-11 col-sm-10  d-flex flex-row align-items-center rounded-3 bg-pinky shadow position-absolute top-3 start-50 translate-middle-x px-4"
                 style=" height: 7rem;" >
                     <span class="fs-5 fw-bold text-white">Products Table</span>
                 </div>
-                <table class="table fs-5 table-borderless  col-lg-12 col-md-12 col-sm-12  rounded-4 text-secondary table-responsive  ">
-                    <thead class="align-text-bottom ">
-                        <tr class="border-bottom  ">
+                <div class="table-responsive h-100 w-100">
+                    <table class="table fs-5 table-borderless  col-lg-12 col-md-12 col-sm-12  rounded-4 text-secondary ">
+                        <thead class="align-text-bottom ">
+                            <tr class="border-bottom  ">
+                                <th scope="col " class="ps-9 fs-5  align-bottom text-nowrap lh-sm ">name</th>
+                                <th scope="col-5" class=" text-start fs-5    align-bottom text-nowrap lh-sm ">image</th>
+                                <th scope="col" class=" text-start fs-5   align-bottom text-nowrap lh-sm ">price</th>
+                                <th scope="col" class=" text-start fs-5   align-bottom text-nowrap lh-sm ">stock</th>
+                                <th scope="col" class="text-start  fs-5   align-bottom text-nowrap lh-sm">category</th>
+                                <th scope="col-2" class="text-start fs-5  text-nowrap align-bottom lh-sm">created at</th>
+                                <th scope="col" class="pe-9 fs-5 text-nowrap text-end align-bottom lh-sm"></th>
 
-                            <th scope="col " class="ps-9 fs-5  align-bottom text-nowrap lh-sm ">name</th>
-                            <th scope="col-5" class=" text-start fs-5    align-bottom text-nowrap lhsm ">image</th>
-                            <th scope="col" class=" text-start fs-5   align-bottom text-nowrap lh-sm ">price</th>
-                            <th scope="col" class=" text-start fs-5   align-bottom text-nowrap lh-sm ">stock</th>
-                            <th scope="col" class="text-start  fs-5   align-bottom text-nowrap lh-sm">category</th>
-                            <th scope="col-2" class="text-start fs-5  text-nowrap align-bottom lh-sm">created at</th>
-                            <th scope="col" class="pe-9 fs-5 text-nowrap text-end align-bottom lh-sm"></th>
+                            </tr>
+                        </thead>
+                        <tbody >
+                            <tr *ngFor="let product of products" class="border-top">
 
-                        </tr>
-                    </thead>
-                    <tbody >
-                        <tr *ngFor="let product of products" class="border-top">
+                                <td class="text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">{{product.name}}</td>
 
-                            <td class="text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">{{product.name}}</td>
+                                <td style="max-height: 2rem; max-width: 2rem;"> <img [src]="product.image" class="rounded-4 object-fit-contain w-100 "  >
+                                </td>
+                                <td class="text-start fs-5   align-middle lh-sm  text-nowrap ">
+                                    {{product.price | currency : 'EGP': 'symbol' : '1.0-0' }}
+                                </td>
+                                <td class="text-start fs-5    lh-sm align-middle  text-nowrap ">
+                                    {{product.countInStock}}
 
-                            <td style="max-height: 2rem; max-width: 2rem;"> <img [src]="product.image" class="rounded-4 object-fit-contain w-100 "  >
-                            </td>
-                            <td class="text-start fs-5   align-middle lh-sm  text-nowrap ">
-                                {{product.price | currency : 'EGP': 'symbol' : '1.0-0' }}
-                            </td>
-                            <td class="text-start fs-5    lh-sm align-middle  text-nowrap ">
-                                {{product.countInStock}}
-
-                            </td>
-                            <td class=" text-start fs-5   lh-sm  align-middle  text-nowrap ">
-                                {{product.category?.name}}
-                            </td>
-                            <td class="text-start fs-5   lh-sm align-middle ">
-                                {{product.dateCreated | date : 'short'}}
-                            </td>
+                                </td>
+                                <td class=" text-start fs-5   lh-sm  align-middle  text-nowrap ">
+                                    {{product.category?.name}}
+                                </td>
+                                <td class="text-start fs-5  text-nowrap lh-sm align-middle ">
+                                    {{product.dateCreated | date : 'short'}}
+                                </td>
 
 
-                            <td class="text-end  fs-5   pe-9 align-middle  text-nowrap  lh-sm ">
-                                <button (click)="editProduct(product.id)" type="button" class="btn btn-pinky me-2">Edit
-                                </button>
-                                <button (click)="deleteProduct(product.id)" type="button" class="btn btn-pinky ">Delete
-                                </button>
-                            </td>
+                                <td class="text-end  fs-5   pe-9 align-middle  text-nowrap  lh-sm ">
+                                    <button (click)="editProduct(product.id)" type="button" class="btn btn-pinky me-2">Edit
+                                    </button>
+                                    <button (click)="deleteProduct(product.id)" type="button" class="btn btn-pinky ">Delete
+                                    </button>
+                                </td>
 
-                        </tr>
-                    </tbody>
+                            </tr>
+                        </tbody>
 
-                </table>
+                    </table>
+                </div>
+
+                </div>
         </div>
 
         </div>
     </div>
-
-
-        </div>
-
-
 <p-confirmDialog [style]="{width: '36vw'}" [baseZIndex]="10000" rejectButtonStyleClass=""
 acceptButtonStyleClass=""></p-confirmDialog>
 

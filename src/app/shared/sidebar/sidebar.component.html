@@ -1,32 +1,35 @@
-<div class="d-lg-flex w-100  flex-column  vh-100  fs-5 d-none lh-sm " >
+<!-- <div class="container-fluid h-100 col-12 bg-pinky position-relative ">
 
-        <ul class="  lh-sm  fs-5  nav  flex-column   col  h-95  w-20  flex-nowrap  align-items-start  justify-content-evenly  list-unstyled  rounded-4  bg-primary  pt-3  px-3  position-fixed">
-                <li class="align-self-center  d-flex flex-row justify-content-center col-12 h-6 rounded-2 text-nowrap text-white ">
-                 <H5>Admin Dashboard</H5>
-                </li>
-                <hr class="col-12 text-white">
+        <div class="row justify-content-center h-100" > -->
 
-                <li class="bg text-nowrap col-12 d-flex flex-row justify-content-start h-9  ps-3 text-white rounded-2 align-items-center  cursor-pointer" routerLink="/dashboard" routerLinkActive="tog">
-                        <i class="bi bi-columns pe-1 fst-normal"> Dashboard</i>
-                </li>
 
-                <li class="bg text-nowrap col-12 d-flex flex-row justify-content-start h-9 ps-3 text-white rounded-2 align-items-center  cursor-pointer" routerLink="/products" routerLinkActive="tog">
-                        <i class="bi bi-tags fst-normal"> Products</i>
-                </li>
+                           <ul class=" lh-sm fs-5 d-flex flex-column w-20 h-95 justify-content-evenly  list-unstyled rounded-4 bg-primary pt-3 px-3 position-fixed" style="overflow-y: auto;overflow-x: auto; min-height: 110px;">
 
-                <li class="bg text-nowrap col-12 d-flex flex-row justify-content-start h-9 ps-3 text-white rounded-2 align-items-center  cursor-pointer" routerLink="/categories" routerLinkActive="tog">
-                        <i class="bi bi-card-list fst-normal"> Categories</i>
-                </li>
-                <li class="bg text-nowrap col-12 d-flex flex-row justify-content-start h-9 ps-3 text-white rounded-2 align-items-center   cursor-pointer" routerLink="/orders" routerLinkActive="tog">
-                        <i class="bi bi-bag-heart fst-normal"> Orders</i>
-                </li>
-                <li class="bg text-nowrap col-12 d-flex flex-row justify-content-start h-9 ps-3 text-white rounded-2 align-items-center  cursor-pointer" routerLink="/users" routerLinkActive="tog">
-                        <i class="bi bi-people fst-normal"> Users</i>
-                </li>
+                                <li class="  text-nowrap  h-5 col-12 d-flex flex-row justify-content-center  text-white rounded-2 align-items-center " style="min-height:4rem"  >
+                                 <H5 >Admin Dashboard</H5>
+                                </li>
+                                <hr class="col-12 text-white">
 
-                <li class="bg text-nowrap col-lg-12 d-flex flex-row justify-content-start align-items-center ps-3  h-9 text-white rounded-2  cursor-pointer" routerLinkActive="tog" (click)="logOut()">
-                        <i class="bi bi-arrow-down-square fst-normal"> Log Out</i>
-                </li>
-        </ul>
+                                <li class="bg text-nowrap  h-9  col-12 d-flex flex-row justify-content-start   ps-3 text-white rounded-2 align-items-center  cursor-pointer" routerLink="/dashboard" routerLinkActive="tog" style="min-height:4rem" >
+                                        <i class="bi bi-columns pe-1 fst-normal"> Dashboard</i>
+                                </li>
 
-</div>
+                                <li class="bg text-nowrap h-9  col-12 d-flex flex-row justify-content-start  ps-3 text-white rounded-2 align-items-center  cursor-pointer" routerLink="/products" routerLinkActive="tog" style="min-height:4rem" >
+                                        <i class="bi bi-tags fst-normal"> Products</i>
+                                </li>
+
+                                <li class="bg text-nowrap h-9 col-12 d-flex flex-row justify-content-start  ps-3 text-white rounded-2 align-items-center  cursor-pointer" routerLink="/categories" routerLinkActive="tog" style="min-height:4rem" >
+                                        <i class="bi bi-card-list fst-normal"> Categories</i>
+                                </li>
+                                <li class="bg text-nowrap h-9 col-12 d-flex flex-row justify-content-start  ps-3 text-white rounded-2 align-items-center   cursor-pointer" routerLink="/orders" routerLinkActive="tog" style="min-height:4rem" >
+                                        <i class="bi bi-bag-heart fst-normal"> Orders</i>
+                                </li>
+                                <li class="bg text-nowrap h-9 col-12 d-flex flex-row justify-content-start  ps-3 text-white rounded-2 align-items-center  cursor-pointer" routerLink="/users" routerLinkActive="tog" style="min-height:4rem" >
+                                        <i class="bi bi-people fst-normal"> Users</i>
+                                </li>
+
+                                <li class="bg text-nowrap h-9 col-lg-12 d-flex flex-row justify-content-start align-items-center ps-3   text-white rounded-2  cursor-pointer" routerLinkActive="tog" (click)="logOut()" style="min-height:4rem" >
+                                        <i class="bi bi-arrow-down-square fst-normal"> Log Out</i>
+                                </li>
+                        </ul>
+

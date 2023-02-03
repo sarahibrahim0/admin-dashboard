@@ -1,22 +1,18 @@
 <p-toast></p-toast>
-<div class="container-fluid  h-100 fs-5 col-12  ">
-    <div class="row ">
+<div class="container-fluid  vh-100 fs-5 col-12  lh-sm ">
+    <div class="row justify-content-center ">
         <div class="col-lg-12 col-sm-12 h-25 mb-5">
-            <nav aria-label="breadcrumb" class="nav  justify-content-between pb-3  col-lg-12 col-sm-12">
+            <nav aria-label="breadcrumb" class="nav  justify-content-between pb-3 col-sm-12 col-lg-12 text-nowrap">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-secondary fw-bold lh-sm"
+                    <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-secondary fw-bold lh-sm text-nowrap"
                         routerLink="/">Home</li>
-                    <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-pinky fw-bold lh-sm"
+                    <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-pinky fw-bold lh-sm  text-nowrap"
                         routerLink="/users">Users</li>
                 </ol>
-                <button routerLink="/user/form" type="button" class="btn btn-pinky fw-bold lh-sm">
+                <button routerLink="/user/form" type="button" class="btn btn-pinky fw-bold lh-sm text-nowrap">
                     <strong>+</strong> New</button>
             </nav>
-
-
-
         </div>
-
         <div class="col-lg-12 col-sm-12 h-100 ">
             <div class=" vh-100 rounded-4 fs-5 bg-white col-lg-12 col-sm-12  w-100 shadow-sm pt-7 position-relative ">
                 <div class="col-lg-11 col-sm-10 d-flex flex-row align-items-center rounded-3 bg-pinky shadow position-absolute top-3 start-50 translate-middle-x px-4"
@@ -29,14 +25,15 @@
                             class="table fs-5 table-borderless  col-lg-12 col-sm-12  rounded-4 text-secondary table-responsive  ">
                             <thead class="align-text-bottom ">
                                 <tr class="border-bottom  ">
-                                    <th scope="col " class=" text-start ps-9 fs-5  align-bottom text-nowrap lh-sm ">name</th>
+                                    <th scope="col " class=" text-start ps-9 fs-5  align-bottom text-nowrap lh-sm ">name
+                                    </th>
                                     <th scope="col-5" class=" text-start fs-5    align-bottom text-nowrap lh-sm ">email
                                     </th>
                                     <th scope="col" class=" text-start fs-5   align-bottom text-nowrap lh-sm ">is admin
                                     </th>
                                     <th scope="col" class=" text-start fs-5   align-bottom text-nowrap lh-sm ">country
                                     </th>
-                                    <th scope="col" class="pe-9 fs-5   text-end align-bottom lh-sm"></th>
+                                    <th scope="col" class="pe-9 fs-5 text-nowrap text-end align-bottom lh-sm"></th>
 
                                 </tr>
                             </thead>

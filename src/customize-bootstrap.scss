@@ -193,6 +193,22 @@ $utilities: map-merge(
       (
         values: map-merge(
           map-get(map-get($utilities, "height"), "values"),
+          (40: 40%),
+        ),
+      ),
+    ),
+  )
+);
+
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "height": map-merge(
+      map-get($utilities, "height"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "height"), "values"),
           (80: 80%),
         ),
       ),

@@ -1,9 +1,9 @@
 <p-toast></p-toast>
-<div class="container-fluid h-100 fs-5 col-12 lh-sm  ">
-            <div class="row mb-5 px-3 text-nowrap">
-                <div class="col-lg-12 col-sm-12 h-25 text-nowrap">
+<div class="container-fluid vh-100 fs-5 col-12 lh-sm  ">
+            <div class="row mb-5 justify-content-between flex-nowrap">
+                <div class="col-lg-12 col-sm-12 h-25 text-nowrap ">
             <nav aria-label="breadcrumb" class="nav  justify-content-between pb-3 col-sm-12 w-100 col-lg-12 text-nowrap ">
-                <ol class="breadcrumb text-nowrap col-sm-8">
+                <ol class="breadcrumb text-nowrap ">
                     <li class="breadcrumb-item fs-5 cursor-pointer text-secondary fw-bold text-nowrap" routerLink="/">Home</li>
                     <li class="breadcrumb-item fs-5 cursor-pointer text-pinky btn-pinky fw-bold text-nowrap" routerLink="/products">
                         Products
@@ -29,7 +29,7 @@
 
 
             <!--Form-->
-            <div class="row">
+            <div class="row justify-content-center">
                 <div class="col-lg-12 col-sm-12">
             <form [formGroup]="form" class="bg-pinky rounded-4 p-4 grid text-white fw-bold ">
 
@@ -103,7 +103,7 @@
         <button ngbDropdownToggle class="btn  bg-white fs-5  text-secondary dropdown-toggle mt-2 fs-5 " type="button"
             data-bs-toggle="dropdown" aria-expanded="false">
 Product Category        </button>
-        <ul ngbDropdownMenu>
+        <ul ngbDropdownMenu class="col-sm-3">
             <li><a class="dropdown-item " [ngClass]="{ 'selected' :category?.name === currentProduct?.category?.name}"
                  ngbDropdownItem *ngFor="let category of categories;"
                  routerLinkActive=""

@@ -70,7 +70,7 @@ export class ProductFormComponent implements OnInit {
       {
         next: (product: Product) => {
           this.MessageService.add({ severity: 'success', summary: 'success', detail: `Product ${product.name} Is Created` });
-          timer(1600).subscribe(() => {
+          timer(1000).subscribe(() => {
             this.location.back()
           })
 
@@ -117,7 +117,6 @@ export class ProductFormComponent implements OnInit {
         this.editMode = true;
         const id = params['id']
         this.productService.getProductById(id).subscribe(resProduct => {
-        // this.CategoriesService.getCategoryById()
           const product = resProduct;
           if (product) {
 
@@ -128,12 +127,7 @@ export class ProductFormComponent implements OnInit {
             this.form.controls['brand'].setValue(resProduct.brand)
             this.form.controls['category'].setValue(resProduct.category?._id)
             this.form.controls['countInStock'].setValue(resProduct.countInStock)
-            // this.form.controls['description'].setValue(resProduct.description)
             this.form.controls['richDescription'].setValue(resProduct.richDescription)
-            // this.form.controls['images'].setValue(resProduct.images)
-            // this.form.controls['dateCreated'].setValue(resProduct.dateCreated)
-            // this.form.controls['rating'].setValue(resProduct.rating)
-            // this.form.controls['numReviews'].setValue(resProduct.numReviews)
             this.form.controls['isFeatured'].setValue(resProduct.isFeatured)
             this.src = resProduct.image
             this.productForm['image'].setValidators([]);

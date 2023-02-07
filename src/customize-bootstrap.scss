@@ -264,6 +264,8 @@ $utilities: map-merge(
 
 }
 
+
+
 .p-inputtext:enabled:focus{
 
   border: 0px solid black;
@@ -343,6 +345,25 @@ $color-mode-type: data;
   $dropdown-color:   var(--bs-white);
 
   .dropdown-item{ color: var(--bs-white)};
+
+  .card{ color:  var(--bs-white); };
+  .p-dialog .p-dialog-header{
+    background-color: var(--bs-secondary-bg-subtle);
+    color: var(--bs-white);
+  };
+
+  .p-dialog .p-dialog-content{
+    background-color: var(--bs-secondary-bg-subtle);
+    color: var(--bs-white);
+
+  };
+
+  .p-dialog .p-dialog-footer{
+    background-color: var(--bs-secondary-bg-subtle);
+    color: var(--bs-white);
+
+  }
+
 
 };
 

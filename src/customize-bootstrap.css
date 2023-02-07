@@ -2843,8 +2843,12 @@ progress {
 [data-bs-theme=dark] .login {
   background-color: var(--bs-secondary-bg-subtle);
 }
-[data-bs-theme=dark] .breadcrumb-item {
+[data-bs-theme=dark] .dropdown-item {
   color: var(--bs-white);
+}
+
+.trorder {
+  overflow-x: visible !important;
 }
 
 .align-baseline {

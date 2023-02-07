@@ -338,18 +338,20 @@ $color-mode-type: data;
 
   };
 
-  .breadcrumb-item{
-    color: var(--bs-white);
+  $breadcrumb-divider-color:  var(--bs-white);
 
-    $breadcrumb-divider-color:  $white
+  $dropdown-color:   var(--bs-white);
 
-  }
+  .dropdown-item{ color: var(--bs-white)};
+
 };
 
 
 
 
-
+.trorder{
+  overflow-x: visible!important;
+}
 @import "../node_modules/bootstrap/scss/utilities/api";
 
 

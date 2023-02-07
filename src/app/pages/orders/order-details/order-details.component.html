@@ -20,9 +20,9 @@
                     data-bs-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
                     Order Details </button>
             </p>
-            <div class="collapse col-lg-12 col-sm-12 show table-responsive " id="collapseExample">
+            <div class="collapse col-lg-12 col-sm-12 show table-responsive trorder " id="collapseExample">
                 <div class=" d-table rounded-4 fs-5  col-lg-12 col-sm-12  w-100 shadow-sm ">
-                    <table class="table fs-5 table-borderless col-lg-12 col-sm-12  rounded-4 text-secondary table-responsive">
+                    <table class="table fs-5 table-borderless col-lg-12 col-sm-12  rounded-4 text-secondary">
                         <thead class="align-text-bottom ">
                             <tr class="border-bottom  ">
                                 <th scope="col " class="ps-9 fs-5  align-bottom text-nowrap lh-sm">order id</th>
@@ -44,7 +44,7 @@
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                             order Status
                                         </button>
-                                        <ul ngbDropdownMenu class="">
+                                        <ul ngbDropdownMenu class="z-3">
                                             <li>
                                                 <a class="dropdown-item" ngbDropdownItem
                                                     *ngFor="let status of orderStatuses;"

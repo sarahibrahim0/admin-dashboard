@@ -19,7 +19,7 @@ const orderStatus = {
 
 @Component({
   selector: 'app-orders-list',
-  templateUrl: './orders-list.component.html',
+  templateUrl:'./orders-list.component.html',
   styleUrls: ['./orders-list.component.scss']
 })
 

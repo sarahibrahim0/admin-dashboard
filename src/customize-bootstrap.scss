@@ -340,9 +340,8 @@ $color-mode-type: data;
 
   };
 
-  $breadcrumb-divider-color:  var(--bs-white);
+  $dropdown-color: var(--bs-white);
 
-  $dropdown-color:   var(--bs-white);
 
   .dropdown-item{ color: var(--bs-white)};
 
@@ -362,11 +361,19 @@ $color-mode-type: data;
     background-color: var(--bs-secondary-bg-subtle);
     color: var(--bs-white);
 
+  };
+
+
+  .breadcrumb-item {
+    // The separator between breadcrumbs (by default, a forward-slash: "/")
+    + .breadcrumb-item {
+
+      &::before {
+        color: var(--#{$prefix}white);
+      }
+    }
   }
-
-
 };
-
 
 
 

@@ -2861,6 +2861,9 @@ progress {
   background-color: var(--bs-secondary-bg-subtle);
   color: var(--bs-white);
 }
+[data-bs-theme=dark] .breadcrumb-item + .breadcrumb-item::before {
+  color: var(--bs-white);
+}
 
 .trorder {
   overflow-x: visible !important;

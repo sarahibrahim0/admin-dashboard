@@ -32,10 +32,23 @@ $position-values: (
 7:3%,
 2:-10%,
 50: 50%,
-100: 100%
+100: 100%,
+a:3%,
+b:1%
 );
 
+.ddbutton:hover{
+  --bs-btn-hover-bg: transparent;
+};
 
+
+.ddbutton:focus  {
+  --bs-btn-active-bg: transparent;
+};
+
+.ddbutton-check:checked + .ddbutton, :not(.ddbutton-check) + .ddbutton:active, .ddbutton:first-child:active, .ddbutton.active, .ddbutton.show{
+  --bs-btn-active-bg: transparent;
+}
 
 
 @import "../node_modules/bootstrap/scss/maps";
@@ -94,6 +107,21 @@ $utilities: map-merge(
         values: map-merge(
           map-get(map-get($utilities, "height"), "values"),
           (95: 96%),
+        ),
+      ),
+    ),
+  )
+);
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "height": map-merge(
+      map-get($utilities, "height"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "height"), "values"),
+          (20: 20%),
         ),
       ),
     ),
@@ -184,6 +212,20 @@ $utilities: map-merge(
 
 
 
+$utilities: map-merge(
+  $utilities,
+  (
+    "height": map-merge(
+      map-get($utilities, "height"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "height"), "values"),
+          (65: 65%),
+        ),
+      ),
+    ),
+  )
+);
 
 
 
@@ -255,14 +297,14 @@ $utilities: map-merge(
   background-color: #bd2158!important;
   border: 0px solid black;
   box-shadow: 0px 0px red;
-}
+};
 
 .p-inputtext:enabled:hover{
 
   border: 0px solid black;
   box-shadow: 0px 0px red;
 
-}
+};
 
 
 
@@ -271,48 +313,52 @@ $utilities: map-merge(
   border: 0px solid black;
   box-shadow: 0px 0px red;
 
-}
+};
 
 .p-inputtext:enabled{
 
   border: 0px solid black;
   box-shadow: 0px 0px red;
 
-}
+};
 
 
 .bg:hover{
   background-image: linear-gradient(195deg, #42424a 0%, #191919 100%);
-  }
-
+};
 
 
   .tog{
       background-image: linear-gradient(195deg, #EC407A 0%, #D81B60 100%);
-  }
+  };
 
 
   .tog:hover{
     background-image: linear-gradient(195deg, #EC407A 0%, #7d002e 100%);
-  }
+  };
 
 .dropdown-item:active{
     background-color: #de2768!important;
-  }
+  };
 
 .selected{
   background-color: #f67da8!important;
-}
+};
 
-.dropdown-menu { max-height: 11.25rem; overflow-y: auto; min-width: 100% !important; background-attachment: local, local, scroll, scroll; }
-
-.dropdown-item { white-space: normal; }
+.dropdown-menu { max-height: 11.25rem; overflow-y: auto; min-width: 100% !important; background-attachment: local, local, scroll, scroll; };
+.dropdown-item { white-space: normal; };
 
 
 
 $color-mode-type: data;
 
 @include color-mode(dark) {
+
+  label{
+    color: var(--bs-white);
+
+  };
+
   table {
     background-color: var(--bs-secondary-bg-subtle);
 
@@ -372,9 +418,28 @@ $color-mode-type: data;
         color: var(--#{$prefix}white);
       }
     }
-  }
-};
+  };
 
+
+  .mode{
+    color: var(--#{$prefix}white);
+  };
+
+  .dropdown-toggle::after{
+
+    color: var(--#{$prefix}white);
+
+
+  }
+
+
+};
+.dropdown-toggle::after{
+
+  color: var(--#{$prefix}dark);
+
+
+}
 
 
 .trorder{

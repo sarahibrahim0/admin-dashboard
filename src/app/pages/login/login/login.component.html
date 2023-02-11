@@ -1,35 +1,52 @@
 <p-toast></p-toast>
+<div class=" position-relative bg-pinky " style=" background-image:url( '../assets/photo-1497294815431-9365093b7331.png');
+    background-size: cover;
+    min-height: 100%;
+    ">
+<span class="posision-absolute top-0 start-0 " style="background-image: linear-gradient(195deg, #42424a 0%, #191919 100%);
+width: 100%;
+min-height: 100%!important;
+position: absolute;
+background-size: cover;
+opacity: .6">
+  </span>
 
-<div class="container-fluid w-100 vh-100  p-4 d-flex flex-row justify-content-center align-items-center text-primary  "
-style="background-image:url( '../assets/photo-1497294815431-9365093b7331.png');">
-<span class="grediant w-100 h-100"></span>
-  <form [formGroup]="loginForm" class="login bg-white shadow h-lg-50 h-70 col-lg-3 col-md-7  col-sm-9 rounded pt-6 ps-4 pe-4 position-relative mt-4 d-flex flex-column align-items-center justify-content-evenly">
-    <div class= "d-flex flex-column justify-content-center align-items-center pt-2 rounded-3 bg-pinky shadow position-absolute z-index-2 top-2 start-50 w-90 translate-middle-x px-4"
+<div class="container-fluid z-3 col-12 h-100 p-6 text-primary ">
+  <div class="row  col-12 h-100 justify-content-center align-items-center ">
+
+  <form [formGroup]="loginForm" class=" login shadow z-3  col-lg-4 col-md-7  col-sm-9 rounded  ps-4 pe-4 position-relative bg-white   "
+  style="min-height: 28rem; height: 80vh; "
+  >
+    <div class= "d-flex flex-column justify-content-center align-items-center pt-2 rounded-3 bg-pinky shadow position-absolute top-2 start-50 w-90 translate-middle-x px-4"
     style=" height: 10rem;">
     <span class="text-white fw-bold fs-4">Sign In</span>
     <div class="col-7 d-flex flex-row align-items-center justify-content-between mt-2 ">
-      <span class=""><i class="bi bi-google fs-5 text-white cursor-pointer shadow "></i></span>
+      <span><i class="bi bi-google fs-5 text-white cursor-pointer shadow "></i></span>
       <span><i class="bi bi-github fs-5  text-white cursor-pointer shadow"></i></span>
       <span><i class="bi bi-facebook fs-5 text-white cursor-pointer shadow"></i></span>
     </div>
-
   </div>
-<div class="h-80 d-flex flex-column justify-content-start ">
-  <div class="form-group">
-    <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" formControlName="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-    <small id="emailHelp" class="form-text text-muted ">We'll never share your email with anyone else.</small>
-  </div>
-  <div class="form-group mt-2">
-    <label for="exampleInputPassword1">Password</label>
-    <input type="password" class="form-control" formControlName="password"  id="exampleInputPassword1" placeholder="Password">
+<div class=" w-100 d-flex flex-column justify-content-center  align-items-end "  style="min-height: 20rem; height: 100%;">
+  <div class="form-group w-100 "  style="min-height: 5rem ">
+    <label class="mb-2" for="exampleInputEmail1">Email address</label>
+    <input (ngModelChange)="clear()"  type="email" class="form-control" formControlName="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
   </div>
 
-  <button type="submit" class="btn btn-pinky mt-4 col-12 " (click)="login()">Sign In</button>
-  <small *ngIf="error"   class="text-danger align-self-center mt-3"> Wrong Email or Password</small>
+  <div class="form-group  w-100  " style="min-height: 5rem;height: 5rem;">
+    <label class="mb-2" for="exampleInputPassword1">Password</label>
+    <input (ngModelChange)="clear()" type="password" class="form-control" formControlName="password"  id="exampleInputPassword1" placeholder="Password">
+  </div>
+
+  <button type="submit" class="btn btn-pinky mt-4 w-100  " style="min-height: 2rem; height: 3rem;" (click)="login()">Sign In</button>
+  <small    [ngClass]="{'invisible' : !error }"   class="text-danger align-self-center mt-3 visible "> Wrong Email or Password</small>
 
 </div>
 
 
   </form>
+  </div>
+
 </div>
+
+
+<!-- </div> -->

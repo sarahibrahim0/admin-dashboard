@@ -1,8 +1,8 @@
 
 <p-toast></p-toast>
 <div class="container-fluid  vh-100 fs-5 col-12 lh-sm ">
-    <div class="row justify-content-center">
-        <div class="col-lg-12 col-sm-12 h-25 mb-5">
+    <div class="row justify-content-center ">
+        <div class="col-lg-12 col-sm-12 h-25 mb-5 ">
             <nav aria-label="breadcrumb" class="nav  justify-content-between pb-3 col-sm-12 col-lg-12 text-nowrap ">
                 <ol  class="breadcrumb text-nowrap ">
                     <li class=" breadcrumb-item nav-fill fs-5 cursor-pointer text-secondary fw-bold lh-sm text-nowrap"
@@ -10,8 +10,28 @@
                     <li class="activeli breadcrumb-item nav-fill fs-5 cursor-pointer text-pinky fw-bold lh-sm  text-nowrap"
                         routerLink="/categories">Categories</li>
                 </ol>
-                <button routerLink="/categories/form" type="button" class="btn btn-pinky fw-bold lh-sm text-nowrap ">
-                    <strong>+</strong> New</button>
+
+                <div class="d-flex flex-row ">
+                    <button routerLink="/categories/form" type="button" class="btn btn-pinky fw-bold lh-sm ">
+                        <strong>+</strong> New</button>
+
+                        <div class="dropdown ">
+                            <button class=" ddbutton btn btn-secondary  dropdown-toggle bg-transparent border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="mode bi bi-brightness-high-fill text-dark">
+                                </i>
+
+                            </button >
+                            <ul class="dropdown-menu">
+                              <li ><a class="dropdown-item" >
+                                <i class="bi bi-brightness-high-fill">
+                                </i></a></li>
+                                <li><a class="dropdown-item" >
+                                 <i class="bi bi-cloud-moon-fill"></i></a></li>
+                            </ul>
+                          </div>
+
+                </div>
+
             </nav>
         </div>
 
@@ -42,7 +62,7 @@
 
 
                         <td class="text-start fs-5    lh-sm align-middle  text-nowrap ">
-                            <i class="pi" [ngClass]="'pi-'+ category?.icon"> </i>
+                            <i class="bi" [ngClass]="'bi-'+ category?.icon" [ngStyle]="{ color: category?.color }"> </i>
                         </td>
 
 

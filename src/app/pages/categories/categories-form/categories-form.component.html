@@ -13,7 +13,7 @@
                        >Category Details
                     </li>
                 </ol>
-                <div>
+                <div class="d-flex flex-row">
                     <button (click)="onSubmit()" type="button" class="btn btn-pinky fw-bold me-2"
                         *ngIf="!editMode; else edit">
                         <strong>+</strong>
@@ -23,6 +23,21 @@
                     </ng-template>
 
                     <button (click)="onCancel()" type="button" class="btn btn-pinky fw-bold "> Cancel</button>
+
+                    <div class="dropdown ">
+                        <button class=" ddbutton btn btn-secondary  dropdown-toggle bg-transparent border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="mode bi bi-brightness-high-fill text-dark">
+                            </i>
+
+                        </button >
+                        <ul class="dropdown-menu">
+                          <li ><a class="dropdown-item" >
+                            <i class="bi bi-brightness-high-fill">
+                            </i></a></li>
+                            <li><a class="dropdown-item" >
+                             <i class="bi bi-cloud-moon-fill"></i></a></li>
+                        </ul>
+                      </div>
                 </div>
             </nav>
 

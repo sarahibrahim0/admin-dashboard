@@ -9,8 +9,28 @@
                         <li class="breadcrumb-item nav-fill fs-5 cursor-pointer text-secondary fw-bold lh-sm" routerLink="/">Home</li>
                         <li class="activeli breadcrumb-item nav-fill fs-5 cursor-pointer text-pinky fw-bold lh-sm" routerLink="/orders">Orders</li>
                     </ol>
-                    <button routerLink="/order/order-details" type="button" class="btn btn-pinky fw-bold lh-sm">
-                        <strong>+</strong> New</button>
+
+
+                        <div class="d-flex flex-row ">
+                            <button routerLink="/order/order-details" type="button" class="btn btn-pinky fw-bold lh-sm">
+                                <strong>+</strong> New</button>
+                                
+                                <div class="dropdown ">
+                                    <button class=" ddbutton btn btn-secondary  dropdown-toggle bg-transparent border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="mode bi bi-brightness-high-fill text-dark">
+                                        </i>
+
+                                    </button >
+                                    <ul class="dropdown-menu">
+                                      <li ><a class="dropdown-item" >
+                                        <i class="bi bi-brightness-high-fill">
+                                        </i></a></li>
+                                        <li><a class="dropdown-item" >
+                                         <i class="bi bi-cloud-moon-fill"></i></a></li>
+                                    </ul>
+                                  </div>
+
+                        </div>
                 </nav>
     </div>
 

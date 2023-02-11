@@ -15,7 +15,7 @@ export class AppComponent {
   loginForm!: FormGroup;
   socialUser!: SocialUser;
   isLoggedin?: boolean = false
-
+  mode: string
 
 
   title = 'Dashboard';

@@ -63,4 +63,9 @@ export class LoginComponent implements OnInit {
   }
 
 
+  clear(){
+    this.error = null;
+  }
+
+
 }

@@ -1,6 +1,7 @@
+import { ToggleModeService } from './../../services/toggle-mode.service';
 import { MessageService, ConfirmationService, ConfirmEventType } from 'primeng/api';
 import { CategoriesService } from '../../services/categories/categories-service.service';
-import { Component } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import { Category } from 'src/app/models/category';
 import { Router } from '@angular/router';
 
@@ -14,7 +15,9 @@ export class CategoriesComponent {
   constructor(private categoriesService: CategoriesService,
     private MessageService: MessageService,
     private ConfirmService: ConfirmationService,
-    private router: Router) {
+    private router: Router,
+    private ToggleModeService: ToggleModeService,
+    private Renderer2: Renderer2) {
   }
 
   categories: Category[]

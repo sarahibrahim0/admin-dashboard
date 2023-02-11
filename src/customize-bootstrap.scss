@@ -65,6 +65,93 @@ b:1%
 
 
 
+$color-mode-type: data;
+
+@include color-mode(dark) {
+
+  label{
+    color: var(--bs-white);
+
+  };
+
+  table {
+    background-color: var(--bs-secondary-bg-subtle);
+
+  };
+
+  td{
+    color: var(--bs-white);
+  };
+
+  tr{
+    color: var(--bs-white);
+  };
+
+  li{
+    color: var(--bs-white);
+  };
+
+  li.activeli{
+    color: var(--bs-pink);
+  }
+
+
+  .login{
+    background-color:var(--bs-secondary-bg-subtle);
+
+  };
+
+  $dropdown-color: var(--bs-white);
+
+
+  .dropdown-item{ color: var(--bs-white)};
+
+  .card{ color:  var(--bs-white); };
+  .p-dialog .p-dialog-header{
+    background-color: var(--bs-secondary-bg-subtle);
+    color: var(--bs-white);
+  };
+
+  .p-dialog .p-dialog-content{
+    background-color: var(--bs-secondary-bg-subtle);
+    color: var(--bs-white);
+
+  };
+
+  .p-dialog .p-dialog-footer{
+    background-color: var(--bs-secondary-bg-subtle);
+    color: var(--bs-white);
+
+  };
+
+
+  .breadcrumb-item {
+    // The separator between breadcrumbs (by default, a forward-slash: "/")
+    + .breadcrumb-item {
+
+      &::before {
+        color: var(--#{$prefix}white);
+      }
+    }
+  };
+
+
+  .mode{
+    color: var(--#{$prefix}white);
+  };
+
+  .dropdown-toggle::after{
+
+    color: var(--#{$prefix}white);
+
+
+  }
+
+
+};
+
+
+
 
 $utilities: map-merge(
   $utilities,
@@ -350,90 +437,7 @@ $utilities: map-merge(
 
 
 
-$color-mode-type: data;
 
-@include color-mode(dark) {
-
-  label{
-    color: var(--bs-white);
-
-  };
-
-  table {
-    background-color: var(--bs-secondary-bg-subtle);
-
-  };
-
-  td{
-    color: var(--bs-white);
-  };
-
-  tr{
-    color: var(--bs-white);
-  };
-
-  li{
-    color: var(--bs-white);
-  };
-
-  li.activeli{
-    color: var(--bs-pink);
-  }
-
-
-  .login{
-    background-color:var(--bs-secondary-bg-subtle);
-
-  };
-
-  $dropdown-color: var(--bs-white);
-
-
-  .dropdown-item{ color: var(--bs-white)};
-
-  .card{ color:  var(--bs-white); };
-  .p-dialog .p-dialog-header{
-    background-color: var(--bs-secondary-bg-subtle);
-    color: var(--bs-white);
-  };
-
-  .p-dialog .p-dialog-content{
-    background-color: var(--bs-secondary-bg-subtle);
-    color: var(--bs-white);
-
-  };
-
-  .p-dialog .p-dialog-footer{
-    background-color: var(--bs-secondary-bg-subtle);
-    color: var(--bs-white);
-
-  };
-
-
-  .breadcrumb-item {
-    // The separator between breadcrumbs (by default, a forward-slash: "/")
-    + .breadcrumb-item {
-
-      &::before {
-        color: var(--#{$prefix}white);
-      }
-    }
-  };
-
-
-  .mode{
-    color: var(--#{$prefix}white);
-  };
-
-  .dropdown-toggle::after{
-
-    color: var(--#{$prefix}white);
-
-
-  }
-
-
-};
 .dropdown-toggle::after{
 
   color: var(--#{$prefix}dark);

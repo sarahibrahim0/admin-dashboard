@@ -47,8 +47,10 @@ b:1%
 
 
 @import "../node_modules/bootstrap/scss/maps";
+
 @import "../node_modules/bootstrap/scss/mixins";
-@import "../node_modules/bootstrap/scss/root";
+
+// @import "../node_modules/bootstrap/scss/root";
 
 @import "../node_modules/bootstrap/scss/utilities";
 @import "../node_modules/bootstrap/scss/reboot";
@@ -412,9 +414,7 @@ $color-mode-type: data;
     }
   };
 
-
 };
-
 
 
 
@@ -426,7 +426,9 @@ $color-mode-type: data;
 
 .dropdown-toggle:empty::after{
   margin-left: 0.255em!important;
-}
+};
+
+
 
 
 @import "../node_modules/bootstrap/scss/utilities/api";

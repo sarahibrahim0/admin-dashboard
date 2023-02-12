@@ -159,7 +159,7 @@ body {
   --bs-warning-text: #ffda6a;
   --bs-danger-text: #ea868f;
   --bs-light-text: #f8f9fa;
-  --bs-dark-text: #dee2e6;
+  --bs-dark-text: #ffffff!important;
   --bs-primary-bg-subtle: #031633;
   --bs-secondary-bg-subtle: #212529;
   --bs-success-bg-subtle: #051b11;
@@ -17216,6 +17216,9 @@ progress {
 }
 
 [data-bs-theme=dark] {
+
+
+
   --bs-body-color: #adb5bd;
   --bs-body-color-rgb: 173, 181, 189;
   --bs-body-bg: #212529;
@@ -20027,6 +20030,12 @@ textarea.form-control-lg {
   --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23adb5bd' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
 }
 
+[data-bs-theme=dark] .btn.dropdown-toggle{
+  --bs-btn-color: #ffffff;
+--bs-btn-bg: transparent;
+
+}
+
 .form-check {
   display: block;
   min-height: 1.5rem;
@@ -22219,6 +22228,9 @@ textarea.form-control-lg {
     border-bottom-left-radius: 0;
   }
 }
+
+
+
 
 .accordion {
   --bs-accordion-color: var(--bs-body-color);

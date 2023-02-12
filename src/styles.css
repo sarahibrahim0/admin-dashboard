@@ -9088,7 +9088,6 @@ progress {
 @font-face {
   font-display: block;
   font-family: "bootstrap-icons";
-  src: url("./fonts/bootstrap-icons.woff2?24e3eb84d0bcaf83d77f904c78ac1f47") format("woff2"), url("./fonts/bootstrap-icons.woff?24e3eb84d0bcaf83d77f904c78ac1f47") format("woff");
 }
 .bi::before,
 [class^=bi-]::before,
@@ -15661,9 +15660,7 @@ progress {
   content: "\f767";
 }
 
-.bi-filetype-woff::before {
-  content: "\f768";
-}
+
 
 .bi-filetype-xls-1::before {
   content: "\f769";
@@ -21095,7 +21092,7 @@ textarea.form-control-lg {
   border-left: 0.3em solid transparent;
 }
 .dropdown-toggle:empty::after {
-  margin-left: 0;
+  /* margin-left: 0; */
 }
 
 .dropdown-menu {
@@ -21449,7 +21446,7 @@ textarea.form-control-lg {
   padding-left: 0.5625rem;
 }
 .dropdown-toggle-split::after, .dropup .dropdown-toggle-split::after, .dropend .dropdown-toggle-split::after {
-  margin-left: 0;
+  /* margin-left: 0; */
 }
 .dropstart .dropdown-toggle-split::before {
   margin-right: 0;

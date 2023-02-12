@@ -5,6 +5,9 @@ $light : #eff1f4;
 $spacer : 1rem;
 
 
+
+
+
 @import "../node_modules/bootstrap/scss/variables";
 
 $spacers: (
@@ -37,18 +40,10 @@ a:3%,
 b:1%
 );
 
-.ddbutton:hover{
-  --bs-btn-hover-bg: transparent;
-};
 
 
-.ddbutton:focus  {
-  --bs-btn-active-bg: transparent;
-};
 
-.ddbutton-check:checked + .ddbutton, :not(.ddbutton-check) + .ddbutton:active, .ddbutton:first-child:active, .ddbutton.active, .ddbutton.show{
-  --bs-btn-active-bg: transparent;
-}
+
 
 
 @import "../node_modules/bootstrap/scss/maps";
@@ -62,95 +57,6 @@ b:1%
 @import "../node_modules/bootstrap/scss/containers";
 @import "../node_modules/bootstrap/scss/grid";
 @import "../node_modules/bootstrap/scss/helpers";
-
-
-
-$color-mode-type: data;
-
-@include color-mode(dark) {
-
-  label{
-    color: var(--bs-white);
-
-  };
-
-  table {
-    background-color: var(--bs-secondary-bg-subtle);
-
-  };
-
-  td{
-    color: var(--bs-white);
-  };
-
-  tr{
-    color: var(--bs-white);
-  };
-
-  li{
-    color: var(--bs-white);
-  };
-
-  li.activeli{
-    color: var(--bs-pink);
-  }
-
-
-  .login{
-    background-color:var(--bs-secondary-bg-subtle);
-
-  };
-
-  $dropdown-color: var(--bs-white);
-
-
-  .dropdown-item{ color: var(--bs-white)};
-
-  .card{ color:  var(--bs-white); };
-  .p-dialog .p-dialog-header{
-    background-color: var(--bs-secondary-bg-subtle);
-    color: var(--bs-white);
-  };
-
-  .p-dialog .p-dialog-content{
-    background-color: var(--bs-secondary-bg-subtle);
-    color: var(--bs-white);
-
-  };
-
-  .p-dialog .p-dialog-footer{
-    background-color: var(--bs-secondary-bg-subtle);
-    color: var(--bs-white);
-
-  };
-
-
-  .breadcrumb-item {
-    // The separator between breadcrumbs (by default, a forward-slash: "/")
-    + .breadcrumb-item {
-
-      &::before {
-        color: var(--#{$prefix}white);
-      }
-    }
-  };
-
-
-  .mode{
-    color: var(--#{$prefix}white);
-  };
-
-  .dropdown-toggle::after{
-
-    color: var(--#{$prefix}white);
-
-
-  }
-
-
-};
-
-
 
 
 $utilities: map-merge(
@@ -437,18 +343,92 @@ $utilities: map-merge(
 
 
 
+$color-mode-type: data;
 
-.dropdown-toggle::after{
+@include color-mode(dark) {
 
-  color: var(--#{$prefix}dark);
+  label{
+    color: var(--bs-white);
+
+  };
+
+  table {
+    background-color: var(--bs-secondary-bg-subtle);
+
+  };
+
+  td{
+    color: var(--bs-white);
+  };
+
+  tr{
+    color: var(--bs-white);
+  };
+
+  li{
+    color: var(--bs-white);
+  };
+
+  li.activeli{
+    color: var(--bs-pink);
+  }
 
 
-}
+  .login{
+    background-color:var(--bs-secondary-bg-subtle);
+
+  };
+
+
+  $dropdown-color: var(--bs-white);
+
+  .dropdown-item{ color: var(--bs-white)};
+
+  .card{ color:  var(--bs-white); };
+  .p-dialog .p-dialog-header{
+    background-color: var(--bs-secondary-bg-subtle);
+    color: var(--bs-white);
+  };
+
+  .p-dialog .p-dialog-content{
+    background-color: var(--bs-secondary-bg-subtle);
+    color: var(--bs-white);
+
+  };
+
+  .p-dialog .p-dialog-footer{
+    background-color: var(--bs-secondary-bg-subtle);
+    color: var(--bs-white);
+
+  };
+
+
+  .breadcrumb-item {
+    // The separator between breadcrumbs (by default, a forward-slash: "/")
+    + .breadcrumb-item {
+      &::before {
+        color: var(--#{$prefix}white);
+      }
+    }
+  };
+
+
+};
+
+
+
+
 
 
 .trorder{
   overflow-x: visible!important;
+};
+
+.dropdown-toggle:empty::after{
+  margin-left: 0.255em!important;
 }
+
+
 @import "../node_modules/bootstrap/scss/utilities/api";
 
 

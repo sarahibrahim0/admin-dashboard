@@ -14,22 +14,19 @@
                     </li>
                 </ol>
                 <div class="d-flex flex-row ">
-                    <button (click)="onSubmit()" type="button" class="btn btn-pinky fw-bold"
+                    <button (click)="onSubmit()" type="button" class="btn btn-pinky fw-bold me-2"
                         *ngIf="!editMode; else edit">
                         <strong>+</strong>
                         Create</button>
                     <ng-template #edit>
-                        <button (click)="editSubmit()" type="button" class="btn btn-pinky fw-bold me-2">Update</button>
+                        <button (click)="editSubmit()" type="button" class="btn btn-pinky fw-bold me-2 ">Update</button>
                     </ng-template>
 
                     <button (click)="onCancel()" type="button" class="btn btn-pinky fw-bold "> Cancel</button>
 
                     <div class="dropdown ">
-                        <button class=" ddbutton btn btn-secondary  dropdown-toggle bg-transparent border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="mode bi bi-brightness-high-fill text-dark">
-                            </i>
-
-                        </button >
+                        <i class=" text-white bi bi-brightness-high-fill btn dropdown-toggle bg-transparent border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        </i>
                         <ul class="dropdown-menu">
                           <li ><a class="dropdown-item" >
                             <i class="bi bi-brightness-high-fill">

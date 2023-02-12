@@ -22,12 +22,9 @@
                     </ng-template>
 
                     <button (click)="onCancel()" type="button" class="btn btn-pinky fw-bold  "> Cancel</button>
-                    <div class="dropdown ">
-                        <button class=" ddbutton btn btn-secondary  dropdown-toggle bg-transparent border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="mode bi bi-brightness-high-fill text-dark">
-                            </i>
-
-                        </button >
+                    <div class="dropdown  ">
+                        <i class=" text-white bi bi-brightness-high-fill btn dropdown-toggle bg-transparent border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        </i>
                         <ul class="dropdown-menu">
                           <li ><a class="dropdown-item" >
                             <i class="bi bi-brightness-high-fill">
@@ -116,9 +113,10 @@
 
     <div class="dropdown mt-2 " ngbDropdown>
         <label class="col-12">Category</label>
-        <button ngbDropdownToggle class="btn  bg-white fs-5  text-secondary dropdown-toggle mt-2 fs-5 " type="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
-Product Category        </button>
+        <button ngbDropdownToggle class="btn btn-pinky fs-5 bg-white text-secondary dropdown-toggle mt-2  " type="button"
+        data-bs-toggle="dropdown" aria-expanded="false">
+Product Category
+    </button>
         <ul ngbDropdownMenu class="col-sm-3">
             <li><a class="dropdown-item " [ngClass]="{ 'selected' :category?.name === currentProduct?.category?.name}"
                  ngbDropdownItem *ngFor="let category of categories;"

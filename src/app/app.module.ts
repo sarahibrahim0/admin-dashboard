@@ -2,7 +2,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
-import { NgModule } from '@angular/core';
+import { NgModule, Renderer2, RendererFactory2 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -39,6 +39,7 @@ import { OrderItemComponent } from './pages/orders/order-item/order-item.compone
 import { SocialLoginModule,
   SocialAuthServiceConfig} from '@abacritt/angularx-social-login'
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
+import { ToggleModeComponent } from './shared/toggle-mode/toggle-mode.component';
 
 
 
@@ -70,6 +71,7 @@ import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
     RegisterComponent,
     OnClickBgDirective,
     OrderItemComponent,
+    ToggleModeComponent,
   ],
   imports: [
     BrowserModule,
@@ -92,6 +94,7 @@ NgbModule,
 ButtonModule,
 SocialLoginModule,
 
+
   ]
 
   ,
@@ -109,7 +112,6 @@ SocialLoginModule,
         ],
       } as SocialAuthServiceConfig,
     },
-
 
   ],
   bootstrap: [AppComponent]

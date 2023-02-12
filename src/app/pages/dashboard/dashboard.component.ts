@@ -1,6 +1,7 @@
+import { ToggleModeService } from './../../services/toggle-mode.service';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Component, DoCheck, OnInit } from '@angular/core';
+import { Component, DoCheck, OnInit , Renderer2} from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -17,7 +18,7 @@ export class DashboardComponent implements OnInit{
 
 
 
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient, private ToggleModeService: ToggleModeService, private Renderer2: Renderer2) { }
 
   ngOnInit(): void {
     this.getProducts();

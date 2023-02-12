@@ -49,19 +49,9 @@ theme: string = 'bootstrap';
 
 
 
-
-
-
-
-    // this.obsMode=  this.ToggleModeService.themeChanges();
-
-    // this.obsMode.subscribe(theme => {
-    //    if (theme.oldValue) {
-    //      this.Renderer2.removeClass(document.body, theme.oldValue);
-    //    }
-    //    this.Renderer2.addClass(document.body, theme.newValue);
-    //  })
   }
+
+
   loginWithGoogle(){
 
       return this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
@@ -73,15 +63,6 @@ theme: string = 'bootstrap';
 
 
 
-  // toggleTheme() {
-  //   if (this.theme === 'bootstrap') {
-  //     this.theme = 'bootstrap-dark';
-  //   } else  {
-  //     this.theme = 'bootstrap';
-  //   }
-
-  //   this.ToggleModeService.setTheme(this.theme)
-  // }
 
 
   }

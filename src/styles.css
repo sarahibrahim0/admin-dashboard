@@ -2654,11 +2654,25 @@ progress {
 [data-bs-theme=dark] .btn.dropdown-toggle {
   color: var(--bs-white);
   background: transparent;
-  &.show:focus{
-    color: var(--bs-white);
 
-  }
 }
+
+[data-bs-theme=dark] .btn.dropdown-toggle {
+  color: var(--bs-white);
+  background: transparent;
+  background-color: var(--bs-body-bg);
+  border: 1px solid white
+
+
+}
+
+[data-bs-theme=dark] .btn.dropdown-toggle.show:focus{
+  color: var(--bs-white);
+  background-color: var(--bs-body-bg);
+  border: 1px solid white
+}
+
+
 
 [data-bs-theme=dark] table {
   background-color: var(--bs-secondary-bg-subtle);

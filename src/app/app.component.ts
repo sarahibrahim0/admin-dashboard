@@ -13,53 +13,36 @@ import { SocialUser, GoogleLoginProvider } from '@abacritt/angularx-social-login
 })
 export class AppComponent {
 
-  loginForm!: FormGroup;
-  socialUser!: SocialUser;
-  isLoggedin?: boolean = false
-  mode: string
-
-
   title = 'Dashboard';
 
 
 
-
-  obsMode
-
-theme: string = 'bootstrap';
-
-    constructor(
-    private loginService: LoginService,
-    private router : Router,
-    private formBuilder: FormBuilder,
-    private socialAuthService: SocialAuthService,
-    private Renderer2: Renderer2,
-    private ToggleModeService: ToggleModeService){}
+    constructor(){}
 
   ngOnInit(){
-    this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-    });
-    this.socialAuthService.authState.subscribe((user) => {
-      this.socialUser = user;
-      this.isLoggedin = user != null;
-      console.log(this.socialUser);
-    });
+    // this.loginForm = this.formBuilder.group({
+    //   email: ['', Validators.required],
+    //   password: ['', Validators.required],
+    // });
+    // this.socialAuthService.authState.subscribe((user) => {
+    //   this.socialUser = user;
+    //   this.isLoggedin = user != null;
+    //   console.log(this.socialUser);
+    // });
 
 
 
   }
 
 
-  loginWithGoogle(){
+  // loginWithGoogle(){
 
-      return this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
-        .then(() => this.router.navigateByUrl('/dashboard'));
-    }
-  logOut(): void {
-    this.socialAuthService.signOut();
-  }
+  //     return this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
+  //       .then(() => this.router.navigateByUrl('/dashboard'));
+  //   }
+  // logOut(): void {
+  //   this.socialAuthService.signOut();
+  // }
 
 
 

@@ -491,6 +491,12 @@ progress {
   }
 }
 
+.display-7 {
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
 .list-unstyled {
   padding-left: 0;
   list-style: none;
@@ -2650,30 +2656,6 @@ progress {
 [data-bs-theme=dark] label {
   color: var(--bs-white);
 }
-
-[data-bs-theme=dark] .btn.dropdown-toggle {
-  color: var(--bs-white);
-  background: transparent;
-
-}
-
-[data-bs-theme=dark] .btn.dropdown-toggle {
-  color: var(--bs-white);
-  background: transparent;
-  background-color: var(--bs-body-bg);
-  border: 1px solid white
-
-
-}
-
-[data-bs-theme=dark] .btn.dropdown-toggle.show:focus{
-  color: var(--bs-white);
-  background-color: var(--bs-body-bg);
-  border: 1px solid white
-}
-
-
-
 [data-bs-theme=dark] table {
   background-color: var(--bs-secondary-bg-subtle);
 }
@@ -12366,7 +12348,11 @@ textarea.form-control-lg {
   outline: 0;
   box-shadow: var(--bs-btn-focus-box-shadow);
 }
-
+.btn-check:checked + .btn, :not(.btn-check) + .btn:active, .btn:first-child:active, .btn.active, .btn.show {
+  color: var(--bs-white);
+  background-color: transparent;
+  border-color: var(--bs-btn-active-border-color);
+}
 .btn-check:checked + .btn:focus-visible, :not(.btn-check) + .btn:active:focus-visible, .btn:first-child:active:focus-visible, .btn.active:focus-visible, .btn.show:focus-visible {
   box-shadow: var(--bs-btn-focus-box-shadow);
 }
@@ -13717,10 +13703,6 @@ textarea.form-control-lg {
 
 [data-bs-theme=dark] .navbar {
   --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-}
-
-[data-bs-theme=dark] .btn-dropdown-toggle{
-  color:white
 }
 
 .card {
@@ -18475,7 +18457,10 @@ textarea.form-control-lg {
   background-color: rgba(var(--bs-pinky-rgb), var(--bs-bg-opacity));
 }
 
-
+.bg-black {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-black-rgb), var(--bs-bg-opacity));
+}
 
 .bg-white {
   --bs-bg-opacity: 1;

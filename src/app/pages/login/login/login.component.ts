@@ -55,6 +55,7 @@ export class LoginComponent implements OnInit {
 
     this.error = error.message
     this.MessageService.add({ severity: 'error', summary: 'Wrong Info', detail: `Sorry, Couldn't Log In` });
+    console.log(error)
 
 
 

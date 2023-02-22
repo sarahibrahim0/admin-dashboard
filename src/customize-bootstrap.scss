@@ -346,6 +346,7 @@ $color-mode-type: data;
 
 @include color-mode(dark) {
 
+
   label{
     color: var(--bs-white);
 
@@ -384,6 +385,7 @@ $color-mode-type: data;
   .dropdown-item{ color: var(--bs-white)};
 
   .card{ color:  var(--bs-white); };
+
   .p-dialog .p-dialog-header{
     background-color: var(--bs-secondary-bg-subtle);
     color: var(--bs-white);

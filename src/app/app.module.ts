@@ -1,4 +1,5 @@
 import { JwtHelperService } from '@auth0/angular-jwt';
+import {SidebarModule} from 'primeng/sidebar';
 
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
@@ -93,8 +94,7 @@ FieldsetModule,
 NgbModule,
 ButtonModule,
 SocialLoginModule,
-
-
+SidebarModule
   ]
 
   ,

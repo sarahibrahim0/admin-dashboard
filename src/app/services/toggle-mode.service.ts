@@ -6,6 +6,7 @@ import { Injectable, Renderer2 } from '@angular/core';
 })
 export class ToggleModeService {
 
+  mode$:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true)
 
 
 mode: string = 'light'

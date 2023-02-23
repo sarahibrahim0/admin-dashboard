@@ -10,8 +10,8 @@ import { Route, Router } from '@angular/router';
 export class SidebarComponent {
 
   bg : boolean = true;
-  data: string 
-
+  data: string
+display = true
   constructor(private loginService: LoginService,
     private router: Router
     )

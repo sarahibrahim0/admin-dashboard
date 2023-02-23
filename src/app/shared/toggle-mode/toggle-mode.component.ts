@@ -1,3 +1,4 @@
+import { BehaviorSubject } from 'rxjs';
 import { ToggleModeService } from './../../services/toggle-mode.service';
 import { Component, OnInit, Renderer2 } from '@angular/core';
 
@@ -8,19 +9,37 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 })
 export class ToggleModeComponent implements OnInit {
 
-  constructor(private ToggleModeService: ToggleModeService, private Renderer2:Renderer2) { }
+  theme: boolean
+
+
+  constructor(private ToggleModeService: ToggleModeService, private Renderer2: Renderer2) { }
 
   ngOnInit(): void {
+
+    this.ToggleModeService.mode$.subscribe(mode => {
+      this.theme = mode;
+      console.log(mode)
+    })
   }
 
+  setlight() {
 
-  setlight(){
+
+    this.ToggleModeService.mode$.subscribe(mode => {
+      this.theme = mode;
+    })
+    this.ToggleModeService.mode$.next(true)
+
     this.ToggleModeService.setLightMode();
-   this.Renderer2.setAttribute(document.querySelector('html'), 'data-bs-theme', this.ToggleModeService.mode);
+    this.Renderer2.setAttribute(document.querySelector('html'), 'data-bs-theme', this.ToggleModeService.mode);
 
   };
 
-  setDark(){
+  setDark() {
+
+
+
+    this.ToggleModeService.mode$.next(false);
     this.ToggleModeService.setDarkMode();
     this.Renderer2.setAttribute(document.querySelector('html'), 'data-bs-theme', this.ToggleModeService.mode);
 

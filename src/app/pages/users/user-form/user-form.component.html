@@ -33,7 +33,7 @@
 
         <!--Form-->
 
-        <form [formGroup]="form" class="bg-pinky rounded-4 p-4  grid text-white fw-bold  vh-100 ">
+        <form [formGroup]="form" class="bg-pinky rounded-4 p-4  grid text-white fw-bold ">
             <div class="g-col-6">
 
     <div>
@@ -125,28 +125,30 @@
                 </div>
 
 
+<div>
+    <div class="dropdown mt-2 " ngbDropdown>
+        <label class="col-12">Country</label>
+        <button ngbDropdownToggle class="btn btn-pinky fs-5 bg-white text-secondary dropdown-toggle mt-2  " type="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+           Country
+        </button>
+        <ul ngbDropdownMenu class="col-sm-3">
+            <li>
+                <a class="dropdown-item"
+                 ngbDropdownItem
+                 *ngFor="let country of countries;"
+                    (click)="sendCountryName(country.name)"
+                    [ngClass]="{ 'selected' :country?.name == currentUser?.country}"
 
-              <div class="dropdown mt-2 " ngbDropdown>
-                <label class="col-12">Country</label>
-                <button ngbDropdownToggle class="btn btn-pinky fs-5 bg-white text-secondary dropdown-toggle mt-2  " type="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-Admin Country
-                </button>
-                <ul ngbDropdownMenu class="col-sm-3">
-                    <li>
-                        <a class="dropdown-item"
-                         ngbDropdownItem
-                         *ngFor="let country of countries;"
-                            (click)="sendCountryName(country.name)"
-                            [ngClass]="{ 'selected' :country?.name == currentUser?.country}"
+                    >{{country.name}}
 
-                            >{{country.name}}
+                </a>
+            </li>
+        </ul>
 
-                        </a>
-                    </li>
-                </ul>
+    </div>
 
-            </div>
+</div>
 
 
 

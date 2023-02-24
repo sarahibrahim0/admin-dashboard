@@ -94,18 +94,18 @@
 
 <div class="g-col-6">
     <div>
-        <label for="richDescription" class="col-form-label">richDescription</label>
+        <label for="richDescription" class="col-form-label">Description</label>
         <div class="col-12">
             <p-editor formControlName="richDescription" [style]="{'height':'18rem'}"></p-editor>
         </div>
     </div>
 
-
-    <div class="dropdown mt-2 " ngbDropdown>
+<div>
+    <div class="dropdown mt-2  " ngbDropdown>
         <label class="col-12">Category</label>
         <button ngbDropdownToggle class="btn btn-pinky fs-5 bg-white text-secondary dropdown-toggle mt-2  " type="button"
         data-bs-toggle="dropdown" aria-expanded="false">
-Product Category
+ Category
     </button>
         <ul ngbDropdownMenu class="col-sm-3">
             <li><a class="dropdown-item " [ngClass]="{ 'selected' :category?.name === currentProduct?.category?.name}"
@@ -116,6 +116,8 @@ Product Category
         </ul>
 
     </div>
+</div>
+
 </div>
 
             </form>

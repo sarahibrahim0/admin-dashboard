@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 
 <div class="container-fluid  vh-100 fs-5 lh-sm col-12 ">
-    <div class="row ">
+    <div class="row justify-content-center ">
         <div class="col-lg-12 col-sm-12 h-25  mb-4">
             <nav aria-label="breadcrumb" class="nav  justify-content-between pb-3 col-sm-12  col-lg-12">
                 <ol class="breadcrumb">
@@ -20,14 +20,12 @@
             </nav>
         </div>
 
-        <div class="order-details col-12 h-100 ">
-            <p class="w-100 d-flex flex-row justify-content-center">
-                <button class="btn btn-pinky btn-lg col-5 " type="button" data-bs-toggle="collapse"
+        <div class="order-details col-12  d-flex flex-column align-items-center mb-2 ">
+                <button  style="min-width:200px" class="btn btn-pinky btn-lg col-5 " type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
                     Order Details </button>
-            </p>
-            <div class="collapse col-lg-12 col-sm-12 show table-responsive trorder " id="collapseExample">
-                <div class=" d-table rounded-4 fs-5  col-lg-12 col-sm-12  w-100 shadow-sm px-3 ">
+            <div class="collapse col-12 show trorder " id="collapseExample">
+                <div class=" table-responsive rounded-4 fs-5  col-lg-12 col-sm-12  w-100 shadow-sm px-3 ">
                     <table class="table fs-5 table-borderless col-lg-12 col-sm-12  rounded-4 text-secondary">
                         <thead class="align-text-bottom ">
                             <tr class="border-bottom  ">
@@ -81,13 +79,11 @@
 
 
 
-        <div class="order-details col-12 h-100   ">
-            <p class="col-12 d-flex flex-row justify-content-center">
-                <button class="btn btn-pinky btn-lg col-5" type="button" data-bs-toggle="collapse"
+        <div class="order-details col-12   d-flex flex-column align-items-center mb-2  ">
+                <button  style="min-width:200px" class="btn btn-pinky btn-lg col-5" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseExample2" aria-expanded="true" aria-controls="collapseExample2">
                     Order Items </button>
-            </p>
-            <div class="collapse col-lg-12 col-sm-12 show table-responsive trorder" id="collapseExample2">
+            <div class="collapse col-12 show  trorder" id="collapseExample2">
                 <app-order-item [orderItem]="returnedOrder?.orderItems"></app-order-item>
 
             </div>
@@ -97,15 +93,13 @@
 
         <!--third one / order address-->
 
-        <div class="order-details col-12 h-100 lh-sm">
-            <p class="col-12 d-flex flex-row justify-content-center">
-                <button class="btn btn-pinky btn-lg col-5 " type="button" data-bs-toggle="collapse"
+        <div class="order-details col-12  lh-sm d-flex flex-column align-items-center mb-2">
+                <button  style="min-width:200px" class="btn btn-pinky btn-lg col-5 " type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseExample3" aria-expanded="true" aria-controls="collapseExample3">
                     Order Details </button>
-            </p>
-            <div class="collapse col-lg-12 col-sm-12 show table-responsive trorder" id="collapseExample3">
-                <div class="d-table rounded-4 fs-5 shadow-sm pt-3 pb-3 col-lg-12 col-sm-12 px-3 w-100 ">
-                    <table class="table fs-5 table-borderless  col-lg-12 col-sm-12  rounded-4 text-secondary">
+            <div class="collapse col-12  show trorder" id="collapseExample3">
+                <div class="table-responsive  rounded-4 fs-5 shadow-sm pt-3 pb-3 col-12 px-3 w-100 ">
+                    <table class="table fs-5 table-borderless  col-12  rounded-4 text-secondary">
                         <thead class="align-text-bottom ">
                             <tr class="border-bottom  ">
                                 <th scope="col-3" class=" ps-9 fs-5  align-bottom text-nowrap lh-sm ">Address</th>

@@ -15685,7 +15685,7 @@ textarea.form-control-lg {
 }
 .offcanvas, .offcanvas-xxl, .offcanvas-xl, .offcanvas-lg, .offcanvas-md, .offcanvas-sm {
   --bs-offcanvas-zindex: 1045;
-  --bs-offcanvas-width: 400px;
+  --bs-offcanvas-width: 300px;
   --bs-offcanvas-height: 30vh;
   --bs-offcanvas-padding-x: 1rem;
   --bs-offcanvas-padding-y: 1rem;
@@ -15881,7 +15881,7 @@ textarea.form-control-lg {
     z-index: var(--bs-offcanvas-zindex);
     display: flex;
     flex-direction: column;
-    max-width: 100%;
+    max-width: 80%;
     color: var(--bs-offcanvas-color);
     visibility: hidden;
     background-color: var(--bs-offcanvas-bg);
@@ -16160,7 +16160,7 @@ textarea.form-control-lg {
 .offcanvas.offcanvas-start {
   top: 0;
   left: 0;
-  width: var(--bs-offcanvas-width);
+  width:300px;
   border-right: var(--bs-offcanvas-border-width) solid var(--bs-offcanvas-border-color);
   transform: translateX(-100%);
 }

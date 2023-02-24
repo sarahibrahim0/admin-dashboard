@@ -22,7 +22,6 @@ const routes: Routes = [
 
        canActivate: [AdminGuard],
     children: [
-
       { path: 'dashboard', component: DashboardComponent },
       { path: 'categories', component: CategoriesComponent },
       { path: 'categories/form', component: CategoriesFormComponent },

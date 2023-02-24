@@ -41,6 +41,7 @@ import { SocialLoginModule,
   SocialAuthServiceConfig} from '@abacritt/angularx-social-login'
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { ToggleModeComponent } from './shared/toggle-mode/toggle-mode.component';
+import { SidebarSmComponent } from './shared/sidebar-sm/sidebar-sm.component';
 
 
 
@@ -73,6 +74,7 @@ import { ToggleModeComponent } from './shared/toggle-mode/toggle-mode.component'
     OnClickBgDirective,
     OrderItemComponent,
     ToggleModeComponent,
+    SidebarSmComponent,
   ],
   imports: [
     BrowserModule,

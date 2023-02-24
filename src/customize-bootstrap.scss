@@ -3,6 +3,7 @@
 $primary :#232325;
 $light : #eff1f4;
 $spacer : 1rem;
+$offcanvas-horizontal-width: 250px;
 
 @import "../node_modules/bootstrap/scss/variables";
 
@@ -39,6 +40,11 @@ b:1%
 
 
 
+@media only screen and (max-width: 600px) {
+  .fst-normal{
+    pointer-events: none
+  }
+}
 
 
 

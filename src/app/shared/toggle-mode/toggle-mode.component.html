@@ -1,15 +1,21 @@
-<div class="dropdown ">
-    <button class="btn dropdown-toggle bg-transparent border-0" type="button" data-bs-toggle="dropdown"
-        aria-expanded="false">
-        <i *ngIf="theme === true" class=" bi bi-brightness-high-fill ">
-        </i>
-        <i *ngIf="theme === false " class="bi bi-cloud-moon-fill"></i>
-    </button>
-    <ul class="dropdown-menu">
-        <li (click)="setlight()"><a class="dropdown-item">
-                <i class="bi bi-brightness-high-fill">
-                </i></a></li>
-        <li (click)="setDark()"><a class="dropdown-item">
-                <i class="bi bi-cloud-moon-fill"></i></a></li>
-    </ul>
+<div class="d-flex flex-row  align-items-start  justify-content-between ">
+
+    <div class="dropdown ">
+        <button class="btn dropdown-toggle bg-transparent border-0" type="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <i *ngIf="theme === true" class=" bi bi-brightness-high-fill ">
+            </i>
+            <i *ngIf="theme === false " class="bi bi-cloud-moon-fill"></i>
+
+        </button>
+        <ul class="dropdown-menu">
+            <li (click)="setlight()"><a class="dropdown-item">
+                    <i class="bi bi-brightness-high-fill">
+                    </i></a></li>
+            <li (click)="setDark()"><a class="dropdown-item">
+                    <i class="bi bi-cloud-moon-fill"></i></a></li>
+        </ul>
+    </div>
+
 </div>
+

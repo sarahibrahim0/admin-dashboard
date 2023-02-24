@@ -1,8 +1,8 @@
 
 <p-toast></p-toast>
 <div class="container-fluid vh-100 fs-5 col-12 text-secondary lh-sm ">
-    <div class="row mb-5 justify-content-between">
-        <div class="col-lg-12 col-sm-12 h-25">
+    <div class="row mb-5 justify-content-between flex-nowrap">
+        <div class="col-lg-12 col-sm-12 h-25  text-nowrap">
             <nav aria-label="breadcrumb text-nowrap" class="nav justify-content-between pb-3 col-sm-12  col-lg-12 text-nowrap ">
                 <ol class="breadcrumb text-nowrap col-sm-8">
                     <li class=" nah breadcrumb-item nav-fill fs-5  text-secondary fw-bold lh-sm text-nowrap"><app-sidebar-sm></app-sidebar-sm></li>
@@ -28,8 +28,8 @@
             </nav>
 </div>
 </div>
-<div class="row ">
-    <div class="col-lg-12 col-sm-12">
+<div class="row justify-content-center">
+    <div>
 
         <!--Form-->
 
@@ -77,7 +77,7 @@
 
             <div>
                 <label for="flexSwitchCheckDefault" class="form-check-label col-form-label" >is admin</label>
-                <div class="form-check form-switch ">
+                <div class="form-check form-switch col-12">
                     <input [value]="adminValue" placeholder="isAdmin"
                      formControlName="isAdmin" class="form-check-input"
                       type="checkbox" role="switch" unchecked id="flexSwitchCheckDefault"
@@ -126,13 +126,13 @@
 
 
 <div>
-    <div class="dropdown mt-2 " ngbDropdown>
         <label class="col-12">Country</label>
-        <button ngbDropdownToggle class="btn btn-pinky fs-5 bg-white text-secondary dropdown-toggle mt-2  " type="button"
+        <div class="dropdown mt-2 " ngbDropdown>
+        <button ngbDropdownToggle class="btn btn-pinky fs-5 bg-white text-secondary dropdown-toggle mt-2" type="button"
             data-bs-toggle="dropdown" aria-expanded="false">
            Country
         </button>
-        <ul ngbDropdownMenu class="col-sm-3">
+        <ul ngbDropdownMenu>
             <li>
                 <a class="dropdown-item"
                  ngbDropdownItem
@@ -161,7 +161,7 @@
         </div>
         </div>
 
-<p-confirmDialog [style]="{width: '36vw'}" [baseZIndex]="10000" rejectButtonStyleClass=""
+<p-confirmDialog [style]="{'min-width': '36vw'}" [baseZIndex]="10000" rejectButtonStyleClass=""
 acceptButtonStyleClass=""></p-confirmDialog>
 
 

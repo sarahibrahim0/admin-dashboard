@@ -33,7 +33,7 @@
 
             <!--Form-->
             <div class="row justify-content-center">
-                <div class="col-lg-12 col-sm-12">
+                <div>
             <form [formGroup]="form" class="bg-pinky rounded-4 p-4 grid text-white fw-bold ">
 
 
@@ -107,7 +107,7 @@
         data-bs-toggle="dropdown" aria-expanded="false">
  Category
     </button>
-        <ul ngbDropdownMenu class="col-sm-3">
+        <ul ngbDropdownMenu >
             <li><a class="dropdown-item " [ngClass]="{ 'selected' :category?.name === currentProduct?.category?.name}"
                  ngbDropdownItem *ngFor="let category of categories;"
                  routerLinkActive=""
@@ -124,7 +124,7 @@
         </div>
 </div>
 </div>
-<p-confirmDialog [style]="{width: '36vw'}" [baseZIndex]="10000" rejectButtonStyleClass=""
+<p-confirmDialog [style]="{'min-width': '36vw'}" [baseZIndex]="10000" rejectButtonStyleClass=""
 acceptButtonStyleClass=""></p-confirmDialog>
 
 

@@ -176,7 +176,7 @@ if(this.productForm['category'].value !== this.categoryId && this.categoryId !==
           ).subscribe({
 
             next: (product: Product) => {
-              this.MessageService.add({ severity: 'success', summary: 'success', detail: `Category ${product.name} updated` });
+              this.MessageService.add({ severity: 'success', summary: 'success', detail: `Product ${product.name} updated` });
             },
 
             error: (err) => { console.log(err) }

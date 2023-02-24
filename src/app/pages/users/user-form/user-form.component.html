@@ -125,32 +125,31 @@
                 </div>
 
 
-<div>
-        <label class="col-12">Country</label>
-        <div class="dropdown mt-2 " ngbDropdown>
-        <button ngbDropdownToggle class="btn btn-pinky fs-5 bg-white text-secondary dropdown-toggle mt-2" type="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
-           Country
-        </button>
-        <ul ngbDropdownMenu>
-            <li>
-                <a class="dropdown-item"
-                 ngbDropdownItem
-                 *ngFor="let country of countries;"
-                    (click)="sendCountryName(country.name)"
-                    [ngClass]="{ 'selected' :country?.name == currentUser?.country}"
 
-                    >{{country.name}}
+                <div  >
+                    <label class="col-12">Country</label>
+                    <div class="dropdown mt-2 col-12" ngbDropdown >
+                    <button ngbDropdownToggle class="btn btn-pinky fs-5 bg-white text-secondary dropdown-toggle mt-2" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                       Country
+                    </button>
+                    <ul ngbDropdownMenu class="col-12">
+                        <li>
+                            <a class="dropdown-item "
+                             ngbDropdownItem
+                             *ngFor="let country of countries;"
+                                (click)="sendCountryName(country.name)"
+                                [ngClass]="{ 'selected' :country?.name == currentUser?.country}"
 
-                </a>
-            </li>
-        </ul>
+                                >{{country.name}}
 
-    </div>
+                            </a>
+                        </li>
+                    </ul>
 
-</div>
+                </div>
 
-
+                </div>
 
 
             </div>
@@ -163,6 +162,7 @@
 
 <p-confirmDialog [style]="{'min-width': '36vw'}" [baseZIndex]="10000" rejectButtonStyleClass=""
 acceptButtonStyleClass=""></p-confirmDialog>
+
 
 
 

@@ -101,13 +101,13 @@
     </div>
 
 <div>
-    <div class="dropdown mt-2  " ngbDropdown>
+    <div class="dropdown mt-2 col-12 " ngbDropdown>
         <label class="col-12">Category</label>
         <button ngbDropdownToggle class="btn btn-pinky fs-5 bg-white text-secondary dropdown-toggle mt-2  " type="button"
         data-bs-toggle="dropdown" aria-expanded="false">
  Category
     </button>
-        <ul ngbDropdownMenu >
+        <ul ngbDropdownMenu class="col-12" >
             <li><a class="dropdown-item " [ngClass]="{ 'selected' :category?.name === currentProduct?.category?.name}"
                  ngbDropdownItem *ngFor="let category of categories;"
                  routerLinkActive=""

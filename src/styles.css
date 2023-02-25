@@ -27,7 +27,7 @@ body {
 @media only screen and (min-width: 992px) {
   .fst-normal {
     pointer-events: none;
-  };
+  }
 
   .nah{
     cursor: default;

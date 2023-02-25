@@ -61,7 +61,7 @@ export class CategoriesFormComponent {
         },
 
         error: (error) => {
-          this.MessageService.add({ severity: 'error', summary: 'error', detail: 'Category Is Not Created' });
+          this.MessageService.add({ severity: 'error', summary: 'error', detail:`Category Isn't Created` });
 
         }
 
@@ -112,11 +112,13 @@ export class CategoriesFormComponent {
           }).subscribe({
 
             next: (category: Category) => {
-              this.MessageService.add({ severity: 'success', summary: 'success', detail: `Category ${category.name} updated` });
-              console.log(category.color)
+              this.MessageService.add({ severity: 'success', summary: 'success', detail: `Category ${category.name} Is Updated` });
             },
 
-            error: (err) => { console.log(err) }
+            error: (err) => {
+              this.MessageService.add({ severity: 'error', summary: 'error', detail: `Category  Isn't Updated` });
+
+             }
 
 
           })

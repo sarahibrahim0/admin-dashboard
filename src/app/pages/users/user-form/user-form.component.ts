@@ -126,7 +126,7 @@ export class UserFormComponent implements OnInit {
         },
 
         error: (error) => {
-          this.MessageService.add({ severity: 'error', summary: 'error', detail: error.error });
+          this.MessageService.add({ severity: 'error', summary: 'error', detail: `User Isn't Created` });
 
         }
 
@@ -181,7 +181,7 @@ export class UserFormComponent implements OnInit {
             },
 
             error: (error) => {
-              this.MessageService.add({ severity: 'error', summary: 'error', detail: error.error });
+              this.MessageService.add({ severity: 'error', summary: 'error', detail:`User Wasn't Updated`});
 
             }
 

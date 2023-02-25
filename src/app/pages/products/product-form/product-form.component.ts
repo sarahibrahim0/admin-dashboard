@@ -77,7 +77,7 @@ export class ProductFormComponent implements OnInit {
         },
 
         error: (error) => {
-          this.MessageService.add({ severity: 'error', summary: 'error', detail: error.error });
+          this.MessageService.add({ severity: 'error', summary: 'error', detail: `Product Isn't Created` });
 
         }
 
@@ -176,10 +176,13 @@ if(this.productForm['category'].value !== this.categoryId && this.categoryId !==
           ).subscribe({
 
             next: (product: Product) => {
-              this.MessageService.add({ severity: 'success', summary: 'success', detail: `Product ${product.name} updated` });
+              this.MessageService.add({ severity: 'success', summary: 'success', detail: `Product ${product.name} Was Updated` });
             },
 
-            error: (err) => { console.log(err) }
+            error: (err) => {
+              this.MessageService.add({ severity: 'error', summary: 'error', detail: `Product Wasn't  Updated` });
+
+            }
 
 
           })

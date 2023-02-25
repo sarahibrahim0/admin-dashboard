@@ -75,10 +75,10 @@ export class OrderDetailsComponent implements OnInit {
       accept: () => {
         return this.ordersService.editOrderStatus(this.returnedOrder.id ,{ status: this.currentStatus}).subscribe({
              next: (updatedOrder: Order) => {
-            this.MessageService.add({ severity: 'success', summary: 'success', detail: `order status is: ${orderStatus[updatedOrder.status].label} ` });
+            this.MessageService.add({ severity: 'success', summary: 'success', detail: `Order Status Is : ${orderStatus[updatedOrder.status].label} ` });
           },
           error: (error) => {
-            this.MessageService.add({ severity: 'error', summary: 'error', detail: 'order status Is Not updated' });
+            this.MessageService.add({ severity: 'error', summary: 'error', detail: `Order Status Isn't Updated` });
 
           }
         })

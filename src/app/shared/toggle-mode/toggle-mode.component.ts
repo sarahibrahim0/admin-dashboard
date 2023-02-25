@@ -18,7 +18,6 @@ export class ToggleModeComponent implements OnInit {
 
     this.ToggleModeService.mode$.subscribe(mode => {
       this.theme = mode;
-      console.log(mode)
     })
   }
 

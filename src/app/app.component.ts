@@ -1,10 +1,5 @@
-import { ToggleModeService } from './services/toggle-mode.service';
-import { Router } from '@angular/router';
-import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { LoginService } from './services/login/login.service';
-import { Component, Renderer2 } from '@angular/core';
-import { SocialUser, GoogleLoginProvider } from '@abacritt/angularx-social-login';
+
+import { Component} from '@angular/core';
 
 @Component({
   selector: 'app-root',

@@ -25,7 +25,6 @@ export class DashboardComponent implements OnInit{
     this.getUsers();
     this.getOrders();
     this.getTotalSales();
-    this.getViews()
 
     }
 
@@ -66,12 +65,7 @@ export class DashboardComponent implements OnInit{
 
   }
 
-  private getViews(){
-   return this.http.get(`http://localhost:3000/api/v1/session`).subscribe(result=>{
 
-
-  })
-  }
 
 
 }

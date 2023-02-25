@@ -53,7 +53,6 @@ export class CategoriesFormComponent {
       {
         next: (category: Category) => {
           this.MessageService.add({ severity: 'success', summary: 'success', detail: `Category ${category.name} Is Created` });
-          console.log(category)
           timer(1600).subscribe(() => {
             this.location.back()
           })
@@ -82,7 +81,6 @@ export class CategoriesFormComponent {
             this.form.controls['name'].setValue(resCategory.name);
             this.form.controls['icon'].setValue(resCategory.icon);
             this.form.controls['color'].setValue(resCategory.color);
-            console.log(resCategory.color)
 
 
           }

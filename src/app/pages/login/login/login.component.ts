@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
 
    return this.loginService.login( this.loginForm.controls['email'].value,
    this.loginForm.controls['password'].value).subscribe({next:(user)=>
-    {console.log(user);
+    {
     this.loginService.setToken(user.token);
     this.MessageService.add({ severity: 'success', summary: 'Success', detail: `You Are Logged In` });
 
@@ -55,7 +55,6 @@ export class LoginComponent implements OnInit {
 
     this.error = error.message
     this.MessageService.add({ severity: 'error', summary: 'Wrong Info', detail: `Sorry, Couldn't Log In` });
-    console.log(error)
 
 
 

@@ -46,7 +46,6 @@ export class OrderDetailsComponent implements OnInit {
         this.ordersService.getOrderById(id).subscribe(orderRes=>{
           this.returnedOrder = orderRes;
           this.selectedStatus = orderRes.status
-          console.log(this.returnedOrder)
 
         })
 

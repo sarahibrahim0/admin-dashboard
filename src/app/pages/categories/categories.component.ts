@@ -39,7 +39,6 @@ export class CategoriesComponent {
       accept: () => {
         return this.categoriesService.deleteCategories(id).subscribe({
           next: (category: Category) => {
-            console.log(category)
             this.MessageService.add({ severity: 'success', summary: 'success', detail: `Category ${category.name} Is Deleted` });
             this.getCategories()
 

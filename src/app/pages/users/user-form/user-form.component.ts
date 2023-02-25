@@ -152,7 +152,6 @@ export class UserFormComponent implements OnInit {
         })
 
         // this.sendCountryName();
-        console.log(this.userForm['name'].value);
 
 
        if (this.userForm['country'].value !== this.countryName && this.countryName !== undefined ){

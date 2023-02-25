@@ -91,8 +91,7 @@ export class ProductFormComponent implements OnInit {
 
   onSubmit() {
 
-    console.log(this.categoryId);
-    console.log(this.productForm['category'].value)
+
 
     this.isSubmitted = true;
     if(this.productForm['category'].value !== this.categoryId && this.categoryId !== undefined ){
@@ -156,11 +155,8 @@ export class ProductFormComponent implements OnInit {
 
 
 
-        console.log(this.categoryId);
-        console.log(this.productForm['category'].value)
+
 if(this.productForm['category'].value !== this.categoryId && this.categoryId !== undefined ){
-  console.log(this.categoryId);
-  console.log(this.productForm['category'].value)
   this.form.controls['category'].setValue(this.categoryId)
 }
 

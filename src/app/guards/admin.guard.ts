@@ -23,7 +23,6 @@ export class AdminGuard implements CanActivate {
 
       const decodedToken = helper.decodeToken(token)
 
-      console.log(decodedToken)
 
     if (decodedToken && decodedToken.isAdmin && this.getExpDate(decodedToken.exp) )
      {
@@ -32,7 +31,6 @@ export class AdminGuard implements CanActivate {
 
     else {
       this.router.navigateByUrl('/login')
-      console.log('eh')
       return false;
     }
 

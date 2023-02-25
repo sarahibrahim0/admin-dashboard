@@ -37,7 +37,6 @@ export class ProductsListComponent implements OnInit {
 
 
   deleteProduct(ProductId: string) {
-    console.log('hi')
 
     this.ConfirmService.confirm({
       message: 'Do you want to delete this product?',

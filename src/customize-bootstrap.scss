@@ -23,7 +23,7 @@ $spacers: (
 
 );
 
-
+$h5-font-size: $font-size-base * .5 ;
 
 $position-values: (
   0: 0%,
@@ -251,7 +251,7 @@ $utilities: map-merge(
       (
         values: map-merge(
           map-get(map-get($utilities, "height"), "values"),
-          (40: 40%),
+          (40: 30%),
         ),
       ),
     ),
@@ -292,7 +292,7 @@ $utilities: map-merge(
 }
 
 .p-button:hover{
-  background-color: #bd2158!important;
+  background-color: #de2768!important;
   border: 0px solid black;
   box-shadow: 0px 0px red;
 };
@@ -393,25 +393,37 @@ $color-mode-type: data;
   .card{ color:  var(--bs-white); };
 
   .p-dialog .p-dialog-header{
-    background-color: var(--bs-secondary-bg-subtle);
-    color: var(--bs-white);
+    background-color: var(--bs-secondary-bg-subtle) !important;
+    color: var(--bs-white)!important;
   };
 
-  .p-dialog .p-dialog-content{
-    background-color: var(--bs-secondary-bg-subtle);
-    color: var(--bs-white);
-
-  };
-
-  .p-dialog .p-dialog-footer{
-    background-color: var(--bs-secondary-bg-subtle);
-    color: var(--bs-white);
+  .p-dialog .p-dialog-footer .p-dialog-content {
+    background-color: var(--bs-secondary-bg-subtle)!important;
+    color: var(--bs-white)!important;
 
   };
 
 
+  };
+
+  .btn.theme:focus{
+    color: var(--bs-white);
+    background-color: transparent;
+
+  }
+
+  .btn.theme:active{
+    color: var(--bs-white);
+    background-color: transparent;
+
+  }
+
+  .btn.theme{
+    color: var(--bs-white);
+    background-color: transparent;
+
+  }
   .breadcrumb-item {
-    // The separator between breadcrumbs (by default, a forward-slash: "/")
     + .breadcrumb-item {
       &::before {
         color: var(--#{$prefix}white);
@@ -419,11 +431,18 @@ $color-mode-type: data;
     }
   };
 
+.btn-check.theme:checked + .btn.theme, :not(.btn-check.theme) + .btn.theme:active, .btn.theme:first-child:active, .btn.theme.active, .btn.show.theme{
+  color: var(--bs-body);
+  border-color: var(--bs-btn-active-border-color);
+}
 
-};
+.btn-check.userdd:checked + .btn.userdd, .btn.userdd , :not(.btn-check.userdd) + .btn.userdd:active, .btn.userdd:first-child:active, .btn.userdd.active, .btn.show.userdd{
+  color: var(--bs-secondary);
+  background-color: white;
+}
 
 
-
+@import "../node_modules/bootstrap/scss/utilities/api";
 
 
 .trorder{
@@ -433,13 +452,3 @@ $color-mode-type: data;
 .dropdown-toggle:empty::after{
   margin-left: 0.255em!important;
 };
-
-
-
-
-@import "../node_modules/bootstrap/scss/utilities/api";
-
-
-
-
-

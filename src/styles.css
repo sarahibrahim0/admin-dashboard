@@ -28,11 +28,11 @@ body {
 @media only screen and (min-width: 600px) {
   .fst-normal{
     pointer-events: none
-  };
+  }
 
   li.nah{
     cursor: default;
-  };
+  }
 };
 
 

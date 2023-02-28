@@ -14,15 +14,15 @@
                     </li>
                 </ol>
                 <div class="d-flex flex-row ">
-                    <button (click)="onSubmit()" type="button" class="btn btn-pinky fw-bold me-2"
+                    <button (click)="onSubmit()" type="button" class="btn btn-pinky fw-bold btn-sm me-2"
                         *ngIf="!editMode; else edit">
                         <strong>+</strong>
                         Create</button>
                     <ng-template #edit>
-                        <button (click)="editSubmit()" type="button" class="btn btn-pinky fw-bold me-2 ">Update</button>
+                        <button (click)="editSubmit()" type="button" class="btn btn-pinky fw-bold me-2 btn-sm">Update</button>
                     </ng-template>
 
-                    <button (click)="onCancel()" type="button" class="btn btn-pinky fw-bold "> Cancel</button>
+                    <button (click)="onCancel()" type="button" class="btn btn-pinky fw-bold btn-sm "> Cancel</button>
                     <app-toggle-mode></app-toggle-mode>
                 </div>
             </nav>
@@ -129,7 +129,7 @@
                 <div  >
                     <label class="col-12">Country</label>
                     <div class="dropdown mt-2 col-12" ngbDropdown >
-                    <button ngbDropdownToggle class=" userdd btn  fs-5  dropdown-toggle mt-2" type="button"
+                    <button ngbDropdownToggle class=" userdd btn  fs-5  dropdown-toggle mt-2 btn-sm" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                        Country
                     </button>

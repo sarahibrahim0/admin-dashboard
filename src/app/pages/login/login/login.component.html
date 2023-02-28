@@ -37,7 +37,7 @@ opacity: .6">
     <label class="mb-2" for="exampleInputPassword1">Password</label>
     <input (ngModelChange)="clear()" type="password" class="form-control" formControlName="password"  id="exampleInputPassword1" placeholder="Password">
   </div>
-  <button type="submit" class="btn btn-pinky mt-4 w-100  " style="min-height: 2rem; height: 3rem;" (click)="login()">Sign In</button>
+  <button type="submit" class="btn btn-pinky btn-sm mt-4 w-100  " style="min-height: 2rem; height: 3rem;" (click)="login()">Sign In</button>
   <small    [ngClass]="{'invisible' : !error }"   class="text-danger align-self-center mt-3 visible "> Wrong Email or Password</small>
 
 </div>

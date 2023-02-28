@@ -24,6 +24,19 @@ body {
   }
 }
 
+
+@media only screen and (min-width: 600px) {
+  .fst-normal{
+    pointer-events: none
+  };
+
+  li.nah{
+    cursor: default;
+  };
+};
+
+
+
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);
@@ -4320,7 +4333,7 @@ progress {
 }
 
 .fs-5 {
-  font-size: 1.25rem;
+  font-size: 1rem;
 }
 
 .fs-6 {
@@ -17717,7 +17730,7 @@ textarea.form-control-lg {
 }
 
 .fs-5 {
-  font-size: 1.25rem;
+  font-size: 1rem;
 }
 
 .fs-6 {
@@ -21211,4 +21224,10 @@ textarea.form-control-lg {
   .d-print-none {
     display: none;
   }
-}/*# sourceMappingURL=styles.css.map */
+
+
+
+
+
+}
+/*# sourceMappingURL=styles.css.map */

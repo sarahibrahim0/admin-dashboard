@@ -102,6 +102,7 @@ export class UserFormComponent implements OnInit {
 
   onSubmit() {
 
+    console.log( this.form.controls['isAdmin'].value)
     const user = {
       name: this.form.controls['name'].value,
       email: this.form.controls['email'].value,
@@ -127,6 +128,7 @@ export class UserFormComponent implements OnInit {
 
         error: (error) => {
           this.MessageService.add({ severity: 'error', summary: 'error', detail: `User Isn't Created` });
+
 
         }
 
@@ -181,6 +183,7 @@ export class UserFormComponent implements OnInit {
 
             error: (error) => {
               this.MessageService.add({ severity: 'error', summary: 'error', detail:`User Wasn't Updated`});
+              console.log(error)
 
             }
 

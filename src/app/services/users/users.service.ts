@@ -26,7 +26,7 @@ export class UsersService {
 
   postUser(user : User) : Observable<User>
   {
-    return this.http.post<User>(`${this.api}`, user);
+    return this.http.post<User>(`${this.api}/register`, user);
   }
 
   deleteUser(id: string): Observable<User>

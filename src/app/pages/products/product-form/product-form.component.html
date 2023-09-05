@@ -86,37 +86,76 @@
         <div class="col-12">
             <label for="image" class="col-form-label">product image</label>
             <input class="form-control" type="file" accept="image/*" id="image" (change)="onUpload($event)">
-        </div>
-        <div class="col-12 mt-3"><img *ngIf="src"   class=" rounded-4 col-6 object-fit-contain" [src]="src" style="max-height: 15rem;"></div>
+            <div class="col-12 mt-3"><img *ngIf="src"   class=" rounded-4 col-6 object-fit-contain" [src]="src" style="max-height: 15rem;"></div>
 
+        </div>
+
+    </div>
+
+    <div>
+        <div class="col-12 " *ngIf="id">
+            <label for="images" class="col-form-label" >product images</label>
+            <input multiple class="form-control" type="file" accept="image/*" id="images" (change)="onUploadImages($event)">
+            <div class="grid mt-3 col-12 " *ngIf="srcs" >
+                <div *ngFor="let src of srcs"  class="g-col-6">
+                    <img class="rounded-4 object-fit-contain g-col-3" [src]="src" style="max-height: 9rem;">
+                </div>
+            </div>
+        </div>
+
+
+
+     </div>
+    <div class="col-12">
+
+    </div>
+
+
+    <div>
+        <label for="flexSwitchCheckDefault" class="form-check-label col-form-label" >featured</label>
+        <div class="form-check form-switch col-12">
+            <input [value]="isFeaturedValue" placeholder="isAdmin"
+             formControlName="isFeatured" class="form-check-input"
+              type="checkbox" role="switch" unchecked id="flexSwitchCheckDefault"
+             >
+          </div>
+    </div>
+
+    <div>
+        <div class="dropdown mt-2 col-12 " ngbDropdown>
+            <label class="col-12">Category</label>
+            <button ngbDropdownToggle class="  btn userdd  btn-sm fs-5  dropdown-toggle mt-2  " type="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+     Category
+        </button>
+            <ul ngbDropdownMenu class="col-12" >
+                <li><a class="dropdown-item " [ngClass]="{ 'selected' :category?.name === currentProduct?.category?.name}"
+                     ngbDropdownItem *ngFor="let category of categories;"
+                     routerLinkActive=""
+                        (click)="sendId(category._id)">{{category.name}}
+                    </a></li>
+            </ul>
+
+        </div>
     </div>
 </div>
 
+
 <div class="g-col-6">
     <div>
-        <label for="richDescription" class="col-form-label">Description</label>
+        <label for="richDescription" class="col-form-label">rich description</label>
         <div class="col-12">
             <p-editor formControlName="richDescription" [style]="{'height':'18rem'}"></p-editor>
         </div>
     </div>
-
-<div>
-    <div class="dropdown mt-2 col-12 " ngbDropdown>
-        <label class="col-12">Category</label>
-        <button ngbDropdownToggle class="  btn userdd  btn-sm fs-5  dropdown-toggle mt-2  " type="button"
-        data-bs-toggle="dropdown" aria-expanded="false">
- Category
-    </button>
-        <ul ngbDropdownMenu class="col-12" >
-            <li><a class="dropdown-item " [ngClass]="{ 'selected' :category?.name === currentProduct?.category?.name}"
-                 ngbDropdownItem *ngFor="let category of categories;"
-                 routerLinkActive=""
-                    (click)="sendId(category._id)">{{category.name}}
-                </a></li>
-        </ul>
-
+    <div>
+        <label for="description" class="col-form-label">description</label>
+        <div class="col-12">
+            <p-editor formControlName="description" [style]="{'height':'10rem'}"></p-editor>
+        </div>
     </div>
-</div>
+
+
 
 </div>
 

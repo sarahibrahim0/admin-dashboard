@@ -36,13 +36,15 @@ export class LoginComponent implements OnInit {
 
   login(){
 
-
-
-
    return this.loginService.login( this.loginForm.controls['email'].value,
    this.loginForm.controls['password'].value).subscribe({next:(user)=>
     {
     this.loginService.setToken(user.token);
+    this.loginService.getUserById(user.id).subscribe({
+      next:(user)=>{this.loginService.$user.next(user)},
+      error: (err)=>{console.log(err)}
+    })
+    console.log(user.token)
     this.MessageService.add({ severity: 'success', summary: 'Success', detail: `You Are Logged In` });
 
     timer(1600).subscribe(() => {
@@ -54,9 +56,7 @@ export class LoginComponent implements OnInit {
   error:(error)=>{
 
     this.error = error.message
-    this.MessageService.add({ severity: 'error', summary: 'Wrong Info', detail: `Sorry, Couldn't Log In` });
-
-
+    this.MessageService.add({ severity: 'error', summary: 'Wrong Info', detail: `Sorry, Couldn't Log In` })
 
 }})
 

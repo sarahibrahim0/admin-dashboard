@@ -42,6 +42,7 @@ import { SocialLoginModule,
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { ToggleModeComponent } from './shared/toggle-mode/toggle-mode.component';
 import { SidebarSmComponent } from './shared/sidebar-sm/sidebar-sm.component';
+import { GalleriaModule } from 'primeng/galleria';
 
 
 
@@ -96,7 +97,8 @@ FieldsetModule,
 NgbModule,
 ButtonModule,
 SocialLoginModule,
-SidebarModule
+SidebarModule,
+GalleriaModule
   ]
 
   ,

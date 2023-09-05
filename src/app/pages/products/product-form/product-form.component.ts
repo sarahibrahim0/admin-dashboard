@@ -2,7 +2,7 @@ import { ProductsServiceService } from './../../../services/products/products-se
 import { Product } from './../../../models/product';
 import { Component, OnInit } from '@angular/core';
 import { CategoriesService } from '../../../services/categories/categories-service.service';
-import { Location } from '@angular/common';
+import { Location, formatDate } from '@angular/common';
 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Category } from 'src/app/models/category';
@@ -24,7 +24,24 @@ export class ProductFormComponent implements OnInit {
   src: string | ArrayBuffer
   isSubmitted : boolean = false;
   categoryId : string
-  currentProduct : Product
+  currentProduct : Product;
+  id: string
+  isFeaturedValue: boolean = false;
+  srcs : any = []
+  responsiveOptions: any[] = [
+    {
+        breakpoint: '1024px',
+        numVisible: 5
+    },
+    {
+        breakpoint: '768px',
+        numVisible: 3
+    },
+    {
+        breakpoint: '560px',
+        numVisible: 1
+    }
+];
 
   constructor(private formBuilder: FormBuilder, private CategoriesService: CategoriesService,
     private MessageService: MessageService,
@@ -34,7 +51,11 @@ export class ProductFormComponent implements OnInit {
     private productService: ProductsServiceService) { }
 
   ngOnInit() {
-
+    this.ActivatedRoute.params.subscribe(params=>{
+      if(params['id']){
+        this.id = params['id']
+      }
+    })
     this.getForm();
     this._checkEditMode();
     this.getCategories();
@@ -53,7 +74,7 @@ export class ProductFormComponent implements OnInit {
       description: [''],
       richDescription: [''],
       image: ['', Validators.required],
-      isFeatured: [false]
+      isFeatured: [this.isFeaturedValue, Validators.required]
     })
   }
 
@@ -98,6 +119,7 @@ export class ProductFormComponent implements OnInit {
       this.form.controls['category'].setValue(this.categoryId);
     }
   const productFormData = new FormData();
+
  Object.keys(this.productForm).map((key) => {
   productFormData.append(key, this.productForm[key].value);
   })
@@ -127,13 +149,13 @@ export class ProductFormComponent implements OnInit {
             this.form.controls['category'].setValue(resProduct.category?._id)
             this.form.controls['countInStock'].setValue(resProduct.countInStock)
             this.form.controls['richDescription'].setValue(resProduct.richDescription)
+            this.form.controls['description'].setValue(resProduct.description)
             this.form.controls['isFeatured'].setValue(resProduct.isFeatured)
-            this.src = resProduct.image
+            this.form.controls['image'].setValue(resProduct.image);
             this.productForm['image'].setValidators([]);
             this.productForm['image'].updateValueAndValidity();
-
-
-
+            this.srcs = resProduct.images;
+            this.src = resProduct.image;
 
           }
 
@@ -201,14 +223,17 @@ this.categoryId = id;
   onUpload(event) {
     const file = event.target.files[0]
     if (file) {
+      console.log(file)
       this.form.patchValue({'image' : file});
       this.form.get('image').updateValueAndValidity;
 
       const fileReader = new FileReader();
-      fileReader.onload = () => {  //after the file is read successfully
-        this.src = fileReader.result
+      fileReader.onloadend = () => {
+         //after the file is read successfully
+       this.src = fileReader.result
       }
       fileReader.readAsDataURL(file);
+
     }
   }
 
@@ -224,4 +249,38 @@ this.categoryId = id;
     return this.form.controls;
   }
 
+  onUploadImages(event){
+
+    const fileList = event.target.files;
+
+    const files : File[] = Array.from(fileList);
+    let singleSrc
+    let filesFormData  = new FormData()
+    if (files) {
+      files.forEach(file=> {
+        let fileReader = new FileReader();
+        fileReader.onload =()=>{
+          singleSrc = fileReader.result;
+          this.srcs.push(singleSrc);
+        }
+        filesFormData.append('images', file);
+        fileReader.readAsDataURL(file);
+
+      })
+
+      console.log(this.srcs)
+
+      this.productService.postProductImages(filesFormData, this.id).subscribe({
+        next: (product) => {
+          this.MessageService.add({ severity: 'success', summary: 'success', detail: `Product ${product.name} Images Was Updated` });
+        },
+        error: (err) => {
+          console.log(err)
+          this.MessageService.add({ severity: 'error', summary: 'error', detail: `Product Images Weren't  Updated` });
+
+        }
+      })
+    }
+
+  }
 }

@@ -74,7 +74,8 @@ export class ProductFormComponent implements OnInit {
       description: [''],
       richDescription: [''],
       image: ['', Validators.required],
-      isFeatured: [this.isFeaturedValue, Validators.required]
+      isFeatured: [this.isFeaturedValue, Validators.required],
+      rating: ['']
     })
   }
 
@@ -152,6 +153,7 @@ export class ProductFormComponent implements OnInit {
             this.form.controls['description'].setValue(resProduct.description)
             this.form.controls['isFeatured'].setValue(resProduct.isFeatured)
             this.form.controls['image'].setValue(resProduct.image);
+            this.form.controls['rating'].setValue(resProduct.rating);
             this.productForm['image'].setValidators([]);
             this.productForm['image'].updateValueAndValidity();
             this.srcs = resProduct.images;

@@ -75,7 +75,7 @@ export class ProductFormComponent implements OnInit {
       richDescription: [''],
       image: ['', Validators.required],
       isFeatured: [this.isFeaturedValue, Validators.required],
-      rating: ['']
+      rating: [0, ]
     })
   }
 

@@ -46,7 +46,7 @@
 
                             <td class="text-start fs-5   ps-9  text-nowrap  lh-sm  align-middle">{{product.name}}</td>
 
-                            <td style="height: 2rem; width: 2rem;"> <img [src]="product.image" class="rounded-4 object-fit-contain w-100 "  >
+                            <td style="height: 2rem; width: 2rem;"> <img [src]="product?.image?.url" class="rounded-4 object-fit-contain w-100 "  >
                             </td>
                             <td class="text-start fs-5   align-middle lh-sm  text-nowrap ">
                                 {{product.price | currency : 'EGP': 'symbol' : '1.0-0' }}

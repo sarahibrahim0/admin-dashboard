@@ -74,7 +74,7 @@ export class ProductFormComponent implements OnInit {
       description: [''],
       richDescription: [''],
       image: ['', Validators.required],
-      isFeatured: [this.isFeaturedValue, Validators.required],
+      isFeatured: [this.isFeaturedValue],
       rating: [0, ]
     })
   }
@@ -152,12 +152,12 @@ export class ProductFormComponent implements OnInit {
             this.form.controls['richDescription'].setValue(resProduct.richDescription)
             this.form.controls['description'].setValue(resProduct.description)
             this.form.controls['isFeatured'].setValue(resProduct.isFeatured)
-            this.form.controls['image'].setValue(resProduct.image);
+            this.form.controls['image'].setValue(resProduct.image?.url);
             this.form.controls['rating'].setValue(resProduct.rating);
             this.productForm['image'].setValidators([]);
             this.productForm['image'].updateValueAndValidity();
             this.srcs = resProduct.images;
-            this.src = resProduct.image;
+            this.src = resProduct.image?.url;
 
           }
 
@@ -189,6 +189,7 @@ if(this.productForm['category'].value !== this.categoryId && this.categoryId !==
   Object.keys(this.productForm).map((key) => {
    productFormData.append(key, this.productForm[key].value);
    })
+   console.log(productFormData);
 
           this.productService.editProduct(params['id'],
         productFormData
@@ -270,7 +271,6 @@ this.categoryId = id;
 
       })
 
-      console.log(this.srcs)
 
       this.productService.postProductImages(filesFormData, this.id).subscribe({
         next: (product) => {

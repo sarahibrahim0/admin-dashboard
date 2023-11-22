@@ -98,7 +98,7 @@
             <input multiple class="form-control" type="file" accept="image/*" id="images" (change)="onUploadImages($event)">
             <div class="grid mt-3 col-12 " *ngIf="srcs" >
                 <div *ngFor="let src of srcs"  class="g-col-6">
-                    <img class="rounded-4 object-fit-contain g-col-3" [src]="src" style="max-height: 9rem;">
+                    <img class="rounded-4 object-fit-contain g-col-3" [src]="src?.url" style="max-height: 9rem;">
                 </div>
             </div>
         </div>

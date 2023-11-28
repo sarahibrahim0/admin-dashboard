@@ -1,3 +1,7 @@
 .dd {
   width: 10rem;
+}
+
+.img {
+  display: inline-block;
 }/*# sourceMappingURL=product-form.component.css.map */

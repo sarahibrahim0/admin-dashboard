@@ -1,1 +1,1 @@
-{"version":3,"sources":[],"names":[],"mappings":"","file":"order-details.component.css"}
+{"version":3,"sources":["order-details.component.scss","order-details.component.css"],"names":[],"mappings":"AAAA;EACI,2BAAA;ACCJ","file":"order-details.component.css"}

@@ -8,6 +8,8 @@ $h5-font-size: 1rem !important;
 
 @import "../node_modules/bootstrap/scss/variables";
 
+
+
 $spacers: (
   0: 0,
   1: $spacer * .25,
@@ -455,3 +457,5 @@ $color-mode-type: data;
 .dropdown-toggle:empty::after{
   margin-left: 0.255em!important;
 };
+
+

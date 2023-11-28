@@ -21239,4 +21239,7 @@ textarea.form-control-lg {
   .d-print-none {
     display: none;
   }
+}
+.offcanvas.offcanvas-start {
+  width: 290px !important;
 }/*# sourceMappingURL=styles.css.map */

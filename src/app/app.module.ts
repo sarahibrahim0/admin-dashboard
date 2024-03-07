@@ -37,23 +37,11 @@ import { OnClickBgDirective } from './directives/on-click-bg.directive';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ButtonModule } from "primeng/button";
 import { OrderItemComponent } from './pages/orders/order-item/order-item.component';
-import { SocialLoginModule,
-  SocialAuthServiceConfig} from '@abacritt/angularx-social-login'
+import { SocialLoginModule,SocialAuthServiceConfig} from '@abacritt/angularx-social-login'
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { ToggleModeComponent } from './shared/toggle-mode/toggle-mode.component';
 import { SidebarSmComponent } from './shared/sidebar-sm/sidebar-sm.component';
 import { GalleriaModule } from 'primeng/galleria';
-
-
-
-
-
-
-
-
-
-
-
 
 
 @NgModule({

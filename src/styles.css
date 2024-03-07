@@ -16171,7 +16171,7 @@ textarea.form-control-lg {
 .offcanvas.offcanvas-start {
   top: 0;
   left: 0;
-  width: 290px !important;
+  width: var(--bs-offcanvas-width);
   border-right: var(--bs-offcanvas-border-width) solid var(--bs-offcanvas-border-color);
   transform: translateX(-100%);
 }
@@ -21242,4 +21242,10 @@ textarea.form-control-lg {
 }
 .offcanvas.offcanvas-start {
   width: 290px !important;
+}
+
+.btn-check:checked + .btn, :not(.btn-check) + .btn:active, .btn:first-child:active, .btn.active, .btn.show {
+  color: var(--bs-white);
+  background-color: #de2768 !important;
+  border-color: var(--bs-btn-active-border-color);
 }/*# sourceMappingURL=styles.css.map */

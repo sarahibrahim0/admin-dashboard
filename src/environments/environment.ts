@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   apiUrl :"https://dashboard-pnlv.onrender.com/api/v1/"
+    // apiUrl :"http://localhost:3000/api/v1/"
+
 };
 // export const environment = {
 //   production: false,

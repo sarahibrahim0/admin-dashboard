@@ -121,6 +121,30 @@
           </div>
     </div>
 
+
+
+    <!-- <td class=" text-start fs-5   lh-sm  align-middle  text-nowrap ">
+      <i class="pi pi-circle-on fs-2" [ngStyle]="{ color: currentProduct?.color }"></i>
+  </td>
+
+ -->
+
+ <div>
+  <label for="flexSwitchCheckDefault" class="form-check-label col-form-label" >Color</label>
+  <div class="form-check form-switch col-12">
+      <!-- <input  placeholder="Color"
+       formControlName="color" class="form-check-input"
+        type="text" role="switch" unchecked id="flexSwitchCheckDefault"
+       > -->
+
+       <p-colorPicker  formControlName="color"  [inline]="true"></p-colorPicker>
+
+    </div>
+</div>
+
+
+
+
     <div>
         <div class="dropdown mt-2 col-12 " ngbDropdown>
             <label class="col-12">Category</label>
@@ -138,6 +162,10 @@
 
         </div>
     </div>
+
+
+
+
 </div>
 
 
@@ -151,7 +179,8 @@
     <div>
         <label for="description" class="col-form-label">description</label>
         <div class="col-12">
-            <p-editor formControlName="description" [style]="{'height':'10rem'}"></p-editor>
+            <p-editor formControlName="description" [style]="{'height':'10rem'}">
+            </p-editor>
         </div>
     </div>
 

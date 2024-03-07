@@ -42,9 +42,10 @@ export class LoginComponent implements OnInit {
     this.loginService.setToken(user.token);
     this.loginService.getUserById(user.id).subscribe({
       next:(user)=>{this.loginService.$user.next(user)},
-      error: (err)=>{console.log(err)}
+      error: (err)=>{
+
+      }
     })
-    console.log(user.token)
     this.MessageService.add({ severity: 'success', summary: 'Success', detail: `You Are Logged In` });
 
     timer(1600).subscribe(() => {

@@ -26,3 +26,9 @@ html {
   width: 290px!important;
 
 }
+
+.btn-check:checked+.btn, :not(.btn-check)+.btn:active, .btn:first-child:active, .btn.active, .btn.show {
+  color: var(--bs-white);
+  background-color: #de2768!important;
+  border-color: var(--bs-btn-active-border-color);
+}

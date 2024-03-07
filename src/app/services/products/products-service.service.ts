@@ -35,7 +35,7 @@ export class ProductsServiceService {
 
   postProductImages(files: FormData , id: string): Observable<Product>
   {
-    
+
  return  this.http.put<Product>(`${this.api}/gallery-images/${id}`,files)
   }
 

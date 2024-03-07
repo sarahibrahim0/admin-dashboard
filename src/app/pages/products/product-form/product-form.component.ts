@@ -9,12 +9,14 @@ import { Category } from 'src/app/models/category';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { timer, concatMap } from 'rxjs'
 import { ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-product-form',
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss']
 })
 export class ProductFormComponent implements OnInit {
+
 
   form: FormGroup;
   name: string;
@@ -23,6 +25,8 @@ export class ProductFormComponent implements OnInit {
   categories : Category [] = [];
   src: string | ArrayBuffer
   isSubmitted : boolean = false;
+  description : string
+  richDescription: string
   categoryId : string
   currentProduct : Product;
   id: string
@@ -51,12 +55,16 @@ export class ProductFormComponent implements OnInit {
     private productService: ProductsServiceService) { }
 
   ngOnInit() {
+
+
+
     this.ActivatedRoute.params.subscribe(params=>{
       if(params['id']){
         this.id = params['id']
       }
     })
     this.getForm();
+
     this._checkEditMode();
     this.getCategories();
 
@@ -71,7 +79,8 @@ export class ProductFormComponent implements OnInit {
       price: ['', Validators.required],
       category: ['', Validators.required],
       countInStock: ['', Validators.required],
-      description: [''],
+      description: [this.description],
+      color: ['' , Validators.required],
       richDescription: [''],
       image: ['', Validators.required],
       isFeatured: [this.isFeaturedValue],
@@ -92,6 +101,7 @@ export class ProductFormComponent implements OnInit {
       {
         next: (product: Product) => {
           this.MessageService.add({ severity: 'success', summary: 'success', detail: `Product ${product.name} Is Created` });
+          console.log(product)
           timer(1000).subscribe(() => {
             this.location.back()
           })
@@ -110,7 +120,6 @@ export class ProductFormComponent implements OnInit {
 
 
 
-
   onSubmit() {
 
 
@@ -122,8 +131,12 @@ export class ProductFormComponent implements OnInit {
   const productFormData = new FormData();
 
  Object.keys(this.productForm).map((key) => {
-  productFormData.append(key, this.productForm[key].value);
-  })
+    productFormData.append(key, this.productForm[key].value);
+
+
+ })
+
+
 
   this.addProduct(productFormData);
 
@@ -154,6 +167,7 @@ export class ProductFormComponent implements OnInit {
             this.form.controls['isFeatured'].setValue(resProduct.isFeatured)
             this.form.controls['image'].setValue(resProduct.image?.url);
             this.form.controls['rating'].setValue(resProduct.rating);
+            this.form.controls['color'].setValue(resProduct.color);
             this.productForm['image'].setValidators([]);
             this.productForm['image'].updateValueAndValidity();
             this.srcs = resProduct.images;
@@ -186,9 +200,15 @@ if(this.productForm['category'].value !== this.categoryId && this.categoryId !==
 
   this.ActivatedRoute.params.subscribe(params => {
   const productFormData = new FormData();
+  console.log('submit')
+
   Object.keys(this.productForm).map((key) => {
-   productFormData.append(key, this.productForm[key].value);
+      productFormData.append(key, this.productForm[key].value);
+
+
    })
+
+
    console.log(productFormData);
 
           this.productService.editProduct(params['id'],
@@ -197,11 +217,13 @@ if(this.productForm['category'].value !== this.categoryId && this.categoryId !==
           ).subscribe({
 
             next: (product: Product) => {
+              console.log(product)
+
               this.MessageService.add({ severity: 'success', summary: 'success', detail: `Product ${product.name} Was Updated` });
             },
 
             error: (err) => {
-              this.MessageService.add({ severity: 'error', summary: 'error', detail: `Product Wasn't  Updated` });
+              this.MessageService.add({ severity: 'error', summary: 'error', detail: err.message });
 
             }
 
@@ -285,4 +307,6 @@ this.categoryId = id;
     }
 
   }
+
+
 }

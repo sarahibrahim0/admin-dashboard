@@ -1,0 +1,60 @@
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { EntityService } from '../../../core/services/entity.service';
+import { BaseTableComponent } from '../../../shared/table/base-table.component';
+import { TableColumn } from '../../../shared/table/table-column';
+
+@Component({
+  selector: 'app-orders-list',
+  standalone: true,
+  imports: [FormsModule, BaseTableComponent],
+  template: `
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold text-slate-900">Orders</h2>
+        <select [(ngModel)]="statusFilter" (ngModelChange)="filterByStatus()" class="rounded-md border border-slate-300 px-3 py-1.5 text-sm outline-none focus:border-indigo-500">
+          <option value="">All Status</option>
+          <option value="Pending">Pending</option>
+          <option value="Processed">Processed</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+      <app-base-table [columns]="columns" [data]="orders" [totalCount]="totalCount" (sortChange)="onSort($event)" (rowClick)="router.navigate(['/admin/orders', $event.id])" />
+    </div>
+  `,
+})
+export class OrdersListComponent implements OnInit {
+  private entityService = inject(EntityService);
+  protected router = inject(Router);
+  orders = signal<any[]>([]);
+  totalCount = signal(0);
+  statusFilter = '';
+
+  columns: TableColumn[] = [
+    { field: 'id', header: 'Order ID', width: '120px', format: (v) => v?.slice(-8) },
+    { field: 'user', header: 'Customer', format: (v) => v?.name || v?.email || '-' },
+    { field: 'totalPrice', header: 'Total', sortable: true, format: (v) => `$${v?.toFixed(2)}` },
+    { field: 'status', header: 'Status', sortable: true },
+    { field: 'paymentStatus', header: 'Payment' },
+    { field: 'dateOrdered', header: 'Date', sortable: true, format: (v) => new Date(v).toLocaleDateString() },
+  ];
+
+  ngOnInit(): void { this.loadOrders(); }
+
+  loadOrders(): void {
+    this.entityService.list<any>('orders').subscribe((data) => {
+      this.orders.set(data); this.totalCount.set(data.length);
+    });
+  }
+
+  filterByStatus(): void { this.loadOrders(); }
+
+  onSort(event: { field: string; dir: 'asc' | 'desc' }): void {
+    const sorted = [...this.orders()].sort((a, b) => {
+      const cmp = a[event.field] < b[event.field] ? -1 : a[event.field] > b[event.field] ? 1 : 0;
+      return event.dir === 'asc' ? cmp : -cmp;
+    });
+    this.orders.set(sorted);
+  }
+}

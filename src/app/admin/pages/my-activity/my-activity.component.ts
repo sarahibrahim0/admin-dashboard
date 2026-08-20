@@ -1,16 +1,12 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TableModule } from 'primeng/table';
-
-import { ButtonModule } from 'primeng/button';
-import { TagModule } from 'primeng/tag';
 import { AuditLogService, AuditLog } from '../../../core/services/audit-log.service';
 
 @Component({
   selector: 'app-my-activity',
   standalone: true,
-  imports: [CommonModule, FormsModule, TableModule, ButtonModule, TagModule],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="space-y-6">
       <h1 class="text-2xl font-bold text-slate-900">My Activity</h1>
@@ -18,7 +14,7 @@ import { AuditLogService, AuditLog } from '../../../core/services/audit-log.serv
       <div class="rounded-lg border border-slate-200 bg-white p-6">
         <div class="mb-4 flex gap-4">
           <select [(ngModel)]="selectedEntity" (ngModelChange)="loadLogs()"
-            class="rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            class="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm">
             <option value="">All Activity</option>
             <option value="Order">Orders</option>
             <option value="Review">Reviews</option>
@@ -26,35 +22,49 @@ import { AuditLogService, AuditLog } from '../../../core/services/audit-log.serv
           </select>
         </div>
 
-        <p-table [value]="logs()" [tableStyle]="{ 'min-width': '50rem' }">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Action</th>
-              <th>Entity</th>
-              <th>Details</th>
-              <th>Date</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-log>
-            <tr>
-              <td>
-                <p-tag [value]="log.action" [severity]="getSeverity(log.action)" />
-              </td>
-              <td>{{ log.entity }}</td>
-              <td class="max-w-xs truncate">{{ log.changes | json }}</td>
-              <td>{{ log.createdAt | date:'medium' }}</td>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="emptymessage">
-            <tr><td colspan="4" class="py-8 text-center text-slate-500">No activity found</td></tr>
-          </ng-template>
-        </p-table>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="border-b border-slate-200">
+                <th class="px-4 py-3 font-medium text-slate-600">Action</th>
+                <th class="px-4 py-3 font-medium text-slate-600">Entity</th>
+                <th class="px-4 py-3 font-medium text-slate-600">Details</th>
+                <th class="px-4 py-3 font-medium text-slate-600">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (log of logs(); track log._id) {
+                <tr class="border-b border-slate-100 hover:bg-slate-50">
+                  <td class="px-4 py-3">
+                    <span class="inline-block rounded-full px-2 py-0.5 text-xs font-medium"
+                      [class]="getSeverity(log.action)">
+                      {{ log.action }}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3 text-slate-700">{{ log.entity }}</td>
+                  <td class="max-w-xs truncate px-4 py-3 text-slate-500">{{ log.changes | json }}</td>
+                  <td class="px-4 py-3 text-slate-500">{{ log.createdAt | date:'medium' }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="4" class="px-4 py-8 text-center text-slate-500">No activity found</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
 
-        <div class="mt-4 flex justify-between text-sm text-slate-600">
+        <div class="mt-4 flex items-center justify-between text-sm text-slate-600">
           <span>Page {{ currentPage() }} of {{ totalPages() }}</span>
           <div class="flex gap-2">
-            <p-button label="Previous" [disabled]="currentPage() <= 1" (onClick)="prevPage()" size="small" />
-            <p-button label="Next" [disabled]="currentPage() >= totalPages()" (onClick)="nextPage()" size="small" />
+            <button (click)="prevPage()" [disabled]="currentPage() <= 1"
+              class="rounded-md border border-slate-300 px-3 py-1.5 text-sm disabled:opacity-40">
+              Previous
+            </button>
+            <button (click)="nextPage()" [disabled]="currentPage() >= totalPages()"
+              class="rounded-md border border-slate-300 px-3 py-1.5 text-sm disabled:opacity-40">
+              Next
+            </button>
           </div>
         </div>
       </div>
@@ -90,12 +100,12 @@ export class MyActivityComponent implements OnInit {
     this.loadLogs();
   }
 
-  getSeverity(action: string): 'success' | 'warn' | 'danger' | 'info' {
+  getSeverity(action: string): string {
     switch (action.toLowerCase()) {
-      case 'create': return 'success';
-      case 'update': return 'warn';
-      case 'delete': return 'danger';
-      default: return 'info';
+      case 'create': return 'bg-emerald-50 text-emerald-700';
+      case 'update': return 'bg-amber-50 text-amber-700';
+      case 'delete': return 'bg-rose-50 text-rose-700';
+      default: return 'bg-slate-100 text-slate-700';
     }
   }
 }

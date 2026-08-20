@@ -1,14 +1,12 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
 import { TwoFactorService } from '../../../core/services/two-factor.service';
 
 @Component({
   selector: 'app-two-factor',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, InputTextModule],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="space-y-6">
       <h1 class="text-2xl font-bold text-slate-900">Two-Factor Authentication</h1>
@@ -17,12 +15,16 @@ import { TwoFactorService } from '../../../core/services/two-factor.service';
         @if (enabled()) {
           <div class="space-y-4">
             <div class="flex items-center gap-2">
-              <span class="h-3 w-3 rounded-full bg-green-500"></span>
-              <span class="font-medium text-green-700">2FA is enabled</span>
+              <span class="h-3 w-3 rounded-full bg-emerald-500"></span>
+              <span class="font-medium text-emerald-700">2FA is enabled</span>
             </div>
             <p class="text-sm text-slate-600">Enter the 6-digit code from your authenticator app to disable 2FA.</p>
-            <input pInputText [(ngModel)]="token" placeholder="Enter 6-digit code" class="w-48" />
-            <p-button label="Disable 2FA" severity="danger" (onClick)="disable2FA()" [disabled]="!token" />
+            <input type="text" [(ngModel)]="token" placeholder="Enter 6-digit code"
+              class="w-48 rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500" />
+            <button (click)="disable2FA()" [disabled]="!token"
+              class="rounded-md bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50">
+              Disable 2FA
+            </button>
           </div>
         } @else {
           <div class="space-y-4">
@@ -34,19 +36,26 @@ import { TwoFactorService } from '../../../core/services/two-factor.service';
               <div class="space-y-4">
                 <p class="text-sm text-slate-600">Scan this QR code with your authenticator app:</p>
                 <img [src]="qrCode()" alt="QR Code" class="h-48 w-48" />
-                <p class="text-sm text-slate-500">Or enter this secret manually: <code class="bg-slate-100 px-2 py-1 rounded">{{ secret() }}</code></p>
-                <input pInputText [(ngModel)]="token" placeholder="Enter 6-digit code to verify" class="w-64" />
-                <p-button label="Verify & Enable" (onClick)="verifyAndEnable()" [disabled]="!token" />
+                <p class="text-sm text-slate-500">Or enter this secret manually: <code class="rounded bg-slate-100 px-2 py-1">{{ secret() }}</code></p>
+                <input type="text" [(ngModel)]="token" placeholder="Enter 6-digit code to verify"
+                  class="w-64 rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500" />
+                <button (click)="verifyAndEnable()" [disabled]="!token"
+                  class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50">
+                  Verify & Enable
+                </button>
               </div>
             } @else {
-              <p-button label="Setup 2FA" (onClick)="setup2FA()" />
+              <button (click)="setup2FA()"
+                class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
+                Setup 2FA
+              </button>
             }
           </div>
         }
 
         @if (message()) {
-          <div class="mt-4 rounded-lg p-3 text-sm"
-               [class]="messageType() === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'">
+          <div class="mt-4 rounded-md p-3 text-sm"
+               [class]="messageType() === 'success' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'">
             {{ message() }}
           </div>
         }

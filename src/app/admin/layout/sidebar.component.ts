@@ -87,6 +87,12 @@ export class SidebarComponent {
       ],
     },
     {
+      title: 'Account',
+      items: [
+        { label: 'My Activity', icon: 'pi pi-history', route: '/my-activity' },
+      ],
+    },
+    {
       title: 'System',
       items: [
         { label: 'Audit Logs', icon: 'pi pi-list', route: '/admin/audit-logs' },

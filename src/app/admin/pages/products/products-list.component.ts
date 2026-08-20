@@ -39,7 +39,7 @@ export class ProductsListComponent implements OnInit {
     { field: 'rating', header: 'Rating', format: (v) => `${v?.toFixed(1)} ★` },
     { field: 'isFeatured', header: 'Featured', format: (v) => v ? 'Yes' : 'No' },
   ];
-  bulkActions: BulkAction[] = [{ label: 'Delete', icon: 'pi pi-trash', action: 'delete' }];
+  bulkActions: BulkAction[] = [{ label: 'Delete', icon: 'trash', action: 'delete' }];
 
   ngOnInit(): void { this.loadProducts(); }
 

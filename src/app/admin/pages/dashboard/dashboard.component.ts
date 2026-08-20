@@ -6,11 +6,14 @@ import { RevenueChartComponent } from './revenue-chart.component';
 import { CategoryChartComponent } from './category-chart.component';
 import { StatusChartComponent } from './status-chart.component';
 import { OrdersChartComponent } from './orders-chart.component';
+import { PeriodSelectorComponent } from './period-selector.component';
+import { UserGrowthChartComponent } from './user-growth-chart.component';
+import { TopProductsChartComponent } from './top-products-chart.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, KpiCardComponent, RevenueChartComponent, CategoryChartComponent, StatusChartComponent, OrdersChartComponent],
+  imports: [CommonModule, KpiCardComponent, RevenueChartComponent, CategoryChartComponent, StatusChartComponent, OrdersChartComponent, PeriodSelectorComponent, UserGrowthChartComponent, TopProductsChartComponent],
   template: `
     <div class="space-y-6">
       <h2 class="text-2xl font-bold text-slate-900">Dashboard</h2>
@@ -30,6 +33,11 @@ import { OrdersChartComponent } from './orders-chart.component';
           <app-kpi-card label="Low Stock" [value]="summary()?.lowStockProducts || 0" subtitle="items with ≤10 stock" icon="pi pi-exclamation-triangle" iconBg="bg-rose-100" iconColor="text-rose-600" />
         </div>
 
+        <!-- Period Selector -->
+        <div class="flex items-center justify-between">
+          <app-period-selector (periodChange)="onPeriodChange($event)" />
+        </div>
+
         <!-- Charts Row -->
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <app-revenue-chart [data]="revenueData()" />
@@ -38,6 +46,8 @@ import { OrdersChartComponent } from './orders-chart.component';
 
           <app-category-chart [data]="categoryData()" />
           <app-orders-chart [data]="revenueData()" />
+          <app-user-growth-chart [data]="userGrowthData()" />
+          <app-top-products-chart [data]="topProductsData()" />
 
           <!-- Reviews Summary -->
           <div class="rounded-lg border border-slate-200 bg-white p-6">
@@ -102,9 +112,14 @@ export class DashboardComponent implements OnInit {
   recentOrders = signal<any[]>([]);
   avgRating = signal(0);
   loading = signal(true);
+  userGrowthData = signal<{ date: string; count: number }[]>([]);
+  topProductsData = signal<{ name: string; totalSold: number; revenue: number }[]>([]);
+  selectedPeriod = signal('day');
 
   ngOnInit(): void {
     this.loadData();
+    this.loadUserGrowth();
+    this.loadTopProducts();
   }
 
   loadData(): void {
@@ -138,6 +153,33 @@ export class DashboardComponent implements OnInit {
         this.loading.set(false);
       },
       error: () => this.loading.set(false),
+    });
+  }
+
+  onPeriodChange(period: string): void {
+    this.selectedPeriod.set(period);
+    this.loadRevenueAndOrders(period);
+    this.loadUserGrowth(period);
+  }
+
+  loadRevenueAndOrders(period: string): void {
+    this.dashboardService.getRevenueOverTime(period, 30).subscribe({
+      next: (data) => this.revenueData.set(data),
+      error: () => {},
+    });
+  }
+
+  loadUserGrowth(period: string = 'day'): void {
+    this.dashboardService.getUserGrowth(period, 30).subscribe({
+      next: (data) => this.userGrowthData.set(data),
+      error: () => {},
+    });
+  }
+
+  loadTopProducts(): void {
+    this.dashboardService.getTopProductsChart(10).subscribe({
+      next: (data) => this.topProductsData.set(data),
+      error: () => {},
     });
   }
 

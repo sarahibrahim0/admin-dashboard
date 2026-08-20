@@ -47,8 +47,11 @@ export class DashboardService {
     return this.http.get<DashboardSummary>(`${this.base}/summary`);
   }
 
-  getRevenueOverTime(period = 'day', days = 30): Observable<RevenuePoint[]> {
-    return this.http.get<RevenuePoint[]>(`${this.base}/revenue-over-time`, { params: { period, days: String(days) } });
+  getRevenueOverTime(period = 'day', days = 30, startDate?: string, endDate?: string): Observable<RevenuePoint[]> {
+    let params: any = { period, days: String(days) };
+    if (startDate) params = { ...params, startDate };
+    if (endDate) params = { ...params, endDate };
+    return this.http.get<RevenuePoint[]>(`${this.base}/revenue-over-time`, { params });
   }
 
   getTopProducts(limit = 10): Observable<TopProduct[]> {
@@ -65,5 +68,13 @@ export class DashboardService {
 
   getRecentOrders(limit = 10): Observable<any[]> {
     return this.http.get<any[]>(`${this.base}/recent-orders`, { params: { limit: String(limit) } });
+  }
+
+  getUserGrowth(period: string = 'day', days: number = 30): Observable<{ date: string; count: number }[]> {
+    return this.http.get<{ date: string; count: number }[]>(`${this.base}/user-growth`, { params: { period, days: String(days) } });
+  }
+
+  getTopProductsChart(limit: number = 10): Observable<{ name: string; totalSold: number; revenue: number }[]> {
+    return this.http.get<{ name: string; totalSold: number; revenue: number }[]>(`${this.base}/top-products-chart`, { params: { limit: String(limit) } });
   }
 }

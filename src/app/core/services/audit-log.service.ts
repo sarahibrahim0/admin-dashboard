@@ -34,6 +34,13 @@ export class AuditLogService {
     return this.http.get<AuditLogResponse>(this.url, { params });
   }
 
+  getMyLogs(page = 1, limit = 50, entity?: string, action?: string): Observable<AuditLogResponse> {
+    let params = new HttpParams().set('page', page).set('limit', limit);
+    if (entity) params = params.set('entity', entity);
+    if (action) params = params.set('action', action);
+    return this.http.get<AuditLogResponse>(`${this.url}my`, { params });
+  }
+
   getEntities(): Observable<string[]> {
     return this.http.get<string[]>(`${this.url}/entities`);
   }

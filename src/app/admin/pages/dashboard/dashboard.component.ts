@@ -2,11 +2,15 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardService, DashboardSummary, RevenuePoint, CategoryDist } from '../../../core/services/dashboard.service';
 import { KpiCardComponent } from './kpi-card.component';
+import { RevenueChartComponent } from './revenue-chart.component';
+import { CategoryChartComponent } from './category-chart.component';
+import { StatusChartComponent } from './status-chart.component';
+import { OrdersChartComponent } from './orders-chart.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, KpiCardComponent],
+  imports: [CommonModule, KpiCardComponent, RevenueChartComponent, CategoryChartComponent, StatusChartComponent, OrdersChartComponent],
   template: `
     <div class="space-y-6">
       <h2 class="text-2xl font-bold text-slate-900">Dashboard</h2>
@@ -28,39 +32,12 @@ import { KpiCardComponent } from './kpi-card.component';
 
         <!-- Charts Row -->
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <!-- Revenue Chart Placeholder -->
-          <div class="rounded-lg border border-slate-200 bg-white p-6">
-            <h3 class="mb-4 text-lg font-semibold text-slate-900">Revenue Over Time</h3>
-            <div class="flex h-64 items-center justify-center text-sm text-slate-400">
-              Chart placeholder — revenue data: {{ revenueData().length }} points
-            </div>
-          </div>
+          <app-revenue-chart [data]="revenueData()" />
 
-          <!-- Status Chart Placeholder -->
-          <div class="rounded-lg border border-slate-200 bg-white p-6">
-            <h3 class="mb-4 text-lg font-semibold text-slate-900">Orders by Status</h3>
-            <div class="space-y-2">
-              @for (item of summary()?.ordersByStatus || []; track item.status) {
-                <div class="flex items-center justify-between text-sm">
-                  <span class="text-slate-600">{{ item.status }}</span>
-                  <span class="font-medium text-slate-900">{{ item.count }}</span>
-                </div>
-              }
-            </div>
-          </div>
+          <app-status-chart [data]="summary()?.ordersByStatus || []" />
 
-          <!-- Category Chart Placeholder -->
-          <div class="rounded-lg border border-slate-200 bg-white p-6">
-            <h3 class="mb-4 text-lg font-semibold text-slate-900">Products by Category</h3>
-            <div class="space-y-2">
-              @for (item of categoryData(); track item.category.id) {
-                <div class="flex items-center justify-between text-sm">
-                  <span class="text-slate-600">{{ item.category.name }}</span>
-                  <span class="font-medium text-slate-900">{{ item.count }}</span>
-                </div>
-              }
-            </div>
-          </div>
+          <app-category-chart [data]="categoryData()" />
+          <app-orders-chart [data]="revenueData()" />
 
           <!-- Reviews Summary -->
           <div class="rounded-lg border border-slate-200 bg-white p-6">

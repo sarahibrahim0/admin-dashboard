@@ -86,6 +86,13 @@ export class SidebarComponent {
         { label: 'Roles', icon: 'pi pi-shield', route: '/admin/roles' },
       ],
     },
+    {
+      title: 'System',
+      items: [
+        { label: 'Audit Logs', icon: 'pi pi-list', route: '/admin/audit-logs' },
+        { label: 'Settings', icon: 'pi pi-cog', route: '/admin/settings' },
+      ],
+    },
   ];
 
   toggle(): void {

@@ -18,6 +18,8 @@ export const routes: Routes = [
       { path: 'reviews', loadChildren: () => import('./admin/pages/reviews/reviews.routes').then((m) => m.REVIEW_ROUTES) },
       { path: 'content', loadChildren: () => import('./admin/pages/content/content.routes').then((m) => m.CONTENT_ROUTES) },
       { path: 'roles', loadChildren: () => import('./admin/pages/roles/roles.routes').then((m) => m.ROLE_ROUTES) },
+      { path: 'audit-logs', loadChildren: () => import('./admin/pages/audit-logs/audit-logs.routes').then((m) => m.AUDIT_LOGS_ROUTES) },
+      { path: 'settings', loadChildren: () => import('./admin/pages/settings/settings.routes').then((m) => m.SETTINGS_ROUTES) },
     ],
   },
   { path: '**', redirectTo: 'admin' },

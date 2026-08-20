@@ -25,12 +25,12 @@ import { TopProductsChartComponent } from './top-products-chart.component';
       } @else {
         <!-- KPI Cards -->
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-          <app-kpi-card label="Revenue" [value]="'$' + formatNumber(summary()?.totalRevenue || 0)" icon="pi pi-dollar" iconBg="bg-green-100" iconColor="text-green-600" />
-          <app-kpi-card label="Orders" [value]="summary()?.totalOrders || 0" icon="pi pi-shopping-cart" iconBg="bg-blue-100" iconColor="text-blue-600" />
-          <app-kpi-card label="Products" [value]="summary()?.totalProducts || 0" icon="pi pi-box" iconBg="bg-purple-100" iconColor="text-purple-600" />
-          <app-kpi-card label="Users" [value]="summary()?.totalUsers || 0" icon="pi pi-users" iconBg="bg-amber-100" iconColor="text-amber-600" />
-          <app-kpi-card label="Pending" [value]="summary()?.pendingOrders || 0" subtitle="orders awaiting processing" icon="pi pi-clock" iconBg="bg-orange-100" iconColor="text-orange-600" />
-          <app-kpi-card label="Low Stock" [value]="summary()?.lowStockProducts || 0" subtitle="items with ≤10 stock" icon="pi pi-exclamation-triangle" iconBg="bg-rose-100" iconColor="text-rose-600" />
+          <app-kpi-card label="Revenue" [value]="'$' + formatNumber(summary()?.totalRevenue || 0)" icon="dollar" iconBg="bg-green-100" iconColor="text-green-600" />
+          <app-kpi-card label="Orders" [value]="summary()?.totalOrders || 0" icon="shopping-cart" iconBg="bg-blue-100" iconColor="text-blue-600" />
+          <app-kpi-card label="Products" [value]="summary()?.totalProducts || 0" icon="box" iconBg="bg-purple-100" iconColor="text-purple-600" />
+          <app-kpi-card label="Users" [value]="summary()?.totalUsers || 0" icon="users" iconBg="bg-amber-100" iconColor="text-amber-600" />
+          <app-kpi-card label="Pending" [value]="summary()?.pendingOrders || 0" subtitle="orders awaiting processing" icon="clock" iconBg="bg-orange-100" iconColor="text-orange-600" />
+          <app-kpi-card label="Low Stock" [value]="summary()?.lowStockProducts || 0" subtitle="items with ≤10 stock" icon="exclamation-triangle" iconBg="bg-rose-100" iconColor="text-rose-600" />
         </div>
 
         <!-- Period Selector -->

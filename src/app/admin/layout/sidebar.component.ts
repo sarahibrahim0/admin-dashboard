@@ -20,24 +20,24 @@ interface SidebarSection {
   imports: [RouterLink, RouterLinkActive, CommonModule],
   template: `
     <aside
-      class="fixed inset-y-0 left-0 z-30 flex flex-col border-e border-slate-200 bg-white transition-all duration-300"
+      class="fixed inset-y-0 left-0 z-30 flex flex-col border-e border-[#c9c9c9] bg-almond transition-all duration-300"
       [class.w-64]="!isCollapsed()"
       [class.w-16]="isCollapsed()">
-      <div class="flex h-16 items-center justify-center border-b border-slate-200">
-        <span class="text-lg font-bold text-indigo-600" [class.hidden]="isCollapsed()">Admin</span>
-        <span class="text-lg font-bold text-indigo-600" [class.hidden]="!isCollapsed()">A</span>
+      <div class="flex h-16 items-center justify-center border-b border-[#c9c9c9]">
+        <span class="text-lg font-bold text-salmon" [class.hidden]="isCollapsed()">Admin</span>
+        <span class="text-lg font-bold text-salmon" [class.hidden]="!isCollapsed()">A</span>
       </div>
       <nav class="flex-1 overflow-y-auto p-3">
         @for (section of sections; track section.title) {
           <div class="mb-4">
-            <h3 class="mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400" [class.hidden]="isCollapsed()">
+            <h3 class="mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-[#797979]" [class.hidden]="isCollapsed()">
               {{ section.title }}
             </h3>
             @for (item of section.items; track item.route) {
               <a
                 [routerLink]="item.route"
-                routerLinkActive="bg-indigo-50 text-indigo-600"
-                class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-100">
+                routerLinkActive="bg-white text-salmon"
+                class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-blue-black hover:bg-[#ecd7cd]">
                 <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                   <path [attr.d]="getIconPath(item.icon)" />
                 </svg>
@@ -49,7 +49,7 @@ interface SidebarSection {
       </nav>
       <button
         (click)="toggle()"
-        class="flex h-12 items-center justify-center border-t border-slate-200 text-slate-400 hover:bg-slate-50">
+        class="flex h-12 items-center justify-center border-t border-[#c9c9c9] text-[#797979] hover:bg-[#ecd7cd]">
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           @if (isCollapsed()) {
             <path d="M9 18l6-6-6-6" />

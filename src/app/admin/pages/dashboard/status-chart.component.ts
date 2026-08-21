@@ -17,8 +17,8 @@ const STATUS_COLORS: Record<string, string> = {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="rounded-lg border border-slate-200 bg-white p-6">
-      <h3 class="mb-4 text-lg font-semibold text-slate-900">Orders by Status</h3>
+    <div class="rounded-lg border border-[#F6F8FE] bg-white p-6">
+      <h3 class="mb-4 text-lg font-semibold uppercase text-blue-black">Orders by Status</h3>
       <div class="h-64">
         <canvas #chartCanvas></canvas>
       </div>

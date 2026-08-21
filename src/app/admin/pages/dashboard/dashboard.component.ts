@@ -16,11 +16,11 @@ import { TopProductsChartComponent } from './top-products-chart.component';
   imports: [CommonModule, KpiCardComponent, RevenueChartComponent, CategoryChartComponent, StatusChartComponent, OrdersChartComponent, PeriodSelectorComponent, UserGrowthChartComponent, TopProductsChartComponent],
   template: `
     <div class="space-y-6">
-      <h2 class="text-2xl font-bold text-slate-900">Dashboard</h2>
+      <h2 class="text-2xl font-bold uppercase text-blue-black">Dashboard</h2>
 
       @if (loading()) {
         <div class="flex items-center justify-center py-12">
-          <div class="h-8 w-8 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent"></div>
+          <div class="h-8 w-8 animate-spin rounded-full border-4 border-salmon border-t-transparent"></div>
         </div>
       } @else {
         <!-- KPI Cards -->
@@ -30,7 +30,7 @@ import { TopProductsChartComponent } from './top-products-chart.component';
           <app-kpi-card label="Products" [value]="summary()?.totalProducts || 0" icon="box" iconBg="bg-purple-100" iconColor="text-purple-600" />
           <app-kpi-card label="Users" [value]="summary()?.totalUsers || 0" icon="users" iconBg="bg-amber-100" iconColor="text-amber-600" />
           <app-kpi-card label="Pending" [value]="summary()?.pendingOrders || 0" subtitle="orders awaiting processing" icon="clock" iconBg="bg-orange-100" iconColor="text-orange-600" />
-          <app-kpi-card label="Low Stock" [value]="summary()?.lowStockProducts || 0" subtitle="items with ≤10 stock" icon="exclamation-triangle" iconBg="bg-rose-100" iconColor="text-rose-600" />
+          <app-kpi-card label="Low Stock" [value]="summary()?.lowStockProducts || 0" subtitle="items with ≤10 stock" icon="exclamation-triangle" iconBg="bg-[#ffe3e3]" iconColor="text-[#ff4545]" />
         </div>
 
         <!-- Period Selector -->
@@ -50,22 +50,22 @@ import { TopProductsChartComponent } from './top-products-chart.component';
           <app-top-products-chart [data]="topProductsData()" />
 
           <!-- Reviews Summary -->
-          <div class="rounded-lg border border-slate-200 bg-white p-6">
-            <h3 class="mb-4 text-lg font-semibold text-slate-900">Reviews Summary</h3>
+          <div class="rounded-lg border border-[#F6F8FE] bg-white p-6">
+            <h3 class="mb-4 text-lg font-semibold uppercase text-blue-black">Reviews Summary</h3>
             <div class="space-y-2 text-sm">
-              <div class="flex justify-between"><span class="text-slate-500">Total Reviews</span><span class="font-medium">{{ summary()?.totalReviews || 0 }}</span></div>
-              <div class="flex justify-between"><span class="text-slate-500">Average Rating</span><span class="font-medium">{{ avgRating().toFixed(1) }} ★</span></div>
+              <div class="flex justify-between"><span class="text-[#797979]">Total Reviews</span><span class="font-medium">{{ summary()?.totalReviews || 0 }}</span></div>
+              <div class="flex justify-between"><span class="text-[#797979]">Average Rating</span><span class="font-medium">{{ avgRating().toFixed(1) }} ★</span></div>
             </div>
           </div>
         </div>
 
         <!-- Recent Orders -->
-        <div class="rounded-lg border border-slate-200 bg-white p-6">
-          <h3 class="mb-4 text-lg font-semibold text-slate-900">Recent Orders</h3>
+        <div class="rounded-lg border border-[#F6F8FE] bg-white p-6">
+          <h3 class="mb-4 text-lg font-semibold uppercase text-blue-black">Recent Orders</h3>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead>
-                <tr class="border-b border-slate-200 text-left text-xs uppercase text-slate-500">
+                <tr class="border-b border-[#F6F8FE] text-left text-xs uppercase text-[#797979]">
                   <th class="pb-2">Customer</th>
                   <th class="pb-2">Total</th>
                   <th class="pb-2">Status</th>
@@ -75,7 +75,7 @@ import { TopProductsChartComponent } from './top-products-chart.component';
               </thead>
               <tbody>
                 @for (order of recentOrders(); track order.id) {
-                  <tr class="border-b border-slate-100">
+                  <tr class="border-b border-[#F6F8FE]">
                     <td class="py-2">{{ order.user?.name || order.user?.email || '-' }}</td>
                     <td class="py-2">\${{ order.totalPrice?.toFixed(2) }}</td>
                     <td class="py-2">
@@ -93,7 +93,7 @@ import { TopProductsChartComponent } from './top-products-chart.component';
                     <td class="py-2">{{ order.dateOrdered | date:'shortDate' }}</td>
                   </tr>
                 } @empty {
-                  <tr><td colspan="5" class="py-4 text-center text-slate-500">No orders yet</td></tr>
+                  <tr><td colspan="5" class="py-4 text-center text-[#797979]">No orders yet</td></tr>
                 }
               </tbody>
             </table>

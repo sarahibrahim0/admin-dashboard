@@ -7,13 +7,13 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="flex items-center gap-2">
-      <span class="text-sm text-slate-600">Period:</span>
+      <span class="text-sm text-[#646D77]">Period:</span>
       @for (p of periods; track p.value) {
         <button
           (click)="selectPeriod(p.value)"
           [class]="selectedPeriod() === p.value
-            ? 'rounded-lg bg-indigo-600 px-3 py-1 text-sm text-white'
-            : 'rounded-lg bg-slate-100 px-3 py-1 text-sm text-slate-700 hover:bg-slate-200'">
+            ? 'rounded-lg bg-salmon px-3 py-1 text-sm text-white'
+            : 'rounded-lg bg-[#ecd7cd] px-3 py-1 text-sm text-[#646D77] hover:bg-[#ecd7cd]'">
           {{ p.label }}
         </button>
       }

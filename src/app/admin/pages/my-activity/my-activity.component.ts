@@ -9,12 +9,12 @@ import { AuditLogService, AuditLog } from '../../../core/services/audit-log.serv
   imports: [CommonModule, FormsModule],
   template: `
     <div class="space-y-6">
-      <h1 class="text-2xl font-bold text-slate-900">My Activity</h1>
+      <h1 class="text-2xl font-bold uppercase text-blue-black">My Activity</h1>
 
-      <div class="rounded-lg border border-slate-200 bg-white p-6">
+      <div class="rounded-lg border border-[#F6F8FE] bg-white p-6">
         <div class="mb-4 flex gap-4">
           <select [(ngModel)]="selectedEntity" (ngModelChange)="loadLogs()"
-            class="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm">
+            class="w-full rounded-md border border-[#c9c9c9] px-2 py-1.5 text-sm">
             <option value="">All Activity</option>
             <option value="Order">Orders</option>
             <option value="Review">Reviews</option>
@@ -25,44 +25,44 @@ import { AuditLogService, AuditLog } from '../../../core/services/audit-log.serv
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm">
             <thead>
-              <tr class="border-b border-slate-200">
-                <th class="px-4 py-3 font-medium text-slate-600">Action</th>
-                <th class="px-4 py-3 font-medium text-slate-600">Entity</th>
-                <th class="px-4 py-3 font-medium text-slate-600">Details</th>
-                <th class="px-4 py-3 font-medium text-slate-600">Date</th>
+              <tr class="border-b border-[#F6F8FE]">
+                <th class="px-4 py-3 font-medium text-[#646D77]">Action</th>
+                <th class="px-4 py-3 font-medium text-[#646D77]">Entity</th>
+                <th class="px-4 py-3 font-medium text-[#646D77]">Details</th>
+                <th class="px-4 py-3 font-medium text-[#646D77]">Date</th>
               </tr>
             </thead>
             <tbody>
               @for (log of logs(); track log._id) {
-                <tr class="border-b border-slate-100 hover:bg-slate-50">
+                <tr class="border-b border-[#F6F8FE] hover:bg-almond">
                   <td class="px-4 py-3">
                     <span class="inline-block rounded-full px-2 py-0.5 text-xs font-medium"
                       [class]="getSeverity(log.action)">
                       {{ log.action }}
                     </span>
                   </td>
-                  <td class="px-4 py-3 text-slate-700">{{ log.entity }}</td>
-                  <td class="max-w-xs truncate px-4 py-3 text-slate-500">{{ log.changes | json }}</td>
-                  <td class="px-4 py-3 text-slate-500">{{ log.createdAt | date:'medium' }}</td>
+                  <td class="px-4 py-3 text-[#646D77]">{{ log.entity }}</td>
+                  <td class="max-w-xs truncate px-4 py-3 text-[#797979]">{{ log.changes | json }}</td>
+                  <td class="px-4 py-3 text-[#797979]">{{ log.createdAt | date:'medium' }}</td>
                 </tr>
               } @empty {
                 <tr>
-                  <td colspan="4" class="px-4 py-8 text-center text-slate-500">No activity found</td>
+                  <td colspan="4" class="px-4 py-8 text-center text-[#797979]">No activity found</td>
                 </tr>
               }
             </tbody>
           </table>
         </div>
 
-        <div class="mt-4 flex items-center justify-between text-sm text-slate-600">
+        <div class="mt-4 flex items-center justify-between text-sm text-[#646D77]">
           <span>Page {{ currentPage() }} of {{ totalPages() }}</span>
           <div class="flex gap-2">
             <button (click)="prevPage()" [disabled]="currentPage() <= 1"
-              class="rounded-md border border-slate-300 px-3 py-1.5 text-sm disabled:opacity-40">
+              class="rounded-md border border-[#c9c9c9] px-3 py-1.5 text-sm disabled:opacity-40">
               Previous
             </button>
             <button (click)="nextPage()" [disabled]="currentPage() >= totalPages()"
-              class="rounded-md border border-slate-300 px-3 py-1.5 text-sm disabled:opacity-40">
+              class="rounded-md border border-[#c9c9c9] px-3 py-1.5 text-sm disabled:opacity-40">
               Next
             </button>
           </div>
@@ -104,8 +104,8 @@ export class MyActivityComponent implements OnInit {
     switch (action.toLowerCase()) {
       case 'create': return 'bg-emerald-50 text-emerald-700';
       case 'update': return 'bg-amber-50 text-amber-700';
-      case 'delete': return 'bg-rose-50 text-rose-700';
-      default: return 'bg-slate-100 text-slate-700';
+      case 'delete': return 'bg-[#fff5f5] text-[#ff4545]';
+      default: return 'bg-[#ecd7cd] text-[#646D77]';
     }
   }
 }

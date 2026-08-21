@@ -10,7 +10,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
   imports: [BaseTableComponent, ConfirmDialogComponent],
   template: `
     <div class="space-y-4">
-      <h2 class="text-2xl font-bold text-slate-900">Reviews</h2>
+      <h2 class="text-2xl font-bold uppercase text-blue-black">Reviews</h2>
       <app-base-table [columns]="columns" [data]="reviews" [totalCount]="totalCount" (sortChange)="onSort($event)" />
     </div>
     <app-confirm-dialog [open]="showDeleteDialog()" title="Delete Review" message="Are you sure?" (confirm)="deleteReview()" (cancel)="showDeleteDialog.set(false)" />

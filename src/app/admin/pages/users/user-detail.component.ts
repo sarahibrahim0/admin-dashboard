@@ -8,19 +8,19 @@ import { EntityService } from '../../../core/services/entity.service';
   template: `
     <div class="mx-auto max-w-2xl space-y-6">
       <div class="flex items-center justify-between">
-        <h2 class="text-2xl font-bold text-slate-900">{{ user()?.name }}</h2>
+        <h2 class="text-2xl font-bold uppercase text-blue-black">{{ user()?.name }}</h2>
         <div class="flex gap-2">
-          <button (click)="router.navigate(['/admin/users', user()?.id, 'edit'])" class="rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">Edit</button>
-          <button (click)="router.navigate(['/admin/users'])" class="text-sm text-indigo-600 hover:text-indigo-800">← Back</button>
+          <button (click)="router.navigate(['/admin/users', user()?.id, 'edit'])" class="rounded-md border border-[#c9c9c9] px-4 py-2 text-sm text-[#646D77] hover:bg-almond">Edit</button>
+          <button (click)="router.navigate(['/admin/users'])" class="text-sm text-salmon hover:text-[#e9855a]">← Back</button>
         </div>
       </div>
       @if (user()) {
-        <div class="rounded-lg border border-slate-200 bg-white p-6 space-y-3 text-sm">
-          <div><span class="text-slate-500">Email:</span> {{ user()?.email }}</div>
-          <div><span class="text-slate-500">Phone:</span> {{ user()?.phone }}</div>
-          <div><span class="text-slate-500">Admin:</span> {{ user()?.isAdmin ? 'Yes' : 'No' }}</div>
-          <div><span class="text-slate-500">Role:</span> {{ user()?.role?.name || 'None' }}</div>
-          <div><span class="text-slate-500">Address:</span> {{ address() }}</div>
+        <div class="rounded-lg border border-[#F6F8FE] bg-white p-6 space-y-3 text-sm">
+          <div><span class="text-[#797979]">Email:</span> {{ user()?.email }}</div>
+          <div><span class="text-[#797979]">Phone:</span> {{ user()?.phone }}</div>
+          <div><span class="text-[#797979]">Admin:</span> {{ user()?.isAdmin ? 'Yes' : 'No' }}</div>
+          <div><span class="text-[#797979]">Role:</span> {{ user()?.role?.name || 'None' }}</div>
+          <div><span class="text-[#797979]">Address:</span> {{ address() }}</div>
         </div>
       }
     </div>

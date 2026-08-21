@@ -6,13 +6,13 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="rounded-lg border border-slate-200 bg-white p-6">
+    <div class="rounded-lg border border-[#F6F8FE] bg-white p-6">
       <div class="flex items-center justify-between">
         <div>
-          <p class="text-sm font-medium text-slate-500">{{ label }}</p>
-          <p class="mt-1 text-2xl font-bold text-slate-900">{{ value }}</p>
+          <p class="text-sm font-medium text-[#797979]">{{ label }}</p>
+          <p class="mt-1 text-2xl font-bold uppercase text-blue-black">{{ value }}</p>
           @if (subtitle) {
-            <p class="mt-1 text-xs text-slate-400">{{ subtitle }}</p>
+            <p class="mt-1 text-xs text-[#c9c9c9]">{{ subtitle }}</p>
           }
         </div>
         <div class="rounded-lg p-3" [ngClass]="iconBg">
@@ -29,8 +29,8 @@ export class KpiCardComponent {
   @Input() value: string | number = '';
   @Input() subtitle = '';
   @Input() icon = 'chart-bar';
-  @Input() iconBg = 'bg-indigo-100';
-  @Input() iconColor = 'text-indigo-600';
+  @Input() iconBg = 'bg-[#ecd7cd]';
+  @Input() iconColor = 'text-salmon';
 
   getIconPath(icon: string): string {
     const icons: Record<string, string> = {

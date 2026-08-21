@@ -8,12 +8,12 @@ import { TableColumn } from './table-column';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="rounded-lg border border-slate-200 bg-white">
-      <div class="flex items-center justify-between border-b border-slate-200 px-4 py-3">
+    <div class="rounded-lg border border-[#F6F8FE] bg-white">
+      <div class="flex items-center justify-between border-b border-[#F6F8FE] px-4 py-3">
         <div class="flex items-center gap-3">
-          <input type="text" placeholder="Search..." [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event); searchChange.emit($event)" class="rounded-md border border-slate-300 px-3 py-1.5 text-sm outline-none focus:border-indigo-500" />
+          <input type="text" placeholder="Search..." [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event); searchChange.emit($event)" class="rounded-md border border-[#c9c9c9] px-3 py-1.5 text-sm outline-none focus:border-salmon" />
           @if (selectedIds().length > 0) {
-            <span class="text-sm text-slate-500">{{ selectedIds().length }} selected</span>
+            <span class="text-sm text-[#797979]">{{ selectedIds().length }} selected</span>
           }
         </div>
         <div class="flex items-center gap-2">
@@ -23,12 +23,12 @@ import { TableColumn } from './table-column';
       <div class="overflow-x-auto">
         <table class="w-full">
           <thead>
-            <tr class="border-b border-slate-200 bg-slate-50">
+            <tr class="border-b border-[#F6F8FE] bg-almond">
               @if (selectable) {
                 <th class="w-10 px-4 py-3"><input type="checkbox" (change)="toggleAll($event)" /></th>
               }
               @for (col of columns; track col.field) {
-                <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500" [style.width]="col.width" [class.cursor-pointer]="col.sortable" (click)="col.sortable && toggleSort(col.field)">
+                <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[#797979]" [style.width]="col.width" [class.cursor-pointer]="col.sortable" (click)="col.sortable && toggleSort(col.field)">
                   <div class="flex items-center gap-1">
                     {{ col.header }}
                     @if (col.sortable && sortField() === col.field) {
@@ -41,30 +41,30 @@ import { TableColumn } from './table-column';
           </thead>
           <tbody>
             @for (row of data(); track row.id) {
-              <tr class="border-b border-slate-100 hover:bg-slate-50 cursor-pointer" [class.bg-indigo-50]="selectedIds().includes(row.id)" (click)="rowClick.emit(row)">
+              <tr class="border-b border-[#F6F8FE] hover:bg-almond cursor-pointer" [class.bg-almond]="selectedIds().includes(row.id)" (click)="rowClick.emit(row)">
                 @if (selectable) {
                   <td class="px-4 py-3" (click)="$event.stopPropagation()"><input type="checkbox" [checked]="selectedIds().includes(row.id)" (change)="toggleSelect(row.id)" /></td>
                 }
                 @for (col of columns; track col.field) {
-                  <td class="px-4 py-3 text-sm text-slate-700" [class.text-center]="col.align === 'center'" [class.text-right]="col.align === 'right'">
+                  <td class="px-4 py-3 text-sm text-[#646D77]" [class.text-center]="col.align === 'center'" [class.text-right]="col.align === 'right'">
                     @if (col.format) { {{ col.format(row[col.field], row) }} } @else { {{ row[col.field] }} }
                   </td>
                 }
               </tr>
             } @empty {
-              <tr><td [attr.colspan]="columns.length + (selectable ? 1 : 0)" class="px-4 py-8 text-center text-sm text-slate-500">No data found</td></tr>
+              <tr><td [attr.colspan]="columns.length + (selectable ? 1 : 0)" class="px-4 py-8 text-center text-sm text-[#797979]">No data found</td></tr>
             }
           </tbody>
         </table>
       </div>
-      <div class="flex items-center justify-between border-t border-slate-200 px-4 py-3">
-        <span class="text-sm text-slate-500">Showing {{ totalCount() === 0 ? 0 : (currentPage() - 1) * pageSize() + 1 }} to {{ Math.min(currentPage() * pageSize(), totalCount()) }} of {{ totalCount() }}</span>
+      <div class="flex items-center justify-between border-t border-[#F6F8FE] px-4 py-3">
+        <span class="text-sm text-[#797979]">Showing {{ totalCount() === 0 ? 0 : (currentPage() - 1) * pageSize() + 1 }} to {{ Math.min(currentPage() * pageSize(), totalCount()) }} of {{ totalCount() }}</span>
         <div class="flex items-center gap-1">
-          <button (click)="currentPage.set(currentPage() - 1); pageChange.emit(currentPage())" [disabled]="currentPage() <= 1" class="rounded px-3 py-1 text-sm text-slate-600 hover:bg-slate-100 disabled:opacity-50">Previous</button>
+          <button (click)="currentPage.set(currentPage() - 1); pageChange.emit(currentPage())" [disabled]="currentPage() <= 1" class="rounded px-3 py-1 text-sm text-[#646D77] hover:bg-[#ecd7cd] disabled:opacity-50">Previous</button>
           @for (p of visiblePages(); track p) {
-            <button (click)="currentPage.set(p); pageChange.emit(p)" [class.bg-indigo-600]="p === currentPage()" [class.text-white]="p === currentPage()" class="rounded px-3 py-1 text-sm hover:bg-slate-100">{{ p }}</button>
+            <button (click)="currentPage.set(p); pageChange.emit(p)" [class.bg-salmon]="p === currentPage()" [class.text-white]="p === currentPage()" class="rounded px-3 py-1 text-sm hover:bg-[#ecd7cd]">{{ p }}</button>
           }
-          <button (click)="currentPage.set(currentPage() + 1); pageChange.emit(currentPage())" [disabled]="currentPage() >= totalPages()" class="rounded px-3 py-1 text-sm text-slate-600 hover:bg-slate-100 disabled:opacity-50">Next</button>
+          <button (click)="currentPage.set(currentPage() + 1); pageChange.emit(currentPage())" [disabled]="currentPage() >= totalPages()" class="rounded px-3 py-1 text-sm text-[#646D77] hover:bg-[#ecd7cd] disabled:opacity-50">Next</button>
         </div>
       </div>
     </div>

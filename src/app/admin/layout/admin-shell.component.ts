@@ -8,7 +8,7 @@ import { TopbarComponent } from './topbar.component';
   standalone: true,
   imports: [RouterOutlet, SidebarComponent, TopbarComponent],
   template: `
-    <div class="flex h-screen bg-slate-50">
+    <div class="flex h-screen bg-almond">
       <app-sidebar (collapsed)="collapsed = $event" />
       <div class="flex flex-1 flex-col overflow-hidden" [class.ms-16]="collapsed" [class.ms-64]="!collapsed">
         <app-topbar />

@@ -9,41 +9,41 @@ import { EntityService } from '../../../core/services/entity.service';
   imports: [FormsModule],
   template: `
     <div class="mx-auto max-w-2xl space-y-6">
-      <h2 class="text-2xl font-bold text-slate-900">{{ isEdit() ? 'Edit' : 'New' }} Content Page</h2>
-      <form (ngSubmit)="submit()" class="space-y-4 rounded-lg border border-slate-200 bg-white p-6">
+      <h2 class="text-2xl font-bold uppercase text-blue-black">{{ isEdit() ? 'Edit' : 'New' }} Content Page</h2>
+      <form (ngSubmit)="submit()" class="space-y-4 rounded-lg border border-[#F6F8FE] bg-white p-6">
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-slate-700">Key (slug)</label>
-            <input [(ngModel)]="form.key" name="key" required [disabled]="isEdit()" class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 disabled:bg-slate-100" />
+            <label class="block text-sm font-medium text-[#646D77]">Key (slug)</label>
+            <input [(ngModel)]="form.key" name="key" required [disabled]="isEdit()" class="mt-1 w-full rounded-md border border-[#c9c9c9] px-3 py-2 text-sm outline-none focus:border-salmon disabled:bg-[#ecd7cd]" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-slate-700">Title</label>
-            <input [(ngModel)]="form.title" name="title" required class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500" />
+            <label class="block text-sm font-medium text-[#646D77]">Title</label>
+            <input [(ngModel)]="form.title" name="title" required class="mt-1 w-full rounded-md border border-[#c9c9c9] px-3 py-2 text-sm outline-none focus:border-salmon" />
           </div>
         </div>
         <div>
-          <label class="block text-sm font-medium text-slate-700">Subtitle</label>
-          <input [(ngModel)]="form.subtitle" name="subtitle" class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500" />
+          <label class="block text-sm font-medium text-[#646D77]">Subtitle</label>
+          <input [(ngModel)]="form.subtitle" name="subtitle" class="mt-1 w-full rounded-md border border-[#c9c9c9] px-3 py-2 text-sm outline-none focus:border-salmon" />
         </div>
         <div>
           <div class="flex items-center justify-between mb-2">
-            <label class="text-sm font-medium text-slate-700">Sections</label>
-            <button type="button" (click)="addSection()" class="text-sm text-indigo-600 hover:text-indigo-800">+ Add Section</button>
+            <label class="text-sm font-medium text-[#646D77]">Sections</label>
+            <button type="button" (click)="addSection()" class="text-sm text-salmon hover:text-[#e9855a]">+ Add Section</button>
           </div>
           @for (section of form.sections; track $index; let i = $index) {
-            <div class="mb-3 rounded border border-slate-200 p-3 space-y-2">
+            <div class="mb-3 rounded border border-[#F6F8FE] p-3 space-y-2">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-medium text-slate-500">Section {{ i + 1 }}</span>
-                <button type="button" (click)="removeSection(i)" class="text-xs text-rose-600 hover:text-rose-800">Remove</button>
+                <span class="text-xs font-medium text-[#797979]">Section {{ i + 1 }}</span>
+                <button type="button" (click)="removeSection(i)" class="text-xs text-[#ff4545] hover:text-[#e63e3e]">Remove</button>
               </div>
-              <input [(ngModel)]="section.heading" [name]="'heading_' + i" placeholder="Heading" class="w-full rounded border border-slate-300 px-2 py-1 text-sm outline-none focus:border-indigo-500" />
-              <textarea [(ngModel)]="section.body" [name]="'body_' + i" placeholder="Body" rows="3" class="w-full rounded border border-slate-300 px-2 py-1 text-sm outline-none focus:border-indigo-500"></textarea>
+              <input [(ngModel)]="section.heading" [name]="'heading_' + i" placeholder="Heading" class="w-full rounded border border-[#c9c9c9] px-2 py-1 text-sm outline-none focus:border-salmon" />
+              <textarea [(ngModel)]="section.body" [name]="'body_' + i" placeholder="Body" rows="3" class="w-full rounded border border-[#c9c9c9] px-2 py-1 text-sm outline-none focus:border-salmon"></textarea>
             </div>
           }
         </div>
         <div class="flex justify-end gap-3 pt-4">
-          <button type="button" (click)="router.navigate(['/admin/content'])" class="rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">Cancel</button>
-          <button type="submit" [disabled]="saving()" class="rounded-md bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-700 disabled:opacity-50">{{ saving() ? 'Saving...' : 'Save' }}</button>
+          <button type="button" (click)="router.navigate(['/admin/content'])" class="rounded-md border border-[#c9c9c9] px-4 py-2 text-sm text-[#646D77] hover:bg-almond">Cancel</button>
+          <button type="submit" [disabled]="saving()" class="rounded-md bg-salmon px-4 py-2 text-sm uppercase tracking-wider text-white hover:bg-[#e9855a] disabled:opacity-50">{{ saving() ? 'Saving...' : 'Save' }}</button>
         </div>
       </form>
     </div>

@@ -11,8 +11,8 @@ const COLORS = ['#4f46e5', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="rounded-lg border border-slate-200 bg-white p-6">
-      <h3 class="mb-4 text-lg font-semibold text-slate-900">Products by Category</h3>
+    <div class="rounded-lg border border-[#F6F8FE] bg-white p-6">
+      <h3 class="mb-4 text-lg font-semibold uppercase text-blue-black">Products by Category</h3>
       <div class="h-64">
         <canvas #chartCanvas></canvas>
       </div>

@@ -12,8 +12,8 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
   template: `
     <div class="space-y-4">
       <div class="flex items-center justify-between">
-        <h2 class="text-2xl font-bold text-slate-900">Categories</h2>
-        <a routerLink="new" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">Add Category</a>
+        <h2 class="text-2xl font-bold uppercase text-blue-black">Categories</h2>
+        <a routerLink="new" class="rounded-md bg-salmon px-4 py-2 text-sm uppercase tracking-wider font-medium text-white hover:bg-[#e9855a]">Add Category</a>
       </div>
       <app-base-table [columns]="columns" [data]="categories" [totalCount]="totalCount" (sortChange)="onSort($event)" (rowClick)="router.navigate(['/admin/categories', $event.id, 'edit'])" />
     </div>

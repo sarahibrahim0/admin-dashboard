@@ -10,7 +10,7 @@ import { TableColumn } from '../../../shared/table/table-column';
   imports: [BaseTableComponent],
   template: `
     <div class="space-y-4">
-      <h2 class="text-2xl font-bold text-slate-900">Users</h2>
+      <h2 class="text-2xl font-bold uppercase text-blue-black">Users</h2>
       <app-base-table [columns]="columns" [data]="users" [totalCount]="totalCount" (sortChange)="onSort($event)" (rowClick)="router.navigate(['/admin/users', $event.id])" />
     </div>
   `,

@@ -9,50 +9,50 @@ import { EntityService } from '../../../core/services/entity.service';
   imports: [FormsModule],
   template: `
     <div class="mx-auto max-w-lg space-y-6">
-      <h2 class="text-2xl font-bold text-slate-900">{{ isEdit() ? 'Edit' : 'New' }} Coupon</h2>
-      <form (ngSubmit)="submit()" class="space-y-4 rounded-lg border border-slate-200 bg-white p-6">
+      <h2 class="text-2xl font-bold uppercase text-blue-black">{{ isEdit() ? 'Edit' : 'New' }} Coupon</h2>
+      <form (ngSubmit)="submit()" class="space-y-4 rounded-lg border border-[#F6F8FE] bg-white p-6">
         <div>
-          <label class="block text-sm font-medium text-slate-700">Code</label>
-          <input [(ngModel)]="form.code" name="code" required class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500" />
+          <label class="block text-sm font-medium text-[#646D77]">Code</label>
+          <input [(ngModel)]="form.code" name="code" required class="mt-1 w-full rounded-md border border-[#c9c9c9] px-3 py-2 text-sm outline-none focus:border-salmon" />
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-slate-700">Type</label>
-            <select [(ngModel)]="form.type" name="type" class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500">
+            <label class="block text-sm font-medium text-[#646D77]">Type</label>
+            <select [(ngModel)]="form.type" name="type" class="mt-1 w-full rounded-md border border-[#c9c9c9] px-3 py-2 text-sm outline-none focus:border-salmon">
               <option value="percent">Percent</option>
               <option value="fixed">Fixed</option>
             </select>
           </div>
           <div>
-            <label class="block text-sm font-medium text-slate-700">Value</label>
-            <input [(ngModel)]="form.value" name="value" type="number" required class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500" />
+            <label class="block text-sm font-medium text-[#646D77]">Value</label>
+            <input [(ngModel)]="form.value" name="value" type="number" required class="mt-1 w-full rounded-md border border-[#c9c9c9] px-3 py-2 text-sm outline-none focus:border-salmon" />
           </div>
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-slate-700">Max Uses (0=unlimited)</label>
-            <input [(ngModel)]="form.maxUses" name="maxUses" type="number" class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500" />
+            <label class="block text-sm font-medium text-[#646D77]">Max Uses (0=unlimited)</label>
+            <input [(ngModel)]="form.maxUses" name="maxUses" type="number" class="mt-1 w-full rounded-md border border-[#c9c9c9] px-3 py-2 text-sm outline-none focus:border-salmon" />
           </div>
           <div>
             <label class="flex items-center gap-2 pt-6">
               <input type="checkbox" [(ngModel)]="form.active" name="active" class="rounded" />
-              <span class="text-sm font-medium text-slate-700">Active</span>
+              <span class="text-sm font-medium text-[#646D77]">Active</span>
             </label>
           </div>
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-slate-700">Valid From</label>
-            <input [(ngModel)]="form.validFrom" name="validFrom" type="date" class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500" />
+            <label class="block text-sm font-medium text-[#646D77]">Valid From</label>
+            <input [(ngModel)]="form.validFrom" name="validFrom" type="date" class="mt-1 w-full rounded-md border border-[#c9c9c9] px-3 py-2 text-sm outline-none focus:border-salmon" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-slate-700">Valid Until</label>
-            <input [(ngModel)]="form.validUntil" name="validUntil" type="date" class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500" />
+            <label class="block text-sm font-medium text-[#646D77]">Valid Until</label>
+            <input [(ngModel)]="form.validUntil" name="validUntil" type="date" class="mt-1 w-full rounded-md border border-[#c9c9c9] px-3 py-2 text-sm outline-none focus:border-salmon" />
           </div>
         </div>
         <div class="flex justify-end gap-3 pt-4">
-          <button type="button" (click)="router.navigate(['/admin/coupons'])" class="rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">Cancel</button>
-          <button type="submit" [disabled]="saving()" class="rounded-md bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-700 disabled:opacity-50">{{ saving() ? 'Saving...' : 'Save' }}</button>
+          <button type="button" (click)="router.navigate(['/admin/coupons'])" class="rounded-md border border-[#c9c9c9] px-4 py-2 text-sm text-[#646D77] hover:bg-almond">Cancel</button>
+          <button type="submit" [disabled]="saving()" class="rounded-md bg-salmon px-4 py-2 text-sm uppercase tracking-wider text-white hover:bg-[#e9855a] disabled:opacity-50">{{ saving() ? 'Saving...' : 'Save' }}</button>
         </div>
       </form>
     </div>

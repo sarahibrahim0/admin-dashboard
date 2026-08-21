@@ -6,15 +6,15 @@ import { AuthStore } from '../../core/stores/auth.store';
   selector: 'app-topbar',
   standalone: true,
   template: `
-    <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white/95 backdrop-blur px-6">
+    <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[#c9c9c9] bg-almond backdrop-blur px-6">
       <div class="flex items-center gap-4">
-        <h1 class="text-lg font-semibold text-slate-900">Dashboard</h1>
+        <h1 class="text-lg font-semibold text-blue-black uppercase tracking-wider">Dashboard</h1>
       </div>
       <div class="flex items-center gap-4">
-        <span class="text-sm text-slate-600">{{ auth.user()?.name || 'Admin' }}</span>
+        <span class="text-sm text-blue-black">{{ auth.user()?.name || 'Admin' }}</span>
         <button
           (click)="logout()"
-          class="rounded-md px-3 py-1.5 text-sm font-medium text-slate-500 hover:text-rose-600">
+          class="bg-salmon px-4 py-2 text-sm font-medium uppercase tracking-wider text-white hover:bg-[#e9855a] transition-all duration-300">
           Logout
         </button>
       </div>

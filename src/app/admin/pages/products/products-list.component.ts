@@ -13,7 +13,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
   template: `
     <div class="space-y-4">
       <div class="flex items-center justify-between">
-        <h2 class="text-2xl font-bold uppercase text-blue-black">Products</h2>
+        <h2 class="text-3xl font-bold uppercase text-blue-black">Products</h2>
         <a routerLink="new" class="rounded-md bg-salmon px-4 py-2 text-sm uppercase tracking-wider font-medium text-white hover:bg-[#e9855a]">Add Product</a>
       </div>
       <app-bulk-actions [selectedCount]="selectedIds().length" [actions]="bulkActions" (actionClick)="handleBulkAction($event)" (clearSelection)="table?.clearSelection()" />

@@ -12,7 +12,7 @@ import { TableColumn } from '../../../shared/table/table-column';
   template: `
     <div class="space-y-4">
       <div class="flex items-center justify-between">
-        <h2 class="text-2xl font-bold uppercase text-blue-black">Orders</h2>
+        <h2 class="text-3xl font-bold uppercase text-blue-black">Orders</h2>
         <select [(ngModel)]="statusFilter" (ngModelChange)="filterByStatus()" class="rounded-md border border-[#c9c9c9] px-3 py-1.5 text-sm outline-none focus:border-salmon">
           <option value="">All Status</option>
           <option value="Pending">Pending</option>

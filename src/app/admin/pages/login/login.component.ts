@@ -17,14 +17,8 @@ import { AuthStore } from '../../../core/stores/auth.store';
   template: `
     <div class="flex min-h-screen items-center justify-center bg-gradient-to-br from-almond via-white to-almond px-4">
       <div class="login-card w-full max-w-md">
-        <!-- Header bar -->
-        <div class="rounded-t-xl bg-gradient-to-r from-salmon to-dark-purple px-8 py-6 text-center">
-          <span class="text-2xl font-bold uppercase tracking-widest text-white">Admin</span>
-          <p class="mt-1 text-sm text-white/80 tracking-wide">Dashboard</p>
-        </div>
-
         <!-- Card body -->
-        <div class="rounded-b-xl bg-white px-8 py-8 shadow-lg">
+        <div class="rounded-xl bg-white px-8 py-8 shadow-lg">
           @if (auth.error()) {
             <div class="mt-5 rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-[#ff4545]">
               {{ auth.error() }}

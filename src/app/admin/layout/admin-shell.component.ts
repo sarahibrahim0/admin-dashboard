@@ -12,7 +12,7 @@ import { TopbarComponent } from './topbar.component';
       <app-sidebar (collapsed)="collapsed = $event" />
       <div class="flex flex-1 flex-col overflow-hidden" [class.ms-16]="collapsed" [class.ms-64]="!collapsed">
         <app-topbar />
-        <main class="flex-1 overflow-y-auto p-6">
+        <main class="flex-1 overflow-y-auto p-8">
           <router-outlet />
         </main>
       </div>

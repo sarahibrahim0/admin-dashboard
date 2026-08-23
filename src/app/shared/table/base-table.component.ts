@@ -9,7 +9,7 @@ import { TableColumn } from './table-column';
   imports: [CommonModule, FormsModule],
   template: `
     <div class="rounded-lg border border-[#F6F8FE] bg-white">
-      <div class="flex items-center justify-between border-b border-[#F6F8FE] px-4 py-3">
+      <div class="flex items-center justify-between border-b border-[#F6F8FE] px-4 py-4">
         <div class="flex items-center gap-3">
           <input type="text" placeholder="Search..." [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event); searchChange.emit($event)" class="rounded-md border border-[#c9c9c9] px-3 py-1.5 text-sm outline-none focus:border-salmon" />
           @if (selectedIds().length > 0) {
@@ -25,10 +25,10 @@ import { TableColumn } from './table-column';
           <thead>
             <tr class="border-b border-[#F6F8FE] bg-almond">
               @if (selectable) {
-                <th class="w-10 px-4 py-3"><input type="checkbox" (change)="toggleAll($event)" /></th>
+                <th class="w-10 px-4 py-4"><input type="checkbox" (change)="toggleAll($event)" /></th>
               }
               @for (col of columns; track col.field) {
-                <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[#797979]" [style.width]="col.width" [class.cursor-pointer]="col.sortable" (click)="col.sortable && toggleSort(col.field)">
+                <th class="px-4 py-4 text-left text-xs font-medium uppercase tracking-wider text-[#797979]" [style.width]="col.width" [class.cursor-pointer]="col.sortable" (click)="col.sortable && toggleSort(col.field)">
                   <div class="flex items-center gap-1">
                     {{ col.header }}
                     @if (col.sortable && sortField() === col.field) {
@@ -43,10 +43,10 @@ import { TableColumn } from './table-column';
             @for (row of data(); track row.id) {
               <tr class="border-b border-[#F6F8FE] hover:bg-almond cursor-pointer" [class.bg-almond]="selectedIds().includes(row.id)" (click)="rowClick.emit(row)">
                 @if (selectable) {
-                  <td class="px-4 py-3" (click)="$event.stopPropagation()"><input type="checkbox" [checked]="selectedIds().includes(row.id)" (change)="toggleSelect(row.id)" /></td>
+                  <td class="px-4 py-4" (click)="$event.stopPropagation()"><input type="checkbox" [checked]="selectedIds().includes(row.id)" (change)="toggleSelect(row.id)" /></td>
                 }
                 @for (col of columns; track col.field) {
-                  <td class="px-4 py-3 text-sm text-[#646D77]" [class.text-center]="col.align === 'center'" [class.text-right]="col.align === 'right'">
+                  <td class="px-4 py-4 text-sm text-[#646D77]" [class.text-center]="col.align === 'center'" [class.text-right]="col.align === 'right'">
                     @if (col.format) { {{ col.format(row[col.field], row) }} } @else { {{ row[col.field] }} }
                   </td>
                 }
@@ -57,7 +57,7 @@ import { TableColumn } from './table-column';
           </tbody>
         </table>
       </div>
-      <div class="flex items-center justify-between border-t border-[#F6F8FE] px-4 py-3">
+      <div class="flex items-center justify-between border-t border-[#F6F8FE] px-4 py-4">
         <span class="text-sm text-[#797979]">Showing {{ totalCount() === 0 ? 0 : (currentPage() - 1) * pageSize() + 1 }} to {{ Math.min(currentPage() * pageSize(), totalCount()) }} of {{ totalCount() }}</span>
         <div class="flex items-center gap-1">
           <button (click)="currentPage.set(currentPage() - 1); pageChange.emit(currentPage())" [disabled]="currentPage() <= 1" class="rounded px-3 py-1 text-sm text-[#646D77] hover:bg-[#ecd7cd] disabled:opacity-50">Previous</button>

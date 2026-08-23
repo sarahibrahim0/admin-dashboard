@@ -25,9 +25,6 @@ import { AuthStore } from '../../../core/stores/auth.store';
 
         <!-- Card body -->
         <div class="rounded-b-xl bg-white px-8 py-8 shadow-lg">
-          <h2 class="text-center text-xl font-semibold uppercase tracking-wider text-blue-black">Sign In</h2>
-          <p class="mt-1 text-center text-sm text-[#797979]">Enter your credentials to access the dashboard</p>
-
           @if (auth.error()) {
             <div class="mt-5 rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-[#ff4545]">
               {{ auth.error() }}

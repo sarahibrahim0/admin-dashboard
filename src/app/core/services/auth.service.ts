@@ -34,4 +34,20 @@ export class AuthService {
       { refreshToken },
     );
   }
+
+  verifyEmail(userId: string, code: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.base}/verify-email`, { userId, code });
+  }
+
+  resendVerification(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.base}/resend-verification`, { email });
+  }
+
+  forgotPassword(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.base}/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, password: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.base}/reset-password`, { token, newPassword: password });
+  }
 }

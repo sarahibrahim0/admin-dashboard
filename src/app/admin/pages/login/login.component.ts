@@ -1,12 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthStore } from '../../../core/stores/auth.store';
 
 @Component({
   selector: 'app-admin-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   styles: `
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(24px); }
@@ -58,7 +58,7 @@ import { AuthStore } from '../../../core/stores/auth.store';
                   class="h-4 w-4 rounded border-[#c9c9c9] text-salmon accent-[#FD8F5F] focus:ring-salmon" />
                 <span class="text-sm text-[#646D77]">Keep me logged in</span>
               </label>
-              <a href="javascript:void(0)" class="text-sm font-medium text-salmon hover:text-[#e9855a] transition-colors">Forgot password?</a>
+              <a routerLink="/forgot-password" class="text-sm font-medium text-salmon hover:text-[#e9855a] transition-colors">Forgot password?</a>
             </div>
 
             <button
@@ -84,6 +84,10 @@ export class LoginComponent {
     try {
       await this.auth.login(this.email, this.password);
       this.router.navigate(['/admin/dashboard']);
-    } catch {}
+    } catch (err: any) {
+      if (err?.status === 403) {
+        this.router.navigate(['/verify-email']);
+      }
+    }
   }
 }

@@ -4,6 +4,9 @@ import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: 'login', loadComponent: () => import('./admin/pages/login/login.component').then((m) => m.LoginComponent) },
+  { path: 'verify-email', loadComponent: () => import('./admin/pages/login/verify-email.component').then((m) => m.VerifyEmailComponent) },
+  { path: 'forgot-password', loadComponent: () => import('./admin/pages/login/forgot-password.component').then((m) => m.ForgotPasswordComponent) },
+  { path: 'reset-password', loadComponent: () => import('./admin/pages/login/reset-password.component').then((m) => m.ResetPasswordComponent) },
   {
     path: 'admin',
     canActivate: [adminGuard],

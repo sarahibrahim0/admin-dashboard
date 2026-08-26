@@ -39,6 +39,12 @@ import { EntityService } from '../../../core/services/entity.service';
           <h3 class="mb-2 text-lg font-semibold uppercase text-blue-black">Description</h3>
           <p class="text-sm text-[#646D77]">{{ product()?.description || 'No description' }}</p>
         </div>
+        @if (product()?.richDescription) {
+          <div class="rounded-lg border border-[#F6F8FE] bg-white p-6">
+            <h3 class="mb-2 text-lg font-semibold uppercase text-blue-black">Rich Description</h3>
+            <div class="text-sm text-[#646D77]" [innerHTML]="product()?.richDescription"></div>
+          </div>
+        }
       }
     </div>
   `,

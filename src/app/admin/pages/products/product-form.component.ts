@@ -2,12 +2,17 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { QuillModule } from 'ngx-quill';
 import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-product-form',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, QuillModule],
+  styles: `
+    :host ::ng-deep .ql-container { min-height: 200px; font-size: 14px; }
+    :host ::ng-deep .ql-editor { min-height: 200px; }
+  `,
   template: `
     <div class="mx-auto max-w-2xl space-y-6">
       <h2 class="text-2xl font-bold uppercase text-blue-black">{{ isEdit() ? 'Edit' : 'New' }} Product</h2>
@@ -17,8 +22,17 @@ import { environment } from '../../../../environments/environment';
           <input [(ngModel)]="form.name" name="name" required class="mt-1 w-full rounded-md border border-[#c9c9c9] px-3 py-2 text-sm outline-none focus:border-salmon" />
         </div>
         <div>
-          <label class="block text-sm font-medium text-[#646D77]">Description</label>
-          <textarea [(ngModel)]="form.description" name="description" rows="3" class="mt-1 w-full rounded-md border border-[#c9c9c9] px-3 py-2 text-sm outline-none focus:border-salmon"></textarea>
+          <label class="block text-sm font-medium text-[#646D77]">Description (plain text)</label>
+          <textarea [(ngModel)]="form.description" name="description" rows="2" class="mt-1 w-full rounded-md border border-[#c9c9c9] px-3 py-2 text-sm outline-none focus:border-salmon"></textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-[#646D77]">Rich Description (HTML)</label>
+          <quill-editor
+            [(ngModel)]="form.richDescription"
+            name="richDescription"
+            [styles]="{ minHeight: '200px' }"
+            placeholder="Write detailed product description...">
+          </quill-editor>
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div>
@@ -72,7 +86,7 @@ export class ProductFormComponent implements OnInit {
   productId = '';
   imageFile: File | null = null;
 
-  form = { name: '', description: '', price: 0, countInStock: 0, brand: '', color: '', category: '', isFeatured: false };
+  form = { name: '', description: '', richDescription: '', price: 0, countInStock: 0, brand: '', color: '', category: '', isFeatured: false };
 
   ngOnInit(): void {
     this.productId = this.route.snapshot.paramMap.get('id') || '';
@@ -80,8 +94,8 @@ export class ProductFormComponent implements OnInit {
       this.isEdit.set(true);
       this.http.get<any>(`${environment.apiUrl}products/${this.productId}`).subscribe((p) => {
         this.form = {
-          name: p.name || '', description: p.description || '', price: p.price || 0,
-          countInStock: p.countInStock || 0, brand: p.brand || '', color: p.color || '',
+          name: p.name || '', description: p.description || '', richDescription: p.richDescription || '',
+          price: p.price || 0, countInStock: p.countInStock || 0, brand: p.brand || '', color: p.color || '',
           category: typeof p.category === 'object' ? p.category?.id : p.category || '', isFeatured: p.isFeatured || false,
         };
       });

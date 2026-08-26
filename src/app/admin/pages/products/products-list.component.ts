@@ -19,7 +19,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
       <app-bulk-actions [selectedCount]="selectedIds().length" [actions]="bulkActions" (actionClick)="handleBulkAction($event)" (clearSelection)="table?.clearSelection()" />
       <app-base-table #table [columns]="columns" [data]="products" [totalCount]="totalCount" [selectable]="true" (searchChange)="onSearch($event)" (sortChange)="onSort($event)" (selectionChange)="selectedIds.set($event)" (rowClick)="router.navigate(['/admin/products', $event.id])" />
     </div>
-    <app-confirm-dialog [open]="showDeleteDialog()" title="Delete Product" message="Are you sure?" (confirm)="deleteProduct()" (cancel)="showDeleteDialog.set(false)" />
+    <app-confirm-dialog [open]="showDeleteDialog()" title="Delete Products" [message]="'Delete ' + selectedIds().length + ' selected products?'" (confirm)="deleteProduct()" (cancel)="showDeleteDialog.set(false)" />
   `,
 })
 export class ProductsListComponent implements OnInit {
@@ -71,13 +71,14 @@ export class ProductsListComponent implements OnInit {
   }
 
   handleBulkAction(action: BulkAction): void {
-    if (action.action === 'delete') this.showDeleteDialog.set(true);
+    if (action.action === 'delete' && this.selectedIds().length > 0) this.showDeleteDialog.set(true);
   }
 
   deleteProduct(): void {
-    if (this.deleteId) {
-      this.entityService.delete('products', this.deleteId).subscribe(() => {
-        this.loadProducts(); this.showDeleteDialog.set(false); this.deleteId = null;
+    const ids = this.selectedIds();
+    if (ids.length > 0) {
+      this.entityService.deleteBulk('products', ids).subscribe(() => {
+        this.loadProducts(); this.selectedIds.set([]); this.showDeleteDialog.set(false);
       });
     }
   }

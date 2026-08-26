@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { EntityService } from '../../../core/services/entity.service';
 import { BaseTableComponent } from '../../../shared/table/base-table.component';
 import { TableColumn } from '../../../shared/table/table-column';
+import { BulkActionsComponent, BulkAction } from '../../../shared/bulk-actions/bulk-actions.component';
+import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-orders-list',
   standalone: true,
-  imports: [FormsModule, BaseTableComponent],
+  imports: [FormsModule, BaseTableComponent, BulkActionsComponent, ConfirmDialogComponent],
   template: `
     <div class="space-y-4">
       <div class="flex items-center justify-between">
@@ -20,8 +22,10 @@ import { TableColumn } from '../../../shared/table/table-column';
           <option value="Cancelled">Cancelled</option>
         </select>
       </div>
-      <app-base-table [columns]="columns" [data]="orders" [totalCount]="totalCount" (sortChange)="onSort($event)" (rowClick)="router.navigate(['/admin/orders', $event.id])" />
+      <app-bulk-actions [selectedCount]="selectedIds().length" [actions]="bulkActions" (actionClick)="handleBulkAction($event)" (clearSelection)="table?.clearSelection()" />
+      <app-base-table #table [columns]="columns" [data]="orders" [totalCount]="totalCount" [selectable]="true" (sortChange)="onSort($event)" (selectionChange)="selectedIds.set($event)" (rowClick)="router.navigate(['/admin/orders', $event.id])" />
     </div>
+    <app-confirm-dialog [open]="showDeleteDialog()" title="Delete Orders" [message]="'Delete ' + selectedIds().length + ' selected orders?'" (confirm)="deleteSelected()" (cancel)="showDeleteDialog.set(false)" />
   `,
 })
 export class OrdersListComponent implements OnInit {
@@ -30,6 +34,8 @@ export class OrdersListComponent implements OnInit {
   orders = signal<any[]>([]);
   totalCount = signal(0);
   statusFilter = '';
+  selectedIds = signal<string[]>([]);
+  showDeleteDialog = signal(false);
 
   columns: TableColumn[] = [
     { field: 'id', header: 'Order ID', width: '120px', format: (v) => v?.slice(-8) },
@@ -39,6 +45,7 @@ export class OrdersListComponent implements OnInit {
     { field: 'paymentStatus', header: 'Payment' },
     { field: 'dateOrdered', header: 'Date', sortable: true, format: (v) => new Date(v).toLocaleDateString() },
   ];
+  bulkActions: BulkAction[] = [{ label: 'Delete', icon: 'trash', action: 'delete' }];
 
   ngOnInit(): void { this.loadOrders(); }
 
@@ -56,5 +63,17 @@ export class OrdersListComponent implements OnInit {
       return event.dir === 'asc' ? cmp : -cmp;
     });
     this.orders.set(sorted);
+  }
+
+  handleBulkAction(action: BulkAction): void {
+    if (action.action === 'delete' && this.selectedIds().length > 0) this.showDeleteDialog.set(true);
+  }
+
+  deleteSelected(): void {
+    const ids = this.selectedIds();
+    if (ids.length === 0) return;
+    this.entityService.deleteBulk('orders', ids).subscribe(() => {
+      this.loadOrders(); this.selectedIds.set([]); this.showDeleteDialog.set(false);
+    });
   }
 }

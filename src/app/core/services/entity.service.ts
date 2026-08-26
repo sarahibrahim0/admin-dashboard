@@ -33,6 +33,10 @@ export class EntityService {
     return this.http.delete(`${environment.apiUrl}${endpoint}/${id}`);
   }
 
+  deleteBulk(endpoint: string, ids: string[]): Observable<any> {
+    return this.http.request('delete', `${environment.apiUrl}${endpoint}`, { body: { ids } });
+  }
+
   count(endpoint: string): Observable<{ count: number }> {
     return this.http.get<{ count: number }>(`${environment.apiUrl}${endpoint}/get/count`);
   }

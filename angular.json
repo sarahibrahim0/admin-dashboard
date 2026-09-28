@@ -26,6 +26,7 @@
               }
             ],
             "styles": [
+              "node_modules/quill/dist/quill.snow.css",
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "src/styles.css"
             ]
@@ -62,6 +63,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "open": true
+          },
           "configurations": {
             "production": {
               "buildTarget": "admin-dashboard-v2:build:production"

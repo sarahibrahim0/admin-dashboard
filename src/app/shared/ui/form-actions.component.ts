@@ -26,6 +26,9 @@ import { TranslatePipe } from '../i18n/translate.pipe';
   selector: 'app-form-actions',
   standalone: true,
   imports: [CommonModule, TranslatePipe],
+  styles: `
+    :host { display: block; }
+  `,
   template: `
     <div class="form-actions" [class.form-actions-sticky]="sticky">
       @if (showCancel) {

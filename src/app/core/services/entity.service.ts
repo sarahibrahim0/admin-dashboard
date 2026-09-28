@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ToastService } from '../../shared/ui/toast.service';
 
@@ -53,8 +53,29 @@ export class EntityService {
     return this.http.get<T[]>(`${environment.apiUrl}${endpoint}`, { params: this.toHttpParams(params) });
   }
 
+  /**
+   * List endpoints are inconsistent: some return a bare array, others a
+   * `{ data, total, page, totalPages }` envelope. Normalise both into
+   * `Paginated<T>` so callers can always read `res.data` / `res.total`.
+   */
+  private toPaginated<T>(res: Paginated<T> | T[] | null | undefined): Paginated<T> {
+    if (Array.isArray(res)) {
+      return { data: res, total: res.length, page: 1, totalPages: 1 };
+    }
+    const envelope = (res ?? {}) as Partial<Paginated<T>>;
+    const data = Array.isArray(envelope.data) ? envelope.data : [];
+    return {
+      data,
+      total: typeof envelope.total === 'number' ? envelope.total : data.length,
+      page: envelope.page ?? 1,
+      totalPages: envelope.totalPages ?? 1,
+    };
+  }
+
   listPaginated<T>(endpoint: string, params?: Record<string, string>): Observable<Paginated<T>> {
-    return this.http.get<Paginated<T>>(`${environment.apiUrl}${endpoint}`, { params: this.toHttpParams(params) });
+    return this.http
+      .get<Paginated<T> | T[]>(`${environment.apiUrl}${endpoint}`, { params: this.toHttpParams(params) })
+      .pipe(map((res) => this.toPaginated<T>(res)));
   }
 
   get<T>(endpoint: string, id: string): Observable<T> {

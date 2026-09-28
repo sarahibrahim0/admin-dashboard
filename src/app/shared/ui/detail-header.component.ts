@@ -39,6 +39,9 @@ import { TranslatePipe } from '../i18n/translate.pipe';
   selector: 'app-detail-header',
   standalone: true,
   imports: [CommonModule, TranslatePipe],
+  styles: `
+    :host { display: block; }
+  `,
   template: `
     <div class="detail-header">
       @if (backLabel) {

@@ -22,6 +22,9 @@ import { ConfirmDialogComponent } from './confirm-dialog.component';
   selector: 'app-form-confirms',
   standalone: true,
   imports: [ConfirmDialogComponent],
+  styles: `
+    :host { display: block; }
+  `,
   template: `
     <app-confirm-dialog [open]="saveOpen" [title]="'Save changes'" [message]="'Do you want to save your changes?'"
       [confirmLabel]="'Save'" [confirmClass]="'btn btn-primary'" (confirm)="save.emit()" (cancel)="saveCancel.emit()" />

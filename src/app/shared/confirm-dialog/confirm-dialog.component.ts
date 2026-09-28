@@ -6,6 +6,9 @@ import { TranslatePipe } from '../i18n/translate.pipe';
   selector: 'app-confirm-dialog',
   standalone: true,
   imports: [CommonModule, TranslatePipe],
+  styles: `
+    :host { display: block; }
+  `,
   template: `
     @if (open) {
       <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">

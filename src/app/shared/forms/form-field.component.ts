@@ -32,6 +32,9 @@ export interface FormFieldConfig {
   selector: 'app-form-field',
   standalone: true,
   imports: [ReactiveFormsModule, TranslatePipe],
+  styles: `
+    :host { display: block; }
+  `,
   template: `
     @if (form && fields.length > 0) {
       <div class="space-y-5">

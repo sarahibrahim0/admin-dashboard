@@ -12,6 +12,9 @@ import { ActivatedRoute, Router } from '@angular/router';
   selector: 'app-base-table',
   standalone: true,
   imports: [CommonModule, FormsModule, TranslatePipe],
+  styles: `
+    :host { display: block; }
+  `,
   template: `
     <div class="overflow-hidden rounded-lg border border-[#eff2f5] bg-white">
       <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#eff2f5] px-4 py-4 sm:px-5">

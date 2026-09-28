@@ -13,6 +13,9 @@ export interface BulkAction {
   selector: 'app-bulk-actions',
   standalone: true,
   imports: [CommonModule, TranslatePipe],
+  styles: `
+    :host { display: block; }
+  `,
   template: `
     @if (selectedCount > 0) {
       <div class="flex items-center gap-2 rounded-lg border border-[#ecd7cd] bg-[#F6F8FE] px-4 py-2">

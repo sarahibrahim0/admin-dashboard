@@ -7,6 +7,9 @@ import { ToastService } from './toast.service';
   selector: 'app-toasts',
   standalone: true,
   imports: [TranslatePipe],
+  styles: `
+    :host { display: block; }
+  `,
   template: `
     <div class="pointer-events-none fixed bottom-4 end-4 z-[100] flex w-80 max-w-[calc(100vw-2rem)] flex-col gap-2">
       @for (t of toast.toasts(); track t.id) {

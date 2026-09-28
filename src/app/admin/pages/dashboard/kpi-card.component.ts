@@ -1,21 +1,22 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-kpi-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   template: `
-    <div class="rounded-lg border border-[#F6F8FE] bg-white p-6">
+    <div class="h-full rounded-lg border border-border bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
       <div class="flex items-center justify-between">
         <div>
-          <p class="text-sm font-medium text-[#797979]">{{ label }}</p>
+          <p class="text-sm font-medium text-muted">{{ label | translate }}</p>
           <p class="mt-1 text-2xl font-bold uppercase text-blue-black">{{ value }}</p>
           @if (subtitle) {
-            <p class="mt-1 text-xs text-[#c9c9c9]">{{ subtitle }}</p>
+            <p class="mt-1 text-xs text-faint">{{ subtitle | translate }}</p>
           }
         </div>
-        <div class="rounded-lg p-3" [ngClass]="iconBg">
+        <div class="rounded-md p-3" [ngClass]="iconBg">
           <svg class="h-5 w-5" [ngClass]="iconColor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path [attr.d]="getIconPath(icon)" />
           </svg>
@@ -29,8 +30,8 @@ export class KpiCardComponent {
   @Input() value: string | number = '';
   @Input() subtitle = '';
   @Input() icon = 'chart-bar';
-  @Input() iconBg = 'bg-[#ecd7cd]';
-  @Input() iconColor = 'text-salmon';
+  @Input() iconBg = 'bg-surface';
+  @Input() iconColor = 'text-blue-black';
 
   getIconPath(icon: string): string {
     const icons: Record<string, string> = {

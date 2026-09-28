@@ -1,1 +1,220 @@
-node D:\E-Commerce\E-Commerce\ecommerce-v2\node_modules\@angular\cli\bin\ng.js serve --port 4301 --host 0.0.0.0
+npm notice run admin-dashboard-v2@0.0.0 npx
+npm notice run ng serve --port 4200 --host 0.0.0.0
+
+Warning: This is a simple server for use in testing or debugging Angular applications
+locally. It hasn't been reviewed for security issues.
+
+Binding this server to an open connection can result in compromising your application or
+computer. Using a different host than the one passed to the "--host" flag might result in
+websocket connection issues.
+    
+> Building...
+√ Building...
+Initial chunk files | Names                       |  Raw size
+styles.css          | styles                      | 181.96 kB | 
+chunk-LDQZ24AZ.js   | -                           |  50.72 kB | 
+chunk-QR3CP6TL.js   | -                           |   9.41 kB | 
+main.js             | main                        |   7.11 kB | 
+chunk-VUJOFXKG.js   | -                           | 987 bytes | 
+
+                    | Initial total               | 250.19 kB
+
+Lazy chunk files    | Names                       |  Raw size
+chunk-W5HMDHBM.js   | dashboard-component         |  72.41 kB | 
+chunk-7JMRRVGJ.js   | admin-shell-component       |  40.70 kB | 
+chunk-ZUYAOD7O.js   | product-form-component      |  35.67 kB | 
+chunk-DBQPMG34.js   | product-detail-component    |  34.99 kB | 
+chunk-ASEWEVCJ.js   | -                           |  28.20 kB | 
+chunk-WXNA75DB.js   | order-detail-component      |  28.12 kB | 
+chunk-5WBXCZZ3.js   | role-form-component         |  24.96 kB | 
+chunk-6QXYKFAM.js   | shipping-settings-component |  24.31 kB | 
+chunk-HO2TCO5X.js   | site-settings-component     |  24.02 kB | 
+chunk-7LL2Q3WH.js   | category-form-component     |  22.59 kB | 
+chunk-A2OZUBMT.js   | profile-component           |  21.84 kB | 
+chunk-ARWV4RZ7.js   | settings-routes             |  19.75 kB | 
+chunk-PG2J3KCV.js   | category-detail-component   |  18.71 kB | 
+chunk-QGXDDCRT.js   | roles-list-component        |  18.25 kB | 
+chunk-6UWSRY34.js   | coupon-form-component       |  17.81 kB | 
+...and 29 more lazy chunks files. Use "--verbose" to show all the files.
+
+Application bundle generation complete. [9.205 seconds] - 2026-09-13T15:33:06.600Z
+
+Watch mode enabled. Watching for file changes...
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m4200[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.1.6:[1m4200[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+[2m6:37:07 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mUnknown Error[22m: admin only
+[39m
+[2m6:37:07 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mERROR {"message":"admin only","status":403}
+[2m6:37:08 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mUnknown Error[22m: admin only
+[39m
+[2m6:37:08 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mERROR {"message":"admin only","status":403}
+[2m6:37:09 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mUnknown Error[22m: admin only
+[39m
+[2m6:37:09 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mERROR {"message":"admin only","status":403}
+[2m6:37:10 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mUnknown Error[22m: admin only
+[39m
+[2m6:37:10 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mERROR {"message":"admin only","status":403}
+[2m7:33:43 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mUnknown Error[22m: admin only
+[39m
+[2m7:33:43 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mERROR {"message":"admin only","status":403}
+[2m7:33:45 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mUnknown Error[22m: admin only
+[39m
+[2m7:33:45 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mERROR {"message":"admin only","status":403}
+[2m7:33:46 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mUnknown Error[22m: admin only
+[39m
+[2m7:33:46 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mERROR {"message":"admin only","status":403}
+> Changes detected. Rebuilding...
+√ Changes detected. Rebuilding...
+Initial chunk files | Names                |  Raw size
+main.js             | main                 |   7.11 kB | 
+
+Lazy chunk files    | Names                |  Raw size
+chunk-DIJUP34K.js   | roles-list-component |  17.17 kB | 
+chunk-QOLVOQUS.js   | roles-routes         | 531 bytes | 
+
+Application bundle generation complete. [5.594 seconds] - 2026-09-13T16:39:56.765Z
+
+Component update sent to client(s).
+> Changes detected. Rebuilding...
+√ Changes detected. Rebuilding...
+Initial chunk files | Names                |  Raw size
+main.js             | main                 |   7.11 kB | 
+
+Lazy chunk files    | Names                |  Raw size
+chunk-UQKBKYSZ.js   | roles-list-component |  16.92 kB | 
+chunk-H6XEXWGD.js   | roles-routes         | 531 bytes | 
+
+Application bundle generation complete. [0.787 seconds] - 2026-09-13T16:40:03.413Z
+
+Page reload sent to client(s).
+> Changes detected. Rebuilding...
+√ Changes detected. Rebuilding...
+Application bundle generation failed. [2.142 seconds] - 2026-09-13T16:42:46.637Z
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'isDependentPermission' does not exist on type 'RoleFormComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/admin/pages/roles/role-form.component.ts:89:50:
+[37m      89 │ ...cursor-not-allowed]="[32misDependentPermission[37m(group, perm.key) && ...
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'isReadSelected' does not exist on type 'RoleFormComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/admin/pages/roles/role-form.component.ts:89:93:
+[37m      89 │ ..."isDependentPermission(group, perm.key) && ![32misReadSelected[37m(group)"
+         ╵                                                [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'isDependentPermission' does not exist on type 'RoleFormComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/admin/pages/roles/role-form.component.ts:90:42:
+[37m      90 │ ... [class.opacity-50]="[32misDependentPermission[37m(group, perm.key) && ...
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'isReadSelected' does not exist on type 'RoleFormComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/admin/pages/roles/role-form.component.ts:90:85:
+[37m      90 │ ..."isDependentPermission(group, perm.key) && ![32misReadSelected[37m(group)"
+         ╵                                                [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'isDependentPermission' does not exist on type 'RoleFormComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/admin/pages/roles/role-form.component.ts:95:36:
+[37m      95 │ ...         [disabled]="[32misDependentPermission[37m(group, perm.key) && ...
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'isReadSelected' does not exist on type 'RoleFormComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/admin/pages/roles/role-form.component.ts:95:79:
+[37m      95 │ ..."isDependentPermission(group, perm.key) && ![32misReadSelected[37m(group)"
+         ╵                                                [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2554: Expected 1 arguments, but got 2.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/admin/pages/roles/role-form.component.ts:96:61:
+[37m      96 │                         (change)="togglePermission(perm.key, [32mgroup[37m)"
+         ╵                                                              [32m~~~~~[0m
+
+
+> Changes detected. Rebuilding...
+√ Changes detected. Rebuilding...
+Application bundle generation failed. [2.205 seconds] - 2026-09-13T16:43:49.615Z
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2554: Expected 1 arguments, but got 2.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/admin/pages/roles/role-form.component.ts:96:61:
+[37m      96 │                         (change)="togglePermission(perm.key, [32mgroup[37m)"
+         ╵                                                              [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'DISABLED'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/admin/pages/roles/role-form.component.ts:281:77:
+[37m      281 │ ...rm.permissions.includes(readKey)) return [32mDISABLED[37m; // not allowed
+          ╵                                             [32m~~~~~~~~[0m
+
+
+> Changes detected. Rebuilding...
+√ Changes detected. Rebuilding...
+Application bundle generation failed. [3.015 seconds] - 2026-09-13T16:52:27.881Z
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'DISABLED'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/admin/pages/roles/role-form.component.ts:281:77:
+[37m      281 │ ...rm.permissions.includes(readKey)) return [32mDISABLED[37m; // not allowed
+          ╵                                             [32m~~~~~~~~[0m
+
+
+> Changes detected. Rebuilding...
+√ Changes detected. Rebuilding...
+Initial chunk files | Names                       |  Raw size
+styles.css          | styles                      | 182.05 kB | 
+chunk-LDQZ24AZ.js   | -                           |  50.72 kB | 
+chunk-QR3CP6TL.js   | -                           |   9.41 kB | 
+main.js             | main                        |   7.11 kB | 
+chunk-VUJOFXKG.js   | -                           | 987 bytes | 
+
+                    | Initial total               | 250.28 kB
+
+Lazy chunk files    | Names                       |  Raw size
+chunk-W5HMDHBM.js   | dashboard-component         |  72.41 kB | 
+chunk-7JMRRVGJ.js   | admin-shell-component       |  40.70 kB | 
+chunk-ZUYAOD7O.js   | product-form-component      |  35.67 kB | 
+chunk-DBQPMG34.js   | product-detail-component    |  34.99 kB | 
+chunk-ASEWEVCJ.js   | -                           |  28.20 kB | 
+chunk-WXNA75DB.js   | order-detail-component      |  28.12 kB | 
+chunk-5YF7Z4D2.js   | role-form-component         |  26.64 kB | 
+chunk-6QXYKFAM.js   | shipping-settings-component |  24.31 kB | 
+chunk-HO2TCO5X.js   | site-settings-component     |  24.02 kB | 
+chunk-7LL2Q3WH.js   | category-form-component     |  22.59 kB | 
+chunk-A2OZUBMT.js   | profile-component           |  21.84 kB | 
+chunk-ARWV4RZ7.js   | settings-routes             |  19.75 kB | 
+chunk-PG2J3KCV.js   | category-detail-component   |  18.71 kB | 
+chunk-6UWSRY34.js   | coupon-form-component       |  17.81 kB | 
+chunk-6YZ2BHC3.js   | content-form-component      |  17.43 kB | 
+...and 29 more lazy chunks files. Use "--verbose" to show all the files.
+
+Application bundle generation complete. [0.704 seconds] - 2026-09-13T16:52:31.043Z
+
+Page reload sent to client(s).
+[2m7:52:33 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mUnknown Error[22m: admin only
+[39m
+[2m7:52:33 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mERROR {"message":"admin only","status":403}
+[2m7:59:30 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mUnknown Error[22m: admin only
+[39m
+[2m7:59:30 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mERROR {"message":"admin only","status":403}
+[2m7:59:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mUnknown Error[22m: admin only
+[39m
+[2m7:59:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mERROR {"message":"admin only","status":403}
+[2m8:48:51 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mUnknown Error[22m: admin only
+[39m
+[2m8:48:52 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mERROR {"message":"admin only","status":403}
+[2m8:48:55 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mUnknown Error[22m: admin only
+[39m
+[2m8:48:55 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mERROR {"message":"admin only","status":403}

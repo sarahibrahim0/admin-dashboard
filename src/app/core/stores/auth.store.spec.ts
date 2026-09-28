@@ -60,4 +60,32 @@ describe('AuthStore', () => {
     expect(store.token()).toBeNull();
     expect(localStorage.getItem('ecom.token')).toBeNull();
   });
+
+  it('login rejects non-admin user and clears session', async () => {
+    const loginRes = { user: 'user@test.com', token: 'acc_123', refreshToken: 'ref_123', userId: 'u2' };
+    const userRes = { id: 'u2', name: 'Test', email: 'user@test.com', isAdmin: false };
+
+    const loginPromise = store.login('user@test.com', 'pass123');
+    loginPromise.catch(() => {});
+
+    const loginReq = http.expectOne(`${environment.apiUrl}users/login`);
+    loginReq.flush(loginRes);
+
+    const meReq = http.expectOne(`${environment.apiUrl}users/u2`);
+    meReq.flush(userRes);
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const logoutReq = http.expectOne(`${environment.apiUrl}auth/logout`);
+    logoutReq.flush({ message: 'ok' });
+
+    await expectAsync(loginPromise).toBeRejected();
+
+    expect(store.isLoggedIn()).toBeFalse();
+    expect(store.token()).toBeNull();
+    expect(store.userId()).toBeNull();
+    expect(store.user()).toBeNull();
+    expect(localStorage.getItem('ecom.token')).toBeNull();
+    expect(store.error()).toContain('admin');
+  });
 });

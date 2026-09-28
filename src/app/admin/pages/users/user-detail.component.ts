@@ -1,26 +1,29 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntityService } from '../../../core/services/entity.service';
+import { LanguageService } from '../../../core/services/language.service';
+import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
+
+import { DetailHeaderComponent } from '../../../shared/ui/detail-header.component';
 
 @Component({
   selector: 'app-user-detail',
   standalone: true,
+  imports: [TranslatePipe, DetailHeaderComponent],
   template: `
-    <div class="mx-auto max-w-2xl space-y-6">
-      <div class="flex items-center justify-between">
-        <h2 class="text-2xl font-bold uppercase text-blue-black">{{ user()?.name }}</h2>
-        <div class="flex gap-2">
-          <button (click)="router.navigate(['/admin/users', user()?.id, 'edit'])" class="rounded-md border border-[#c9c9c9] px-4 py-2 text-sm text-[#646D77] hover:bg-almond">Edit</button>
-          <button (click)="router.navigate(['/admin/users'])" class="text-sm text-salmon hover:text-[#e9855a]">← Back</button>
-        </div>
-      </div>
+    <div class="w-full space-y-6">
+        <app-detail-header [title]="localized(user()?.name)" eyebrow="Team member"
+        backLabel="Back to users" backTo="/admin/users"
+        editLabel="Edit" [editTo]="['/admin/users', user()?.id, 'edit']" />
       @if (user()) {
-        <div class="rounded-lg border border-[#F6F8FE] bg-white p-6 space-y-3 text-sm">
-          <div><span class="text-[#797979]">Email:</span> {{ user()?.email }}</div>
-          <div><span class="text-[#797979]">Phone:</span> {{ user()?.phone }}</div>
-          <div><span class="text-[#797979]">Admin:</span> {{ user()?.isAdmin ? 'Yes' : 'No' }}</div>
-          <div><span class="text-[#797979]">Role:</span> {{ user()?.role?.name || 'None' }}</div>
-          <div><span class="text-[#797979]">Address:</span> {{ address() }}</div>
+        <div class="card">
+          <dl class="grid grid-cols-1 gap-5 text-sm sm:grid-cols-2">
+            <div><dt class="spec-dt">{{ 'Email:' | translate }}</dt><dd class="spec-dd">{{ user()?.email }}</dd></div>
+            <div><dt class="spec-dt">{{ 'Phone:' | translate }}</dt><dd class="spec-dd">{{ user()?.phone }}</dd></div>
+            <div><dt class="spec-dt">{{ 'Admin:' | translate }}</dt><dd class="spec-dd">{{ user()?.isAdmin ? ('Yes' | translate) : ('No' | translate) }}</dd></div>
+            <div><dt class="spec-dt">{{ 'Role:' | translate }}</dt><dd class="spec-dd">{{ localized(user()?.role?.name) || ('None' | translate) }}</dd></div>
+            <div class="sm:col-span-2"><dt class="spec-dt">{{ 'Address:' | translate }}</dt><dd class="spec-dd">{{ address() }}</dd></div>
+          </dl>
         </div>
       }
     </div>
@@ -30,7 +33,12 @@ export class UserDetailComponent implements OnInit {
   private entityService = inject(EntityService);
   private route = inject(ActivatedRoute);
   protected router = inject(Router);
+  private language = inject(LanguageService);
   user = signal<any>(null);
+
+  localized(v: any): string {
+    return this.language.localizedValue(v);
+  }
 
   address(): string {
     const u = this.user();

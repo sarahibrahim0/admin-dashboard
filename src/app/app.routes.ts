@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { adminGuard } from './core/guards/admin.guard';
-import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: 'login', loadComponent: () => import('./admin/pages/login/login.component').then((m) => m.LoginComponent) },
@@ -18,18 +17,17 @@ export const routes: Routes = [
       { path: 'categories', loadChildren: () => import('./admin/pages/categories/categories.routes').then((m) => m.CATEGORY_ROUTES) },
       { path: 'orders', loadChildren: () => import('./admin/pages/orders/orders.routes').then((m) => m.ORDER_ROUTES) },
       { path: 'coupons', loadChildren: () => import('./admin/pages/coupons/coupons.routes').then((m) => m.COUPON_ROUTES) },
+      { path: 'payments', loadChildren: () => import('./admin/pages/payments/payments.routes').then((m) => m.PAYMENT_ROUTES) },
+      { path: 'countries', loadChildren: () => import('./admin/pages/countries/countries.routes').then((m) => m.COUNTRY_ROUTES) },
+      { path: 'currencies', loadChildren: () => import('./admin/pages/currencies/currencies.routes').then((m) => m.CURRENCY_ROUTES) },
       { path: 'users', loadChildren: () => import('./admin/pages/users/users.routes').then((m) => m.USER_ROUTES) },
       { path: 'reviews', loadChildren: () => import('./admin/pages/reviews/reviews.routes').then((m) => m.REVIEW_ROUTES) },
-      { path: 'content', loadChildren: () => import('./admin/pages/content/content.routes').then((m) => m.CONTENT_ROUTES) },
       { path: 'roles', loadChildren: () => import('./admin/pages/roles/roles.routes').then((m) => m.ROLE_ROUTES) },
       { path: 'audit-logs', loadChildren: () => import('./admin/pages/audit-logs/audit-logs.routes').then((m) => m.AUDIT_LOGS_ROUTES) },
       { path: 'settings', loadChildren: () => import('./admin/pages/settings/settings.routes').then((m) => m.SETTINGS_ROUTES) },
+      { path: 'my-activity', loadChildren: () => import('./admin/pages/my-activity/my-activity.routes').then(m => m.MY_ACTIVITY_ROUTES) },
     ],
   },
-  {
-    path: 'my-activity',
-    loadChildren: () => import('./admin/pages/my-activity/my-activity.routes').then(m => m.MY_ACTIVITY_ROUTES),
-    canActivate: [authGuard],
-  },
+  { path: 'my-activity', redirectTo: 'admin/my-activity', pathMatch: 'full' },
   { path: '**', redirectTo: 'admin' },
 ];

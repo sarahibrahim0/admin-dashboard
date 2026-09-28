@@ -12,6 +12,7 @@ export interface DashboardSummary {
   pendingOrders: number;
   lowStockProducts: number;
   averageOrderValue: number;
+  averageRating?: number;
   ordersByStatus: { status: string; count: number }[];
   paymentStatusBreakdown: { status: string; count: number }[];
 }

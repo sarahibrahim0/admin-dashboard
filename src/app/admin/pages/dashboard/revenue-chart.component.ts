@@ -1,16 +1,18 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild, ElementRef, AfterViewInit, OnDestroy, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Chart, registerables } from 'chart.js';
+import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
+import { LanguageService } from '../../../core/services/language.service';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-revenue-chart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   template: `
-    <div class="rounded-lg border border-[#F6F8FE] bg-white p-6">
-      <h3 class="mb-4 text-lg font-semibold uppercase text-blue-black">Revenue Over Time</h3>
+    <div class="rounded-lg border border-border bg-white p-6">
+      <h3 class="mb-4 text-lg font-semibold uppercase text-blue-black">{{ 'Revenue Over Time' | translate }}</h3>
       <div class="h-64">
         <canvas #chartCanvas></canvas>
       </div>
@@ -20,8 +22,17 @@ Chart.register(...registerables);
 export class RevenueChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
   @Input() data: { date: string; revenue: number; orderCount: number }[] = [];
+  private language = inject(LanguageService);
 
   private chart: Chart | null = null;
+
+  constructor() {
+    // Canvas content is not reactive — redraw with the new language on toggle.
+    effect(() => {
+      this.language.language();
+      if (this.chartCanvas) this.renderChart();
+    });
+  }
 
   ngAfterViewInit(): void {
     this.renderChart();
@@ -47,10 +58,10 @@ export class RevenueChartComponent implements AfterViewInit, OnChanges, OnDestro
       data: {
         labels: this.data.map((d) => d.date),
         datasets: [{
-          label: 'Revenue',
+          label: this.language.translate('Revenue'),
           data: this.data.map((d) => d.revenue),
-          borderColor: '#4f46e5',
-          backgroundColor: 'rgba(79, 70, 229, 0.1)',
+          borderColor: '#10B981',
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
           fill: true,
           tension: 0.4,
           pointRadius: 2,

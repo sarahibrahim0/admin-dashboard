@@ -1,28 +1,68 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-salmon: #FD8F5F;
-  --color-almond: #F2E1D9;
-  --color-dark-purple: #680F18;
-  --color-blue-black: #1D2547;
-  --color-body-gray: #646D77;
-  --color-heading: #1a1a1a;
-  --color-error: #ff4545;
-  --color-hover-salmon: #e9855a;
-  --color-border-light: #c9c9c9;
-  --color-link-gray: #C2C5DB;
+  /* Modern indigo system — Linear / shadcn-inspired (2025–26).
+     primary #6366F1 (indigo-500) = vivid accent for links, icons, active.
+     Solid fills (buttons, chips) use --color-primary-hover #4F46E5 for AA.
+     salmon/almond kept as aliases so old classes keep rendering indigo. */
+  --color-salmon: #6366F1;
+  --color-hover-salmon: #4F46E5;
+  --color-primary: #6366F1;
+  --color-primary-hover: #4F46E5;
+  --color-primary-soft: #E0E7FF;
+  --color-almond: #E0E7FF;
+  --color-almond-soft: #EEF2FF;
+  --color-surface: #F4F4F5;
+  --color-card: #FFFFFF;
+  --color-border: #E4E4E7;
+  --color-ink: #18181B;
+  --color-blue-black: #18181B;
+  --color-muted: #52525B;
+  --color-faint: #71717A;
+  --color-body-gray: #52525B;
+  --color-heading: #18181B;
+  --color-error: #DC2626;
+  --color-success: #059669;
+  --color-warning: #D97706;
+  --color-info: #6366F1;
+  --color-hover-salmon-old: #4F46E5;
+  --color-border-light: #E4E4E7;
+  --color-link-gray: #A1A1AA;
+}
+
+/* Dark mode variable flips — token utilities (bg-surface, bg-card,
+   border-border, text-ink, text-muted, text-faint, bg-primary, …)
+   follow automatically. */
+app-admin-shell .admin-dark {
+  --color-surface: #0B0B0C;
+  --color-card: #18181B;
+  --color-border: #27272A;
+  --color-ink: #FAFAFA;
+  --color-blue-black: #FAFAFA;
+  --color-muted: #A1A1AA;
+  --color-faint: #A1A1AA;
+  --color-body-gray: #A1A1AA;
+  --color-heading: #FAFAFA;
+  --color-primary: #A5B4FC;
+  --color-primary-hover: #C7D2FE;
+  --color-salmon: #A5B4FC;
+  --color-hover-salmon: #C7D2FE;
+  --color-primary-soft: #312E81;
+  --color-almond: #312E81;
+  --color-almond-soft: #1E1B4B;
 }
 
 * {
   scrollbar-width: auto;
-  scrollbar-color: rgb(186, 186, 186) #F2E1D9;
+  scrollbar-color: rgb(186, 186, 186) #F4F4F5;
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Plus Jakarta Sans", "IBM Plex Sans Arabic", -apple-system, "Segoe UI", Arial, sans-serif;
   font-style: normal;
-  font-weight: normal;
+  font-weight: 400;
+  letter-spacing: -0.011em;
   overflow-x: visible;
 }
 
@@ -36,11 +76,235 @@ html, body {
 
 html { overflow-x: hidden; }
 
+html[dir="rtl"] body {
+  font-family: "IBM Plex Sans Arabic", "Plus Jakarta Sans", "Segoe UI", Tahoma, Arial, sans-serif;
+  letter-spacing: 0;
+}
+
+/* Rendered localized HTML descriptions (products, categories, …) read
+   right-to-left in Arabic, like the titles. Beats Quill's forced
+   `text-align: left` and flips LTR-only list/quote spacing everywhere.
+   (Editing surfaces keep their own per-tab direction via
+   app-localized-field, so this only targets rendered `.rich-text`.) */
+html[dir="rtl"] .rich-text {
+  direction: rtl;
+  text-align: right;
+}
+html[dir="rtl"] .rich-text ul,
+html[dir="rtl"] .rich-text ol {
+  padding-left: 0;
+  padding-right: 1.5rem;
+}
+html[dir="rtl"] .rich-text blockquote,
+html[dir="rtl"] .ql-snow .ql-editor blockquote {
+  border-left: 0;
+  border-right: 3px solid #6366F1;
+  padding-left: 0;
+  padding-right: 1rem;
+}
+
+/* RTL dock: the sidebar lives on the right. Tailwind v4 translate utilities
+   use the `translate` property (not `transform`), so mirror the hidden /
+   shown states through that same property — a `transform: translateX()`
+   here would stack on top of it and break both states (visible when it
+   should hide, pushed off when it should show). Unlayered author CSS wins
+   over Tailwind's layered utilities, and the more specific rules below
+   re-enable the shown states. */
+html[dir="rtl"] app-admin-shell aside {
+  left: auto;
+  right: 0;
+}
+
+html[dir="rtl"] app-admin-shell aside.translate-x-0 {
+  translate: 0 0;
+}
+
+@media (min-width: 768px) {
+  html[dir="rtl"] app-admin-shell aside.md\:translate-x-0 {
+    translate: 0 0;
+  }
+}
+
+@media (min-width: 768px) {
+  html[dir="rtl"] app-admin-shell .md\:ms-16 {
+    margin-left: 0;
+    margin-right: 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  html[dir="rtl"] app-admin-shell .lg\:ms-64 {
+    margin-left: 0;
+    margin-right: 16rem;
+  }
+}
+
+/* RTL mobile: the drawer is docked on the right edge, so it must slide out
+   toward the right (translate: 100%) — the LTR -translate-x-full would push
+   it inward and leave it overlapping the content. */
+@media (max-width: 767px) {
+  html[dir="rtl"] app-admin-shell aside:not(.translate-x-0) {
+    translate: 100%;
+  }
+}
+
+/* RTL drawer-rail: flip the collapse/expand chevron so it points in the
+   direction the panel expands (inward, toward the left). */
+html[dir="rtl"] app-admin-shell aside > button svg {
+  transform: rotate(180deg);
+}
+
+/* Keep every routed admin page on the same content grid. */
+app-admin-shell main {
+  padding: 0.75rem !important;
+}
+
+app-admin-shell main .mx-auto[class*="max-w-"] {
+  width: 100%;
+  max-width: 72rem !important;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+app-admin-shell .border-\[\#F6F8FE\],
+app-admin-shell .border-\[\#eadbd4\],
+app-admin-shell .border-\[\#c9c9c9\],
+app-admin-shell .border-\[\#eff2f5\] {
+  border-color: #E4E4E7 !important;
+}
+
+app-admin-shell .bg-\[\#F6F8FE\],
+app-admin-shell .bg-\[\#ecd7cd\],
+app-admin-shell .bg-\[\#f8eeea\] {
+  background-color: #F4F4F5 !important;
+}
+
+app-admin-shell .text-\[\#646D77\],
+app-admin-shell .text-\[\#797979\] {
+  color: #52525B !important;
+}
+
+app-admin-shell .text-\[\#c9c9c9\] {
+  color: #71717A !important;
+}
+
+app-admin-shell .admin-dark {
+  background: #171a25 !important;
+  color: #e7e9f2;
+}
+
+app-admin-shell .rounded-lg {
+  border-radius: 0.625rem;
+}
+
+app-admin-shell .bg-white {
+  box-shadow: 0 0.25rem 0.75rem rgba(15, 23, 42, 0.06);
+}
+
+app-admin-shell input:not([type="checkbox"]):not([type="radio"]),
+app-admin-shell select,
+app-admin-shell textarea {
+  border-radius: 0.475rem;
+  min-height: 2.5rem;
+}
+
+app-admin-shell button.bg-salmon,
+app-admin-shell a.bg-salmon {
+  border-radius: 0.475rem;
+  background-color: #4F46E5 !important;
+  box-shadow: 0 0.2rem 0.5rem rgba(79, 70, 229, 0.2);
+}
+
+app-admin-shell button.bg-salmon:hover,
+app-admin-shell a.bg-salmon:hover {
+  background-color: #4338CA !important;
+  box-shadow: 0 0.3rem 0.75rem rgba(79, 70, 229, 0.28);
+}
+
+app-admin-shell .rounded-full {
+  letter-spacing: 0.01em;
+}
+
+app-admin-shell h1,
+app-admin-shell h2,
+app-admin-shell h3,
+app-admin-shell h4 {
+  letter-spacing: -0.01em;
+}
+
+app-admin-shell label {
+  color: #52525B;
+  font-weight: 600;
+}
+
+app-admin-shell button:not(.bg-salmon):not([disabled]) {
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+app-admin-shell table thead th {
+  white-space: nowrap;
+}
+
+app-admin-shell table tbody tr {
+  transition: background-color 160ms ease;
+}
+
+app-admin-shell .animate-spin {
+  border-color: #6366F1;
+  border-top-color: transparent;
+}
+
+app-admin-shell .admin-dark main {
+  background: #171a25;
+}
+
+app-admin-shell .admin-dark .bg-white,
+app-admin-shell .admin-dark .bg-\[white\] {
+  background-color: #18181B !important;
+}
+
+app-admin-shell .admin-dark .bg-\[\#f4f5f8\] {
+  background-color: #171a25 !important;
+}
+
+app-admin-shell .admin-dark .border-\[\#F6F8FE\],
+app-admin-shell .admin-dark .border-\[\#eadbd4\],
+app-admin-shell .admin-dark .border-\[\#c9c9c9\] {
+  border-color: #353b4d !important;
+}
+
+app-admin-shell .admin-dark .text-blue-black,
+app-admin-shell .admin-dark .text-\[\#18181B\] {
+  color: #f3f4f8 !important;
+}
+
+app-admin-shell .admin-dark .text-\[\#646D77\],
+app-admin-shell .admin-dark .text-\[\#797979\] {
+  color: #b9bfce !important;
+}
+
+app-admin-shell .admin-dark .text-\[\#c9c9c9\] {
+  color: #737b8f !important;
+}
+
+app-admin-shell .admin-dark input,
+app-admin-shell .admin-dark select,
+app-admin-shell .admin-dark textarea {
+  background-color: #1b2030 !important;
+  border-color: #41495e !important;
+  color: #f3f4f8 !important;
+}
+
+app-admin-shell .admin-dark .hover\:bg-white:hover,
+app-admin-shell .admin-dark .hover\:bg-\[\#f8eeea\]:hover {
+  background-color: #2b3141 !important;
+}
+
 a { text-decoration: none !important; }
 ul { list-style: none !important; padding: 0; }
 
 :focus-visible {
-  outline: 2px solid #FD8F5F;
+  outline: 2px solid #6366F1;
   outline-offset: 2px;
 }
 
@@ -66,17 +330,541 @@ ul { list-style: none !important; padding: 0; }
 }
 
 .p-rating .p-rating-icon.p-rating-icon-active {
-  color: #FD8F5F !important;
+  color: #6366F1 !important;
 }
 
 .p-rating .p-rating-icon.pi-star-fill {
-  color: #FD8F5F !important;
+  color: #6366F1 !important;
 }
 
 .p-rating:not(.p-disabled):not(.p-readonly) .p-rating-icon:hover {
-  color: #FD8F5F !important;
+  color: #4F46E5 !important;
 }
 
 .p-rating:not(.p-disabled):not(.p-readonly) .p-rating-icon {
-  color: #FD8F5F !important;
+  color: #6366F1 !important;
+}
+
+/* ============================================================
+   Dashboard design system — buttons + page headers + form bars
+   Single source of truth. All list / add / edit / view pages
+   must use these classes (or app-page-header / app-form-actions
+   which wrap them) instead of inline Tailwind button styles.
+   ============================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.475rem;
+  padding: 0.625rem 1.25rem; /* px-5 py-2.5 */
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.25rem;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.btn-primary {
+  background-color: #4F46E5;
+  color: #fff;
+  box-shadow: 0 0.2rem 0.5rem rgba(79, 70, 229, 0.2);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #4338CA;
+  box-shadow: 0 0.3rem 0.75rem rgba(79, 70, 229, 0.28);
+}
+
+.btn-secondary {
+  background-color: #fff;
+  border-color: #E4E4E7;
+  color: #52525B;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: #F4F4F5;
+}
+
+.btn-danger {
+  background-color: #DC2626;
+  color: #fff;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #B91C1C;
+}
+
+.btn-danger-outline {
+  background-color: #fff;
+  border-color: #DC2626;
+  color: #DC2626;
+}
+
+.btn-danger-outline:hover:not(:disabled) {
+  background-color: #FEF3F2;
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: #6366F1;
+  text-transform: none;
+  letter-spacing: normal;
+  padding: 0.5rem 0.75rem;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background-color: rgba(37, 99, 235, 0.08);
+}
+
+.link-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6366F1;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.link-back:hover {
+  color: #4F46E5;
+}
+
+/* Page header: back (row 1) / eyebrow / title / subtitle left, actions right */
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.page-header-text {
+  min-width: 0;
+}
+
+.page-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #71717A;
+}
+
+.page-title {
+  margin-top: 0.25rem;
+  font-size: 1.875rem; /* text-3xl */
+  line-height: 2.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #18181B;
+}
+
+.page-subtitle {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #52525B;
+}
+
+.page-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-inline-start: auto;
+}
+
+/* Form footer bar: always right-aligned Cancel + Save */
+.form-actions {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  padding-top: 1.25rem;
+  margin-top: 1.5rem;
+  border-top: 1px solid #E4E4E7;
+}
+
+@media (min-width: 640px) {
+  .form-actions {
+    flex-direction: row;
+  }
+}
+
+/* Breathing room between the detail header card and the form/content below
+   it on every VIEW + ADD/EDIT page. Padding (not margin) so it can't
+   collapse with the page wrapper's space-y. */
+app-detail-header {
+  display: block;
+  padding-bottom: 0.5rem;
+}
+
+/* Same breathing room between the list header and the table below it. */
+app-page-header {
+  display: block;
+  padding-bottom: 0.5rem;
+}
+
+/* Detail / form header card: shared by all VIEW + ADD/EDIT pages.
+   List pages keep the plain app-page-header row. */
+.detail-header {
+  background-color: #fff;
+  border: 1px solid #E4E4E7;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(15, 23, 42, 0.05);
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.detail-back {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #52525B;
+  background: none;
+  border: none;
+  border-radius: 0.475rem;
+  padding: 0.375rem 0.625rem;
+  margin: -0.375rem -0.625rem 0;
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.detail-back:hover {
+  color: #6366F1;
+  background-color: rgba(37, 99, 235, 0.08);
+}
+
+.detail-back i {
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+/* Chevron points back in both directions: ← in LTR, → in RTL. */
+html[dir="rtl"] .detail-back i {
+  transform: rotate(180deg);
+}
+
+.detail-main {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.detail-text {
+  min-width: 0;
+  flex: 1 1 12rem;
+}
+
+.detail-chip {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #4F46E5;
+  background-color: #E0E7FF;
+  border: 1px solid #C7D2FE;
+  border-radius: 999px;
+  padding: 0.25rem 0.625rem;
+  margin-bottom: 0.5rem;
+}
+
+.detail-title {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  color: #18181B;
+  overflow-wrap: anywhere;
+}
+
+/* Section titles (list pages) stay uppercase; entity names don't. */
+.detail-title-section {
+  text-transform: uppercase;
+}
+
+.detail-subtitle {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #52525B;
+}
+
+.detail-side {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-inline-start: auto;
+}
+
+.detail-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Floating sticky variant: pins to the viewport bottom while scrolling
+   long forms. Only add to forms that scroll (product/category/role/
+   content) — on short forms it would just duplicate the header actions. */
+.form-actions-sticky {
+  position: sticky;
+  bottom: 1rem;
+  z-index: 20;
+  background-color: #fff;
+  border: 1px solid #E4E4E7;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(15, 23, 42, 0.12);
+  padding: 0.75rem 1rem;
+}
+
+/* Content card: THE surface for view + add/edit sections, wizards and
+   settings panels. Replaces repeated
+   `rounded-lg border border-[#eadbd4] bg-white p-6 sm:p-8` strings. */
+.card {
+  background-color: #fff;
+  border: 1px solid #E4E4E7;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(15, 23, 42, 0.05);
+  padding: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .card {
+    padding: 2rem;
+  }
+}
+
+/* Section heading inside cards. Pair with mb-* as needed
+   (`section-title mb-5`); strip headers use it margin-free. */
+.section-title {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+  color: #18181B;
+}
+
+/* Spec rows (dl/dt/dd) on detail pages. */
+.spec-dt {
+  color: #71717A;
+}
+
+.spec-dd {
+  margin-top: 0.25rem;
+  font-weight: 600;
+  color: #18181B;
+}
+
+/* Dark mode — static utilities + legacy hardcoded hexes.
+   Token utilities (bg-surface, bg-card, border-border, text-ink,
+   text-muted, text-faint, text-primary, bg-primary) already flip
+   via the .admin-dark variable overrides above. */
+.admin-dark {
+  background-color: #0A0A0C !important;
+  color: #F4F4F5;
+  color-scheme: dark;
+}
+
+.admin-dark main {
+  background-color: #0A0A0C !important;
+}
+
+.admin-dark aside,
+.admin-dark header {
+  background-color: #0A0A0C !important;
+  border-color: #27272A !important;
+  color: #F4F4F5;
+}
+
+.admin-dark .bg-white,
+.admin-dark .bg-\[white\] {
+  background-color: #18181B !important;
+}
+
+.admin-dark .bg-surface {
+  background-color: #18181B !important;
+}
+
+.admin-dark .hover\:bg-surface:hover {
+  background-color: #27272A !important;
+}
+
+.admin-dark .hover\:bg-white:hover {
+  background-color: #27272A !important;
+}
+
+.admin-dark .border-border {
+  border-color: #27272A !important;
+}
+
+.admin-dark .text-ink,
+.admin-dark .text-blue-black,
+.admin-dark .text-\[\#18181B\] {
+  color: #F4F4F5 !important;
+}
+
+.admin-dark .text-muted,
+.admin-dark .text-\[\#646D77\],
+.admin-dark .text-\[\#797979\],
+.admin-dark .text-\[\#7e8299\] {
+  color: #A1A1AA !important;
+}
+
+.admin-dark .text-faint,
+.admin-dark .text-\[\#c9c9c9\],
+.admin-dark .text-\[\#a1a5b7\] {
+  color: #A1A1AA !important;
+}
+
+.admin-dark label {
+  color: #D4D4D8 !important;
+}
+
+.admin-dark .bg-\[\#F6F8FE\],
+.admin-dark .bg-\[\#ecd7cd\],
+.admin-dark .bg-\[\#f8eeea\],
+.admin-dark .bg-\[\#f5f8fa\],
+.admin-dark .bg-\[\#fbfcfe\],
+.admin-dark .bg-\[\#f8fbff\] {
+  background-color: #18181B !important;
+}
+
+.admin-dark .border-\[\#F6F8FE\],
+.admin-dark .border-\[\#eadbd4\],
+.admin-dark .border-\[\#c9c9c9\],
+.admin-dark .border-\[\#eff2f5\],
+.admin-dark .border-\[\#e3e8ef\] {
+  border-color: #27272A !important;
+}
+
+.admin-dark input,
+.admin-dark select,
+.admin-dark textarea {
+  background-color: #0A0A0C !important;
+  border-color: #52525B !important;
+  color: #F4F4F5 !important;
+}
+
+.admin-dark input::placeholder,
+.admin-dark textarea::placeholder {
+  color: #71717A !important;
+}
+
+.admin-dark table thead tr {
+  background-color: #18181B !important;
+}
+
+.admin-dark table tbody tr:hover {
+  background-color: #27272A !important;
+}
+
+.admin-dark .btn-secondary {
+  background-color: #18181B;
+  border-color: #52525B;
+  color: #F4F4F5;
+}
+
+.admin-dark .btn-secondary:hover:not(:disabled) {
+  background-color: #27272A;
+}
+
+.admin-dark .btn-ghost {
+  color: #A5B4FC;
+}
+
+.admin-dark .link-back {
+  color: #A5B4FC;
+}
+
+.admin-dark .page-title {
+  color: #F4F4F5;
+}
+
+.admin-dark .detail-header {
+  background-color: #18181B;
+  border-color: #27272A;
+}
+
+.admin-dark .detail-title {
+  color: #F4F4F5;
+}
+
+.admin-dark .detail-subtitle {
+  color: #A1A1AA;
+}
+
+.admin-dark .detail-back {
+  color: #A1A1AA;
+}
+
+.admin-dark .detail-back:hover {
+  color: #A5B4FC;
+  background-color: rgba(147, 197, 253, 0.12);
+}
+
+.admin-dark .detail-chip {
+  background-color: #312E81;
+  border-color: #6366F1;
+  color: #C7D2FE;
+}
+
+.admin-dark .form-actions-sticky {
+  background-color: #18181B;
+  border-color: #27272A;
+}
+
+.admin-dark .card {
+  background-color: #18181B;
+  border-color: #27272A;
+}
+
+.admin-dark .section-title {
+  color: #F4F4F5;
+}
+
+.admin-dark .spec-dt {
+  color: #A1A1AA;
+}
+
+.admin-dark .spec-dd {
+  color: #F4F4F5;
+}
+.admin-dark .page-subtitle,
+.admin-dark .page-eyebrow {
+  color: #A1A1AA;
+}
+
+.admin-dark .form-actions {
+  border-top-color: #27272A;
+}
+
+.admin-dark .bg-white {
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.3);
 }

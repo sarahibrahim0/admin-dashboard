@@ -1,81 +1,33 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EntityService } from '../../../core/services/entity.service';
+import { BaseTableComponent } from '../../../shared/table/base-table.component';
+import { TableColumn, TableAction } from '../../../shared/table/table-column';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
+import { PageHeaderComponent } from '../../../shared/ui/page-header.component';
+import { LanguageService } from '../../../core/services/language.service';
+import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
+import { LatestLoader } from '../../../shared/utils/latest-loader';
+import { readTableQuery } from '../../../shared/table/table-query';
+import { formatAddedOn, formatDateTime } from '../../../shared/utils/datetime';
 
 @Component({
   selector: 'app-roles-list',
   standalone: true,
-  imports: [RouterLink, ConfirmDialogComponent],
+  imports: [RouterLink, TranslatePipe, PageHeaderComponent, BaseTableComponent, ConfirmDialogComponent],
   template: `
     <div class="space-y-8">
-      <div class="flex items-center justify-between">
-        <h2 class="text-3xl font-bold uppercase text-blue-black">Roles</h2>
-        <a routerLink="new" class="inline-flex items-center gap-2 rounded-md bg-salmon px-5 py-2.5 text-sm uppercase tracking-wider font-medium text-white hover:bg-[#e9855a] transition-colors">
-          <i class="bi bi-plus-lg text-sm"></i>
-          Add Role
-        </a>
-      </div>
+      <app-page-header title="{{ 'Roles' | translate }}" eyebrow="{{ 'Access' | translate }}" subtitle="{{ 'Manage access roles and permissions.' | translate }}">
+        <a actions routerLink="new" class="btn btn-primary"><i class="bi bi-plus-lg"></i>{{ 'Add Role' | translate }}</a>
+      </app-page-header>
 
-      @if (roles().length === 0) {
-        <div class="rounded-lg border border-[#F6F8FE] bg-white p-12 text-center">
-          <i class="bi bi-shield-lock text-4xl text-[#c9c9c9]"></i>
-          <p class="mt-3 text-sm text-[#797979]">No roles found</p>
-        </div>
-      } @else {
-        <div class="rounded-lg border border-[#F6F8FE] bg-white overflow-hidden">
-          <table class="w-full">
-            <thead>
-              <tr class="border-b border-[#F6F8FE] bg-[#F6F8FE]">
-                <th class="px-6 py-4 text-left text-xs font-medium uppercase tracking-wider text-[#797979]">Name</th>
-                <th class="px-6 py-4 text-left text-xs font-medium uppercase tracking-wider text-[#797979]">Permissions</th>
-                <th class="px-6 py-4 text-left text-xs font-medium uppercase tracking-wider text-[#797979]">Default</th>
-                <th class="px-6 py-4 text-right text-xs font-medium uppercase tracking-wider text-[#797979]">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (role of roles(); track role.id) {
-                <tr class="border-b border-[#F6F8FE] hover:bg-[#F6F8FE] transition-colors cursor-pointer" (click)="router.navigate(['/admin/roles', role.id, 'edit'])">
-                  <td class="px-6 py-4 text-sm font-semibold text-blue-black">{{ role.name }}</td>
-                  <td class="px-6 py-4">
-                    <div class="flex flex-wrap gap-1.5">
-                      @for (group of getPermissionGroups(role.permissions); track group) {
-                        <span class="inline-block rounded-full bg-almond px-2.5 py-1 text-xs font-medium text-blue-black">{{ group }}</span>
-                      }
-                      @if (getExtraCount(role.permissions) > 0) {
-                        <span class="inline-block rounded-full bg-[#F6F8FE] px-2.5 py-1 text-xs font-medium text-[#797979]">+{{ getExtraCount(role.permissions) }}</span>
-                      }
-                    </div>
-                  </td>
-                  <td class="px-6 py-4">
-                    @if (role.isDefault) {
-                      <i class="bi bi-check-circle-fill text-lg text-green-500"></i>
-                    } @else {
-                      <i class="bi bi-dash text-lg text-[#c9c9c9]"></i>
-                    }
-                  </td>
-                  <td class="px-6 py-4 text-right">
-                    <div class="flex items-center justify-end gap-2" (click)="$event.stopPropagation()">
-                      <button (click)="router.navigate(['/admin/roles', role.id, 'edit'])" class="p-2 text-[#797979] hover:text-salmon transition-colors rounded-md hover:bg-almond">
-                        <i class="bi bi-pencil text-sm"></i>
-                      </button>
-                      <button (click)="confirmDelete(role.id)" class="p-2 text-[#797979] hover:text-[#ff4545] transition-colors rounded-md hover:bg-red-50">
-                        <i class="bi bi-trash text-sm"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      }
+      <app-base-table [columns]="columns" [actions]="actions" [data]="roles" [totalCount]="totalCount" [serverSidePagination]="true" [pageSize]="pageSize" (searchChange)="onSearch($event)" [initialSortField]="sortBy" [initialSortDir]="sortDir" [initialSearch]="search" [initialFilters]="filters" [initialPage]="currentPage" [syncQueryParams]="true" (sortChange)="onSort($event)" (filterChange)="onFilter($event)" [loading]="loader.loading()" [error]="loader.error()" (pageChange)="onPageChange($event)" (rowClick)="router.navigate(['/admin/roles', $event.id])" (actionClick)="handleAction($event)" />
     </div>
 
     <app-confirm-dialog
       [open]="showDeleteDialog()"
-      title="Delete Role"
-      message="Are you sure you want to delete this role? This action cannot be undone."
+      [title]="'Delete Role' | translate"
+      [message]="'Are you sure you want to delete this role? This action cannot be undone.' | translate"
       (confirm)="deleteRole()"
       (cancel)="showDeleteDialog.set(false)"
     />
@@ -83,11 +35,28 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
 })
 export class RolesListComponent implements OnInit {
   private entityService = inject(EntityService);
+  protected loader = new LatestLoader();
   protected router = inject(Router);
+  private language = inject(LanguageService);
+  private route = inject(ActivatedRoute);
   roles = signal<any[]>([]);
   totalCount = signal(0);
   showDeleteDialog = signal(false);
   deleteId: string | null = null;
+
+  columns: TableColumn[] = [
+    { field: 'name', header: 'Name', sortable: true, filterable: true, filterType: 'text', placeholder: 'name', format: (v) => this.language.localizedValue(v) || '-' },
+    { field: 'permissions', header: 'Permissions', format: (_v, row) => ({ chips: this.getPermissionGroups(row.permissions) }) },
+    { field: 'isDefault', header: 'Default', filterable: true, filterType: 'boolean', format: (v) => ({ icon: v ? 'bi-check-circle-fill' : 'bi-dash', iconClass: v ? 'text-green-500' : 'text-[#c9c9c9]' }) },
+    { field: 'addedOn', header: 'Added on', format: (_v, row) => formatAddedOn(row, ['createdAt'], this.language.language()) },
+    { field: 'updatedAt', header: 'Updated', sortable: true, format: (v) => formatDateTime(v, this.language.language()) },
+    { field: 'createdBy', header: 'Added by', format: (v) => this.language.localizedValue(v?.name) || '-' },
+  ];
+  actions: TableAction[] = [
+    { type: 'view', icon: 'bi bi-eye', title: 'View' },
+    { type: 'edit', icon: 'bi bi-pencil', title: 'Edit', class: 'text-[#797979] hover:bg-[#f1faff] hover:text-[#1e6bb8]' },
+    { type: 'delete', icon: 'bi bi-trash', title: 'Delete', class: 'text-[#797979] hover:bg-red-50 hover:text-[#ff4545]' },
+  ];
 
   private permissionGroupMap: Record<string, string> = {
     dashboard: 'Dashboard',
@@ -96,16 +65,46 @@ export class RolesListComponent implements OnInit {
     orders: 'Orders',
     users: 'Users',
     coupons: 'Coupons',
-    content: 'Content',
     reviews: 'Reviews',
     roles: 'Roles',
   };
 
   ngOnInit(): void {
-    this.entityService.list<any>('roles').subscribe((data) => {
-      this.roles.set(data);
-      this.totalCount.set(data.length);
+    this.loadRoles();
+  }
+
+  private queryState = readTableQuery(this.route.snapshot.queryParamMap);
+  currentPage = this.queryState.page;
+  sortBy = this.queryState.sortField || 'createdAt';
+  sortDir: 'asc' | 'desc' = this.queryState.sortDir;
+  search = this.queryState.search;
+  filters: Record<string, string> = this.queryState.filters;
+  pageSize = signal(20);
+
+  loadRoles(page = this.currentPage): void {
+    const params = this.entityService.buildQueryParams({
+      page, limit: 20, sortBy: this.sortBy, sortDir: this.sortDir,
+      search: this.search, filter: this.filters,
     });
+    this.loader.load(
+      this.entityService.listPaginated<any>('roles', params),
+      (res) => { this.roles.set(res.data); this.totalCount.set(res.total); },
+    );
+  }
+
+  onSearch(query: string): void { this.search = query; this.loadRoles(1); }
+  onPageChange(page: number): void { this.currentPage = page; this.loadRoles(page); }
+  onSort(event: { field: string; dir: 'asc' | 'desc' }): void { this.sortBy = event.field; this.sortDir = event.dir; this.loadRoles(1); }
+  onFilter(filters: Record<string, string>): void { this.filters = filters; this.loadRoles(1); }
+
+  handleAction(event: { action: string; row: any }): void {
+    if (event.action === 'view') {
+      this.router.navigate(['/admin/roles', event.row.id]);
+    } else if (event.action === 'edit') {
+      this.router.navigate(['/admin/roles', event.row.id, 'edit']);
+    } else if (event.action === 'delete') {
+      this.confirmDelete(event.row.id);
+    }
   }
 
   getPermissionGroups(permissions: string[]): string[] {
@@ -116,16 +115,7 @@ export class RolesListComponent implements OnInit {
       const label = this.permissionGroupMap[prefix] || prefix;
       groups.add(label);
     }
-    return Array.from(groups).slice(0, 3);
-  }
-
-  getExtraCount(permissions: string[]): number {
-    if (!permissions) return 0;
-    const groups = new Set<string>();
-    for (const perm of permissions) {
-      groups.add(perm.split(':')[0]);
-    }
-    return Math.max(0, groups.size - 3);
+    return Array.from(groups);
   }
 
   confirmDelete(id: string): void {
@@ -136,12 +126,9 @@ export class RolesListComponent implements OnInit {
   deleteRole(): void {
     if (this.deleteId) {
       this.entityService.delete('roles', this.deleteId).subscribe(() => {
-        this.entityService.list<any>('roles').subscribe((data) => {
-          this.roles.set(data);
-          this.totalCount.set(data.length);
-        });
-        this.showDeleteDialog.set(false);
         this.deleteId = null;
+        this.loadRoles();
+        this.showDeleteDialog.set(false);
       });
     }
   }

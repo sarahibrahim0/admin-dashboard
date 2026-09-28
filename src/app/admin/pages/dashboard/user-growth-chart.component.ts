@@ -1,16 +1,18 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild, ElementRef, AfterViewInit, OnDestroy, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Chart, registerables } from 'chart.js';
+import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
+import { LanguageService } from '../../../core/services/language.service';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-user-growth-chart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   template: `
-    <div class="rounded-lg border border-[#F6F8FE] bg-white p-6">
-      <h3 class="mb-4 text-lg font-semibold uppercase text-blue-black">User Growth</h3>
+    <div class="rounded-lg border border-border bg-white p-6">
+      <h3 class="mb-4 text-lg font-semibold uppercase text-blue-black">{{ 'User Growth' | translate }}</h3>
       <div class="h-64">
         <canvas #chartCanvas></canvas>
       </div>
@@ -20,8 +22,17 @@ Chart.register(...registerables);
 export class UserGrowthChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
   @Input() data: { date: string; count: number }[] = [];
+  private language = inject(LanguageService);
 
   private chart: Chart | null = null;
+
+  constructor() {
+    // Canvas content is not reactive — redraw with the new language on toggle.
+    effect(() => {
+      this.language.language();
+      if (this.chartCanvas) this.renderChart();
+    });
+  }
 
   ngAfterViewInit(): void { this.renderChart(); }
   ngOnChanges(changes: SimpleChanges): void { if (changes['data'] && this.chartCanvas) this.renderChart(); }
@@ -37,10 +48,10 @@ export class UserGrowthChartComponent implements AfterViewInit, OnChanges, OnDes
       data: {
         labels: this.data.map((d) => d.date),
         datasets: [{
-          label: 'New Users',
+          label: this.language.translate('New Users'),
           data: this.data.map((d) => d.count),
-          borderColor: '#10b981',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          borderColor: '#4F46E5',
+          backgroundColor: 'rgba(79, 70, 229, 0.08)',
           fill: true,
           tension: 0.4,
           pointRadius: 2,

@@ -1,6 +1,10 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { forkJoin, of } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
 import { DashboardService, DashboardSummary, RevenuePoint, CategoryDist } from '../../../core/services/dashboard.service';
+import { LanguageService } from '../../../core/services/language.service';
+import { formatDateTime } from '../../../shared/utils/datetime';
 import { KpiCardComponent } from './kpi-card.component';
 import { RevenueChartComponent } from './revenue-chart.component';
 import { CategoryChartComponent } from './category-chart.component';
@@ -9,102 +13,102 @@ import { OrdersChartComponent } from './orders-chart.component';
 import { PeriodSelectorComponent } from './period-selector.component';
 import { UserGrowthChartComponent } from './user-growth-chart.component';
 import { TopProductsChartComponent } from './top-products-chart.component';
+import { BaseTableComponent } from '../../../shared/table/base-table.component';
+import { TableColumn } from '../../../shared/table/table-column';
+import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, KpiCardComponent, RevenueChartComponent, CategoryChartComponent, StatusChartComponent, OrdersChartComponent, PeriodSelectorComponent, UserGrowthChartComponent, TopProductsChartComponent],
+  imports: [CommonModule, TranslatePipe, KpiCardComponent, RevenueChartComponent, CategoryChartComponent, StatusChartComponent, OrdersChartComponent, PeriodSelectorComponent, UserGrowthChartComponent, TopProductsChartComponent, BaseTableComponent],
   template: `
     <div class="space-y-6">
-      <h2 class="text-2xl font-bold uppercase text-blue-black">Dashboard</h2>
+      <div class="flex items-center justify-between border-b border-[#eadbd4] pb-4">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#797979]">{{ 'Overview' | translate }}</p>
+          <h2 class="mt-1 text-2xl font-bold uppercase text-blue-black">{{ 'Dashboard' | translate }}</h2>
+        </div>
+        <span class="text-sm text-[#797979]">{{ 'Live store metrics' | translate }}</span>
+      </div>
 
       @if (loading()) {
         <div class="flex items-center justify-center py-12">
           <div class="h-8 w-8 animate-spin rounded-full border-4 border-salmon border-t-transparent"></div>
         </div>
       } @else {
-        <!-- KPI Cards -->
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-          <app-kpi-card label="Revenue" [value]="'$' + formatNumber(summary()?.totalRevenue || 0)" icon="dollar" iconBg="bg-green-100" iconColor="text-green-600" />
-          <app-kpi-card label="Orders" [value]="summary()?.totalOrders || 0" icon="shopping-cart" iconBg="bg-blue-100" iconColor="text-blue-600" />
-          <app-kpi-card label="Products" [value]="summary()?.totalProducts || 0" icon="box" iconBg="bg-purple-100" iconColor="text-purple-600" />
-          <app-kpi-card label="Users" [value]="summary()?.totalUsers || 0" icon="users" iconBg="bg-amber-100" iconColor="text-amber-600" />
-          <app-kpi-card label="Pending" [value]="summary()?.pendingOrders || 0" subtitle="orders awaiting processing" icon="clock" iconBg="bg-orange-100" iconColor="text-orange-600" />
-          <app-kpi-card label="Low Stock" [value]="summary()?.lowStockProducts || 0" subtitle="items with ≤10 stock" icon="exclamation-triangle" iconBg="bg-[#ffe3e3]" iconColor="text-[#ff4545]" />
-        </div>
+        <section>
+          <div class="mb-4 flex items-end justify-between border-b border-[#eadbd4] pb-3">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#797979]">{{ 'At a glance' | translate }}</p>
+              <h3 class="mt-1 text-xl font-semibold text-blue-black">{{ 'Key metrics' | translate }}</h3>
+            </div>
+            <span class="text-xs uppercase tracking-wider text-[#797979]">{{ 'Store performance' | translate }}</span>
+          </div>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+            <app-kpi-card label="Revenue" [value]="'$' + formatNumber(summary()?.totalRevenue || 0)" icon="dollar" />
+            <app-kpi-card label="Orders" [value]="summary()?.totalOrders || 0" icon="shopping-cart" />
+            <app-kpi-card label="Products" [value]="summary()?.totalProducts || 0" icon="box" />
+            <app-kpi-card label="Users" [value]="summary()?.totalUsers || 0" icon="users" />
+            <app-kpi-card label="Pending" [value]="summary()?.pendingOrders || 0" subtitle="orders awaiting processing" icon="clock" iconBg="bg-amber-50" iconColor="text-amber-700" />
+            <app-kpi-card label="Low Stock" [value]="summary()?.lowStockProducts || 0" subtitle="items with ≤10 stock" icon="exclamation-triangle" iconBg="bg-red-50" iconColor="text-[#D92D20]" />
+          </div>
+        </section>
 
-        <!-- Period Selector -->
-        <div class="flex items-center justify-between">
+        <section class="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-[#eadbd4] bg-white px-4 py-3 sm:px-6">
+          <div>
+            <h3 class="text-lg font-semibold uppercase text-blue-black">{{ 'Performance' | translate }}</h3>
+            <p class="text-sm text-[#797979]">{{ 'Track your store activity over time.' | translate }}</p>
+          </div>
           <app-period-selector (periodChange)="onPeriodChange($event)" />
-        </div>
+        </section>
 
-        <!-- Charts Row -->
-        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <section class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.65fr)_minmax(280px,0.75fr)]">
           <app-revenue-chart [data]="revenueData()" />
+          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-1">
+            <app-status-chart [data]="summary()?.ordersByStatus ?? emptyOrdersByStatus" />
+            <div class="rounded-lg border border-border bg-white p-6">
+              <div class="mb-5 flex items-center justify-between">
+                <h3 class="text-lg font-semibold uppercase text-blue-black">{{ 'Reviews' | translate }}</h3>
+                <span class="text-2xl font-bold text-primary">{{ avgRating().toFixed(1) }} ★</span>
+              </div>
+              <div class="flex items-end justify-between border-t border-border pt-4">
+                <span class="text-sm text-[#797979]">{{ 'Total reviews' | translate }}</span>
+                <span class="font-semibold text-blue-black">{{ summary()?.totalReviews || 0 }}</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
-          <app-status-chart [data]="summary()?.ordersByStatus || []" />
-
+        <section class="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <app-category-chart [data]="categoryData()" />
           <app-orders-chart [data]="revenueData()" />
           <app-user-growth-chart [data]="userGrowthData()" />
           <app-top-products-chart [data]="topProductsData()" />
-
-          <!-- Reviews Summary -->
-          <div class="rounded-lg border border-[#F6F8FE] bg-white p-6">
-            <h3 class="mb-4 text-lg font-semibold uppercase text-blue-black">Reviews Summary</h3>
-            <div class="space-y-2 text-sm">
-              <div class="flex justify-between"><span class="text-[#797979]">Total Reviews</span><span class="font-medium">{{ summary()?.totalReviews || 0 }}</span></div>
-              <div class="flex justify-between"><span class="text-[#797979]">Average Rating</span><span class="font-medium">{{ avgRating().toFixed(1) }} ★</span></div>
-            </div>
-          </div>
-        </div>
+        </section>
 
         <!-- Recent Orders -->
-        <div class="rounded-lg border border-[#F6F8FE] bg-white p-6">
-          <h3 class="mb-4 text-lg font-semibold uppercase text-blue-black">Recent Orders</h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-              <thead>
-                <tr class="border-b border-[#F6F8FE] text-left text-xs uppercase text-[#797979]">
-                  <th class="pb-2">Customer</th>
-                  <th class="pb-2">Total</th>
-                  <th class="pb-2">Status</th>
-                  <th class="pb-2">Payment</th>
-                  <th class="pb-2">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (order of recentOrders(); track order.id) {
-                  <tr class="border-b border-[#F6F8FE]">
-                    <td class="py-2">{{ order.user?.name || order.user?.email || '-' }}</td>
-                    <td class="py-2">\${{ order.totalPrice?.toFixed(2) }}</td>
-                    <td class="py-2">
-                      <span class="rounded-full px-2 py-0.5 text-xs font-medium"
-                        [class.bg-amber-100]="order.status === 'Pending'"
-                        [class.text-amber-700]="order.status === 'Pending'"
-                        [class.bg-green-100]="order.status === 'Processed'"
-                        [class.text-green-700]="order.status === 'Processed'"
-                        [class.bg-red-100]="order.status === 'Cancelled'"
-                        [class.text-red-700]="order.status === 'Cancelled'">
-                        {{ order.status }}
-                      </span>
-                    </td>
-                    <td class="py-2">{{ order.paymentStatus }}</td>
-                    <td class="py-2">{{ order.dateOrdered | date:'shortDate' }}</td>
-                  </tr>
-                } @empty {
-                  <tr><td colspan="5" class="py-4 text-center text-[#797979]">No orders yet</td></tr>
-                }
-              </tbody>
-            </table>
-          </div>
+        <div class="rounded-lg border border-border bg-white p-6">
+          <h3 class="mb-4 text-lg font-semibold uppercase text-blue-black">{{ 'Recent Orders' | translate }}</h3>
+          <app-base-table [columns]="recentColumns" [data]="recentOrders" [totalCount]="recentCount" [showSearch]="false" [serverSidePagination]="false" [pageSize]="recentPageSize" />
         </div>
       }
     </div>
   `,
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
   private dashboardService = inject(DashboardService);
+  private language = inject(LanguageService);
+  readonly emptyOrdersByStatus: { status: string; count: number }[] = [];
+
+  constructor() {
+    // Some dashboard strings (e.g. top-product names) are localized by the
+    // backend per the `x-language` header, so reload on toggle — not just
+    // re-render — to show the correct language data.
+    effect(() => {
+      this.language.language();
+      this.loadData();
+    });
+  }
 
   summary = signal<DashboardSummary | null>(null);
   revenueData = signal<RevenuePoint[]>([]);
@@ -116,43 +120,63 @@ export class DashboardComponent implements OnInit {
   topProductsData = signal<{ name: string; totalSold: number; revenue: number }[]>([]);
   selectedPeriod = signal('day');
 
-  ngOnInit(): void {
-    this.loadData();
-    this.loadUserGrowth();
-    this.loadTopProducts();
+  localized(v: any): string {
+    return this.language.localizedValue(v);
+  }
+
+  formatDate(value: unknown): string {
+    return formatDateTime(value, this.language.language());
+  }
+
+  readonly recentCount = computed(() => this.recentOrders().length);
+  readonly recentPageSize = signal(100);
+
+  recentColumns: TableColumn[] = [
+    { field: 'user', header: 'Customer', format: (v) => this.localized(v?.name) || v?.email || '-' },
+    { field: 'totalPrice', header: 'Total', format: (v) => `$${v?.toFixed(2)}` },
+    {
+      field: 'status',
+      header: 'Status',
+      format: (v) => ({ badge: v, badgeClass: this.orderStatusBadge(v) }),
+    },
+    { field: 'paymentStatus', header: 'Payment' },
+    { field: 'dateOrdered', header: 'Date', format: (v) => this.formatDate(v) },
+  ];
+
+  orderStatusBadge(status: string): string {
+    switch (status) {
+      case 'Pending': return 'bg-amber-100 text-amber-700';
+      case 'Processed': return 'bg-green-100 text-green-700';
+      case 'Shipped': return 'bg-blue-100 text-blue-700';
+      case 'Delivered': return 'bg-purple-100 text-purple-700';
+      case 'Cancelled': return 'bg-red-100 text-red-700';
+      default: return 'bg-[#F6F8FE] text-[#797979]';
+    }
   }
 
   loadData(): void {
     this.loading.set(true);
-    this.dashboardService.getSummary().subscribe({
-      next: (data) => {
-        this.summary.set(data);
-        this.avgRating.set(data.totalReviews > 0 ? (data as any).averageRating || 0 : 0);
-      },
-      error: () => {},
-    });
-
-    this.dashboardService.getRevenueOverTime('day', 30).subscribe({
-      next: (data) => this.revenueData.set(data),
-      error: () => {},
-    });
-
-    this.dashboardService.getCategoryDistribution().subscribe({
-      next: (data) => this.categoryData.set(data),
-      error: () => {},
-    });
-
-    this.dashboardService.getReviewsSummary().subscribe({
-      next: (data) => this.avgRating.set(data.averageRating),
-      error: () => {},
-    });
-
-    this.dashboardService.getRecentOrders(10).subscribe({
-      next: (data) => {
-        this.recentOrders.set(data);
-        this.loading.set(false);
-      },
-      error: () => this.loading.set(false),
+    forkJoin({
+      summary: this.dashboardService.getSummary().pipe(catchError(() => of(null))),
+      revenue: this.dashboardService.getRevenueOverTime('day', 30).pipe(catchError(() => of([]))),
+      categories: this.dashboardService.getCategoryDistribution().pipe(catchError(() => of([]))),
+      reviews: this.dashboardService.getReviewsSummary().pipe(catchError(() => of(null))),
+      recentOrders: this.dashboardService.getRecentOrders(10).pipe(catchError(() => of([]))),
+      userGrowth: this.dashboardService.getUserGrowth('day', 30).pipe(catchError(() => of([]))),
+      topProducts: this.dashboardService.getTopProductsChart(10).pipe(catchError(() => of([]))),
+    }).pipe(
+      finalize(() => this.loading.set(false)),
+    ).subscribe(({ summary, revenue, categories, reviews, recentOrders, userGrowth, topProducts }) => {
+      if (summary) {
+        this.summary.set(summary);
+        this.avgRating.set(summary.totalReviews > 0 ? summary.averageRating || 0 : 0);
+      }
+      if (reviews) this.avgRating.set(reviews.averageRating);
+      this.revenueData.set(revenue);
+      this.categoryData.set(categories);
+      this.recentOrders.set(recentOrders);
+      this.userGrowthData.set(userGrowth);
+      this.topProductsData.set(topProducts);
     });
   }
 
@@ -165,21 +189,14 @@ export class DashboardComponent implements OnInit {
   loadRevenueAndOrders(period: string): void {
     this.dashboardService.getRevenueOverTime(period, 30).subscribe({
       next: (data) => this.revenueData.set(data),
-      error: () => {},
+      error: (err) => console.error('Failed to load revenue-over-time:', err),
     });
   }
 
   loadUserGrowth(period: string = 'day'): void {
     this.dashboardService.getUserGrowth(period, 30).subscribe({
       next: (data) => this.userGrowthData.set(data),
-      error: () => {},
-    });
-  }
-
-  loadTopProducts(): void {
-    this.dashboardService.getTopProductsChart(10).subscribe({
-      next: (data) => this.topProductsData.set(data),
-      error: () => {},
+      error: (err) => console.error('Failed to load user-growth:', err),
     });
   }
 

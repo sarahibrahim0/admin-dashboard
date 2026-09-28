@@ -10,6 +10,10 @@ import { clearStorageKey, getStorageKey, setStorageKey } from '../utils/storage'
 export class AuthStore {
   private auth = inject(AuthService);
 
+  private refreshTimer: ReturnType<typeof setInterval> | null = null;
+  private readonly accessTokenLifetimeMs = 15 * 60 * 1000;
+  private readonly refreshMarginMs = 3 * 60 * 1000;
+
   readonly token = signal<string | null>(getStorageKey('ecom.token'));
   readonly refreshToken = signal<string | null>(getStorageKey('ecom.refreshToken'));
   readonly userId = signal<string | null>(getStorageKey('ecom.userId'));
@@ -18,29 +22,46 @@ export class AuthStore {
   readonly error = signal<string | null>(null);
   readonly pendingVerificationUserId = signal<string | null>(null);
   readonly pendingVerificationEmail = signal<string | null>(null);
+  private persistentSession = true;
+
+  private persist(key: string, value: string): void {
+    setStorageKey(key, value, this.persistentSession);
+  }
 
   readonly isLoggedIn = computed(() => this.token() !== null);
   readonly isAdmin = computed(() => this.user()?.isAdmin === true);
 
-  async login(email: string, password: string): Promise<void> {
+  async login(email: string, password: string, keepLoggedIn = true): Promise<void> {
     this.loading.set(true);
     this.error.set(null);
+    this.persistentSession = keepLoggedIn;
     try {
-      await firstValueFrom(
+      const user = await firstValueFrom(
         this.auth.login(email, password).pipe(
           tap((res) => {
             this.token.set(res.token);
             this.refreshToken.set(res.refreshToken);
             this.userId.set(res.userId);
-            setStorageKey('ecom.token', res.token);
-            setStorageKey('ecom.refreshToken', res.refreshToken);
-            setStorageKey('ecom.userId', res.userId);
+            this.persist('ecom.token', res.token);
+            this.persist('ecom.refreshToken', res.refreshToken);
+            this.persist('ecom.userId', res.userId);
           }),
           switchMap((res) => this.auth.me(res.userId)),
           tap((user) => this.user.set(user)),
         ),
       );
+      if (!user.isAdmin) {
+        this.logout();
+        const err: any = new Error('Only admin accounts are allowed to sign in here.');
+        err.isAdminError = true;
+        throw err;
+      }
+      this.startTokenRefresh();
     } catch (err: any) {
+      if (err?.isAdminError) {
+        this.error.set('Only admin accounts are allowed to sign in here.');
+        throw err;
+      }
       if (err?.status === 403 && err?.error?.userId) {
         this.pendingVerificationUserId.set(err.error.userId);
         this.pendingVerificationEmail.set(email);
@@ -75,8 +96,8 @@ export class AuthStore {
       const res = await firstValueFrom(this.auth.refresh(rt));
       this.token.set(res.accessToken);
       this.refreshToken.set(res.refreshToken);
-      setStorageKey('ecom.token', res.accessToken);
-      setStorageKey('ecom.refreshToken', res.refreshToken);
+      this.persist('ecom.token', res.accessToken);
+      this.persist('ecom.refreshToken', res.refreshToken);
       return true;
     } catch {
       this.logout();
@@ -84,17 +105,37 @@ export class AuthStore {
     }
   }
 
+  startTokenRefresh(): void {
+    this.stopTokenRefresh();
+    if (!this.token()) return;
+    const intervalMs = Math.max(this.accessTokenLifetimeMs - this.refreshMarginMs, 60 * 1000);
+    this.refreshTimer = setInterval(() => {
+      if (!this.token()) {
+        this.stopTokenRefresh();
+        return;
+      }
+      void this.refreshAccessToken();
+    }, intervalMs);
+  }
+
+  stopTokenRefresh(): void {
+    if (this.refreshTimer) {
+      clearInterval(this.refreshTimer);
+      this.refreshTimer = null;
+    }
+  }
+
   async loadUser(): Promise<void> {
-    const id = this.userId();
-    if (!id) return;
+    if (!this.token()) return;
     try {
-      this.user.set(await firstValueFrom(this.auth.me(id)));
+      this.user.set(await firstValueFrom(this.auth.profile()));
     } catch {
       this.user.set(null);
     }
   }
 
   logout(): void {
+    this.stopTokenRefresh();
     const rt = this.refreshToken();
     if (rt) {
       firstValueFrom(this.auth.logout(rt)).catch(() => {});

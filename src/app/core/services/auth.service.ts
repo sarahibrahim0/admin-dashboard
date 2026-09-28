@@ -21,6 +21,10 @@ export class AuthService {
     return this.http.get<User>(`${this.base}/${id}`);
   }
 
+  profile(): Observable<User> {
+    return this.http.get<User>(`${this.base}/profile`);
+  }
+
   refresh(refreshToken: string): Observable<{ accessToken: string; refreshToken: string }> {
     return this.http.post<{ accessToken: string; refreshToken: string }>(
       `${environment.apiUrl}auth/refresh`,

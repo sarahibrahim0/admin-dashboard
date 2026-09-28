@@ -1,12 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthStore } from '../../../core/stores/auth.store';
+import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
+import { LanguageService } from '../../../core/services/language.service';
+import { FormFieldComponent } from '../../../shared/forms/form-field.component';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, FormFieldComponent],
   styles: `
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
     .login-card { animation: fadeInUp 0.5s ease-out; }
@@ -14,27 +17,30 @@ import { AuthStore } from '../../../core/stores/auth.store';
   template: `
     <div class="flex min-h-screen items-center justify-center bg-gradient-to-br from-almond via-white to-almond px-4">
       <div class="login-card w-full max-w-md rounded-xl bg-white px-8 py-8 shadow-lg">
-        <h2 class="text-center text-xl font-semibold uppercase tracking-wider text-blue-black">Forgot Password?</h2>
-        <p class="mt-1 text-center text-sm text-[#797979]">Enter your email to receive a reset link</p>
+        <h2 class="text-center text-xl font-semibold uppercase tracking-wider text-blue-black">{{ 'Forgot Password?' | translate }}</h2>
+        <p class="mt-1 text-center text-sm text-[#797979]">{{ 'Enter your email to receive a reset link' | translate }}</p>
         @if (auth.error(); as err) {
           <div class="mt-5 rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-[#ff4545]">{{ err }}</div>
         }
         @if (success(); as msg) {
           <div class="mt-5 rounded-md bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">{{ msg }}</div>
         }
-        <form (ngSubmit)="submit()" class="mt-6 space-y-5">
-          <div>
-            <label class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#797979]">Email Address</label>
-            <input type="email" [(ngModel)]="email" name="email" placeholder="admin@example.com" required
-              class="w-full rounded-md border border-[#c9c9c9] px-4 py-3 text-sm text-blue-black outline-none transition-colors placeholder:text-[#c9c9c9] focus:border-salmon focus:ring-2 focus:ring-salmon/20" />
-          </div>
-          <button type="submit" [disabled]="auth.loading() || success()"
-            class="w-full rounded-md bg-salmon py-3 text-sm font-semibold uppercase tracking-widest text-white transition-colors hover:bg-[#e9855a] disabled:opacity-50">
-            {{ auth.loading() ? 'Sending...' : 'Send Reset Link' }}
+        <form [formGroup]="form" (ngSubmit)="submit()" class="mt-6 space-y-5">
+          <app-form-field
+            [control]="form.controls.email"
+            [label]="'Email Address' | translate"
+            [type]="'email'"
+            [placeholder]="'admin@example.com'"
+            [required]="true"
+            [id]="'email'">
+          </app-form-field>
+          <button type="submit" [disabled]="auth.loading() || success() || form.invalid"
+            class="w-full rounded-md bg-salmon py-3 text-sm font-semibold uppercase tracking-widest text-white transition-colors hover:bg-primary-hover disabled:opacity-50">
+            {{ auth.loading() ? ('Sending...' | translate) : ('Send Reset Link' | translate) }}
           </button>
         </form>
         <div class="mt-4 text-center">
-          <a routerLink="/login" class="text-sm text-[#797979] hover:text-blue-black transition-colors">Back to Login</a>
+          <a routerLink="/login" class="text-sm text-[#797979] hover:text-blue-black transition-colors">{{ 'Back to Login' | translate }}</a>
         </div>
       </div>
     </div>
@@ -43,10 +49,16 @@ import { AuthStore } from '../../../core/stores/auth.store';
 export class ForgotPasswordComponent {
   protected readonly auth = inject(AuthStore);
   private router = inject(Router);
-  email = '';
+  private language = inject(LanguageService);
+  private fb = inject(FormBuilder);
   success = signal('');
+
+  form = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+  });
+
   async submit(): Promise<void> {
-    if (!this.email.trim()) return;
-    try { await this.auth.forgotPassword(this.email.trim()); this.success.set('Check your email for the reset link.'); } catch {}
+    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
+    try { await this.auth.forgotPassword(this.form.controls.email.value?.trim() ?? ''); this.success.set(this.language.translate('Check your email for the reset link.')); } catch {}
   }
 }

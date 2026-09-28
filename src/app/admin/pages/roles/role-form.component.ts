@@ -1,7 +1,13 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { EntityService } from '../../../core/services/entity.service';
+import { HttpClient } from '@angular/common/http';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
+import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
+import { LanguageService } from '../../../core/services/language.service';
+import { LocalizedFieldComponent } from '../../../shared/forms/localized-field.component';
+import { FormConfirmsComponent } from '../../../shared/confirm-dialog/form-confirms.component';
+import { joinLocalized, splitLocalized } from '../../../shared/utils/localized';
 
 interface PermissionGroup {
   key: string;
@@ -9,263 +15,213 @@ interface PermissionGroup {
   permissions: { key: string; label: string }[];
 }
 
+import { DetailHeaderComponent } from '../../../shared/ui/detail-header.component';
+import { ToastService } from '../../../shared/ui/toast.service';
+
 @Component({
   selector: 'app-role-form',
   standalone: true,
-  imports: [FormsModule],
+  imports: [ReactiveFormsModule, TranslatePipe, LocalizedFieldComponent, DetailHeaderComponent, FormConfirmsComponent],
   template: `
-    <div class="space-y-8">
-      <div class="flex items-center gap-4">
-        <button (click)="router.navigate(['/admin/roles'])" class="p-2 text-[#797979] hover:text-blue-black hover:bg-almond rounded-md transition-colors">
-          <i class="bi bi-arrow-left text-lg"></i>
-        </button>
-        <h2 class="text-3xl font-bold uppercase text-blue-black">{{ isEdit() ? 'Edit' : 'New' }} Role</h2>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Left Panel: Role Info -->
-        <div class="lg:col-span-1">
-          <div class="rounded-lg border border-[#F6F8FE] bg-white p-8 space-y-6">
-            <h3 class="text-base font-semibold uppercase tracking-wider text-[#797979]">Role Information</h3>
+    <div class="w-full space-y-6">
+      <app-detail-header title="{{ isEdit() ? ('Edit role' | translate) : ('New role' | translate) }}"
+        eyebrow="{{ isEdit() ? ('Update role' | translate) : ('New role' | translate) }}"
+        backLabel="Back to roles" backTo="/admin/roles"
+        saveLabel="Save role" cancelTo="/admin/roles" [saving]="saving()" (save)="showSaveDialog.set(true)" />
+      <form id="role-form" [formGroup]="form" (ngSubmit)="showSaveDialog.set(true)" class="space-y-6">
+        <section class="card">
+          <h3 class="section-title mb-5">{{ 'Role information' | translate }}</h3>
+          @if (submitError()) {
+            <div class="mb-5 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-[#ff4545]">{{ submitError() }}</div>
+          }
+          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <app-localized-field [controlEn]="form.controls.nameEn" [controlAr]="form.controls.nameAr" [label]="'Name' | translate" [placeholder]="'Role name' | translate" [placeholderAr]="'اسم الدور'" [required]="true" [id]="'role-name'"></app-localized-field>
             <div>
-              <label class="block text-xs font-medium uppercase tracking-wider text-[#797979] mb-2">Role Name</label>
-              <input
-                [(ngModel)]="form.name"
-                name="name"
-                required
-                placeholder="e.g. Editor, Manager"
-                class="w-full rounded-md border border-[#c9c9c9] px-4 py-2.5 text-sm outline-none focus:border-salmon transition-colors"
-              />
-            </div>
-            <div class="pt-2">
-              <label class="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  [(ngModel)]="form.isDefault"
-                  name="isDefault"
-                  class="w-4 h-4 rounded border-[#c9c9c9] text-salmon focus:ring-salmon accent-[#FD8F5F]"
-                />
-                <div>
-                  <span class="text-sm font-medium text-blue-black">Default Role</span>
-                  <p class="text-xs text-[#797979] mt-0.5">Automatically assigned to new users</p>
-                </div>
+              <label class="flex cursor-pointer items-center gap-2 pt-4">
+                <input type="checkbox" [formControl]="form.controls.isDefault" class="rounded accent-salmon" />
+                <span class="text-sm font-medium text-[#646D77]">{{ 'Default role' | translate }}</span>
               </label>
             </div>
-
-            <div class="pt-4 border-t border-[#F6F8FE]">
-              <div class="text-sm text-[#797979]">
-                <span class="font-semibold text-blue-black">{{ selectedCount() }}</span> of <span class="font-semibold text-blue-black">{{ totalCount() }}</span> permissions selected
-              </div>
-            </div>
           </div>
-        </div>
-
-        <!-- Right Panel: Permissions -->
-        <div class="lg:col-span-2">
-          <div class="rounded-lg border border-[#F6F8FE] bg-white p-8 space-y-6">
-            <h3 class="text-base font-semibold uppercase tracking-wider text-[#797979]">Permissions</h3>
-
+        </section>
+        <section class="card">
+          <h3 class="section-title mb-5">{{ 'Permissions' | translate }}</h3>
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
             @for (group of permissionGroups; track group.key) {
-              <div class="space-y-3">
-                <div class="flex items-center justify-between">
-                  <h4 class="text-sm font-semibold uppercase tracking-wider text-blue-black">{{ group.label }}</h4>
-                  <label class="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      [checked]="isGroupFullySelected(group)"
-                      [indeterminate]="isGroupPartiallySelected(group)"
-                      (change)="toggleGroup(group)"
-                      class="w-3.5 h-3.5 rounded border-[#c9c9c9] text-salmon focus:ring-salmon accent-[#FD8F5F]"
-                    />
-                    <span class="text-xs text-[#797979]">Select All</span>
+              <div class="rounded-lg border border-[#eadbd4] bg-almond/50 p-5">
+                <div class="mb-2 flex items-center justify-between">
+                  <h4 class="text-base font-bold text-blue-black">{{ group.label | translate }}</h4>
+                </div>
+                <div>
+                  <label class="flex cursor-pointer items-center gap-2 text-sm font-medium text-[#646D77]">
+                    <input type="checkbox" [checked]="hasRead(group)" (change)="toggleRead(group, $event)" class="rounded accent-salmon" />
+                    {{ 'Read' | translate }}
                   </label>
                 </div>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  @for (perm of group.permissions; track perm.key) {
-                    <label
-                      class="flex items-center gap-2 rounded-md px-3 py-2 text-sm cursor-pointer transition-colors"
-                      [class]="form.permissions.includes(perm.key) ? 'bg-salmon/10 text-salmon border border-salmon/30' : 'bg-[#F6F8FE] text-[#646D77] border border-transparent hover:bg-almond'"
-                    >
-                      <input
-                        type="checkbox"
-                        [checked]="form.permissions.includes(perm.key)"
-                        (change)="togglePermission(perm.key)"
-                        class="w-3.5 h-3.5 rounded border-[#c9c9c9] text-salmon focus:ring-salmon accent-[#FD8F5F]"
-                      />
-                      <span>{{ perm.label }}</span>
-                    </label>
+                <div class="mt-3 space-y-2">
+                  @for (p of group.permissions; track p.key) {
+                    @if (p.key !== group.key + ':read') {
+                      <label class="flex cursor-pointer items-center gap-2 text-sm text-[#646D77]">
+                        <input
+                          type="checkbox"
+                          [checked]="hasPermission(p.key)"
+                          [disabled]="isDependent(p.key) && !hasRead(group)"
+                          (change)="togglePermission(p.key, $event)"
+                          class="rounded accent-salmon" />
+                        {{ p.label | translate }}
+                      </label>
+                    }
                   }
                 </div>
               </div>
-              @if (!$last) {
-                <div class="border-b border-[#F6F8FE]"></div>
-              }
             }
           </div>
-        </div>
-      </div>
+        </section>
 
-      <!-- Footer -->
-      <div class="flex justify-end gap-3">
-        <button
-          type="button"
-          (click)="router.navigate(['/admin/roles'])"
-          class="rounded-md border border-[#c9c9c9] px-6 py-2.5 text-sm font-medium text-[#646D77] hover:bg-almond transition-colors">
-          Cancel
-        </button>
-        <button
-          type="button"
-          (click)="submit()"
-          [disabled]="saving()"
-          class="rounded-md bg-salmon px-6 py-2.5 text-sm font-medium uppercase tracking-wider text-white hover:bg-[#e9855a] disabled:opacity-50 transition-colors">
-          {{ saving() ? 'Saving...' : 'Save Role' }}
-        </button>
-      </div>
+      </form>
+      <app-form-confirms [saveOpen]="showSaveDialog()" (save)="confirmSave()" (saveCancel)="showSaveDialog.set(false)" />
     </div>
   `,
 })
 export class RoleFormComponent implements OnInit {
-  private entityService = inject(EntityService);
+private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   protected router = inject(Router);
+  private toast = inject(ToastService);
+  private http = inject(HttpClient);
+  private language = inject(LanguageService);
+
   isEdit = signal(false);
   saving = signal(false);
+  submitError = signal<string | null>(null);
+  showSaveDialog = signal(false);
   roleId = '';
-  form = { name: '', permissions: [] as string[], isDefault: false };
+
+  confirmSave(): void {
+    this.showSaveDialog.set(false);
+    this.submit();
+  }
+
+  form = this.fb.group({
+    nameEn: ['', Validators.required],
+    nameAr: [''],
+    isDefault: [false],
+    permissions: [[] as string[]],
+  });
 
   permissionGroups: PermissionGroup[] = [
-    {
-      key: 'dashboard',
-      label: 'Dashboard',
-      permissions: [{ key: 'dashboard:read', label: 'Read' }],
-    },
-    {
-      key: 'products',
-      label: 'Products',
-      permissions: [
-        { key: 'products:read', label: 'Read' },
-        { key: 'products:create', label: 'Create' },
-        { key: 'products:update', label: 'Update' },
-        { key: 'products:delete', label: 'Delete' },
-      ],
-    },
-    {
-      key: 'categories',
-      label: 'Categories',
-      permissions: [
-        { key: 'categories:read', label: 'Read' },
-        { key: 'categories:create', label: 'Create' },
-        { key: 'categories:update', label: 'Update' },
-        { key: 'categories:delete', label: 'Delete' },
-      ],
-    },
-    {
-      key: 'orders',
-      label: 'Orders',
-      permissions: [
-        { key: 'orders:read', label: 'Read' },
-        { key: 'orders:update', label: 'Update' },
-        { key: 'orders:delete', label: 'Delete' },
-      ],
-    },
-    {
-      key: 'users',
-      label: 'Users',
-      permissions: [
-        { key: 'users:read', label: 'Read' },
-        { key: 'users:create', label: 'Create' },
-        { key: 'users:update', label: 'Update' },
-        { key: 'users:delete', label: 'Delete' },
-      ],
-    },
-    {
-      key: 'coupons',
-      label: 'Coupons',
-      permissions: [
-        { key: 'coupons:read', label: 'Read' },
-        { key: 'coupons:create', label: 'Create' },
-        { key: 'coupons:update', label: 'Update' },
-        { key: 'coupons:delete', label: 'Delete' },
-      ],
-    },
-    {
-      key: 'content',
-      label: 'Content',
-      permissions: [
-        { key: 'content:read', label: 'Read' },
-        { key: 'content:create', label: 'Create' },
-        { key: 'content:update', label: 'Update' },
-        { key: 'content:delete', label: 'Delete' },
-      ],
-    },
-    {
-      key: 'reviews',
-      label: 'Reviews',
-      permissions: [
-        { key: 'reviews:read', label: 'Read' },
-        { key: 'reviews:delete', label: 'Delete' },
-      ],
-    },
-    {
-      key: 'roles',
-      label: 'Roles',
-      permissions: [
-        { key: 'roles:read', label: 'Read' },
-        { key: 'roles:create', label: 'Create' },
-        { key: 'roles:update', label: 'Update' },
-        { key: 'roles:delete', label: 'Delete' },
-        { key: 'roles:manage', label: 'Manage' },
-      ],
-    },
+    { key: 'dashboard', label: 'Dashboard', permissions: [
+      { key: 'dashboard:read', label: 'Read' },
+      { key: 'dashboard:write', label: 'Write' },
+    ]},
+{ key: 'categories', label: 'Categories', permissions: [
+      { key: 'categories:read', label: 'Read' },
+      { key: 'categories:write', label: 'Write' },
+      { key: 'categories:delete', label: 'Delete' },
+    ]},
+    { key: 'products', label: 'Products', permissions: [
+      { key: 'products:read', label: 'Read' },
+      { key: 'products:write', label: 'Write' },
+      { key: 'products:delete', label: 'Delete' },
+    ]},
+    { key: 'users', label: 'Users', permissions: [
+      { key: 'users:read', label: 'Read' },
+      { key: 'users:write', label: 'Write' },
+      { key: 'users:delete', label: 'Delete' },
+    ]},
+    { key: 'roles', label: 'Roles', permissions: [
+      { key: 'roles:read', label: 'Read' },
+      { key: 'roles:write', label: 'Write' },
+      { key: 'roles:delete', label: 'Delete' },
+    ]},
+    { key: 'coupons', label: 'Coupons', permissions: [
+      { key: 'coupons:read', label: 'Read' },
+      { key: 'coupons:write', label: 'Write' },
+      { key: 'coupons:delete', label: 'Delete' },
+    ]},
   ];
-
-  selectedCount = computed(() => this.form.permissions.length);
-  totalCount = computed(() => this.permissionGroups.reduce((sum, g) => sum + g.permissions.length, 0));
 
   ngOnInit(): void {
     this.roleId = this.route.snapshot.paramMap.get('id') || '';
     if (this.roleId) {
       this.isEdit.set(true);
-      this.entityService.get<any>('roles', this.roleId).subscribe((r) => {
-        this.form = { name: r.name, permissions: r.permissions || [], isDefault: r.isDefault || false };
+      this.http.get<any>(`${environment.apiUrl}roles/${this.roleId}`).subscribe((r) => {
+        const name = splitLocalized(r.name);
+        this.form.patchValue({
+          nameEn: name.en,
+          nameAr: name.ar,
+          isDefault: !!r.isDefault,
+          permissions: r.permissions || [],
+        });
       });
     }
   }
 
-  isGroupFullySelected(group: PermissionGroup): boolean {
-    return group.permissions.every((p) => this.form.permissions.includes(p.key));
+  hasPermission(key: string): boolean {
+    return (this.form.controls.permissions.value || []).includes(key);
   }
 
-  isGroupPartiallySelected(group: PermissionGroup): boolean {
-    const selected = group.permissions.filter((p) => this.form.permissions.includes(p.key)).length;
-    return selected > 0 && selected < group.permissions.length;
+  hasRead(group: PermissionGroup): boolean {
+    return this.hasPermission(`${group.key}:read`);
   }
 
-  toggleGroup(group: PermissionGroup): void {
-    if (this.isGroupFullySelected(group)) {
-      this.form.permissions = this.form.permissions.filter((p) => !group.permissions.some((gp) => gp.key === p));
+isDependent(key: string): boolean {
+    return !key.endsWith(':read');
+  }
+
+  toggleRead(group: PermissionGroup, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    const perms = new Set(this.form.controls.permissions.value || []);
+    const readKey = `${group.key}:read`;
+    if (checked) {
+      perms.add(readKey);
     } else {
-      const groupKeys = group.permissions.map((p) => p.key);
-      this.form.permissions = [...new Set([...this.form.permissions, ...groupKeys])];
+      group.permissions.forEach((p) => perms.delete(p.key));
     }
+    this.form.controls.permissions.setValue([...perms]);
   }
 
-  togglePermission(perm: string): void {
-    if (this.form.permissions.includes(perm)) {
-      this.form.permissions = this.form.permissions.filter((p) => p !== perm);
-    } else {
-      this.form.permissions.push(perm);
-    }
+  togglePermission(key: string, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    const perms = new Set(this.form.controls.permissions.value || []);
+    checked ? perms.add(key) : perms.delete(key);
+    this.form.controls.permissions.setValue([...perms]);
   }
 
   submit(): void {
+    if (this.saving()) return;
+    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
+    if (this.form.pristine) {
+      this.toast.info('No changes to save');
+      return;
+    }
     this.saving.set(true);
+    this.submitError.set(null);
+    const v = this.form.getRawValue();
+    const body: any = {
+      ...v,
+      name: joinLocalized(v.nameEn, v.nameAr),
+    };
+    delete body.nameEn;
+    delete body.nameAr;
     const req = this.isEdit()
-      ? this.entityService.update('roles', this.roleId, this.form)
-      : this.entityService.create('roles', this.form);
+      ? this.http.put<any>(`${environment.apiUrl}roles/${this.roleId}`, body)
+      : this.http.post<any>(`${environment.apiUrl}roles`, body);
     req.subscribe({
-      next: () => this.router.navigate(['/admin/roles']),
-      error: () => this.saving.set(false),
+      next: () => {
+        this.saving.set(false);
+        if (this.isEdit()) {
+          this.form.markAsPristine();
+          this.toast.success('Saved successfully');
+        } else {
+          this.toast.success('Saved successfully');
+          this.router.navigate(['/admin/roles']);
+        }
+      },
+      error: (err) => {
+        this.saving.set(false);
+        this.submitError.set(err?.error?.message || 'Could not save role');
+      },
     });
   }
 }

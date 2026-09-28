@@ -9,7 +9,7 @@ export class TwoFactorService {
   private url = `${environment.apiUrl}2fa`;
 
   setup(): Observable<{ secret: string; qrCode: string }> {
-    return this.http.post<{ secret: string; qrCode: string }>(`${this.url}/setup`, {});
+    return this.http.post<{ secret: string; qrCode: string }>(`${this.url}/setup`, null);
   }
 
   verify(token: string): Observable<{ message: string }> {

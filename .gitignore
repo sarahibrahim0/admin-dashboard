@@ -29,6 +29,12 @@ yarn-error.log
 !.vscode/mcp.json
 .history/*
 
+# Logs
+*.log
+
+# Firebase
+/.firebase
+
 # Miscellaneous
 /.angular/cache
 .sass-cache/

@@ -1,107 +1,105 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, DestroyRef, inject, OnInit, signal, viewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AuditLogService, AuditLog } from '../../../core/services/audit-log.service';
+import { AuditLogService } from '../../../core/services/audit-log.service';
+import { LanguageService } from '../../../core/services/language.service';
+import { displayAuditChanges } from '../../../shared/utils/audit-display';
+import { formatDateTime } from '../../../shared/utils/datetime';
+import { BaseTableComponent } from '../../../shared/table/base-table.component';
+import { readTableQuery } from '../../../shared/table/table-query';
+import { PageHeaderComponent } from '../../../shared/ui/page-header.component';
+import { TableColumn } from '../../../shared/table/table-column';
+import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
+import { LatestLoader } from '../../../shared/utils/latest-loader';
 
 @Component({
   selector: 'app-audit-logs-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule, TranslatePipe, PageHeaderComponent, BaseTableComponent],
   template: `
     <div class="space-y-6">
-      <h1 class="text-2xl font-bold uppercase text-blue-black">Audit Logs</h1>
+      <app-page-header title="{{ 'Audit Logs' | translate }}" eyebrow="{{ 'Security' | translate }}" subtitle="{{ 'Review system activity and changes.' | translate }}"></app-page-header>
 
-      <div class="rounded-lg border border-[#F6F8FE] bg-white p-6">
-        <div class="mb-4 flex gap-4">
-          <select [(ngModel)]="selectedEntity" (ngModelChange)="loadLogs()"
-            class="w-full rounded-md border border-[#c9c9c9] px-2 py-1.5 text-sm">
-            <option value="">All Entities</option>
+      <app-base-table #table [columns]="columns" [data]="logs" [totalCount]="totalCount" [serverSidePagination]="true" [pageSize]="pageSize" (searchChange)="onSearch($event)" [initialSearch]="queryState.search" [initialPage]="queryState.page" [syncQueryParams]="true" [loading]="loader.loading()" [error]="loader.error()" (pageChange)="onPageChange($event)">
+        <div actions>
+          <select [(ngModel)]="selectedEntity" (ngModelChange)="onFilterChange()"
+            class="w-full rounded-md border border-[#c9c9c9] px-2 py-1.5 text-sm sm:w-48">
+            <option value="">{{ 'All Entities' | translate }}</option>
             @for (entity of entities(); track entity) {
               <option [value]="entity">{{ entity }}</option>
             }
           </select>
         </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead>
-              <tr class="border-b border-[#F6F8FE]">
-                <th class="px-4 py-3 font-medium text-[#646D77]">Action</th>
-                <th class="px-4 py-3 font-medium text-[#646D77]">Entity</th>
-                <th class="px-4 py-3 font-medium text-[#646D77]">User</th>
-                <th class="px-4 py-3 font-medium text-[#646D77]">Changes</th>
-                <th class="px-4 py-3 font-medium text-[#646D77]">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (log of logs(); track log._id) {
-                <tr class="border-b border-[#F6F8FE] hover:bg-almond">
-                  <td class="px-4 py-3">
-                    <span class="inline-block rounded-full px-2 py-0.5 text-xs font-medium"
-                      [class]="getSeverity(log.action)">
-                      {{ log.action }}
-                    </span>
-                  </td>
-                  <td class="px-4 py-3 text-[#646D77]">{{ log.entity }}</td>
-                  <td class="px-4 py-3 text-[#646D77]">{{ log.user?.name || log.user?.email || '-' }}</td>
-                  <td class="max-w-xs truncate px-4 py-3 text-[#797979]">{{ log.changes | json }}</td>
-                  <td class="px-4 py-3 text-[#797979]">{{ log.createdAt | date:'medium' }}</td>
-                </tr>
-              } @empty {
-                <tr>
-                  <td colspan="5" class="px-4 py-8 text-center text-[#797979]">No audit logs found</td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-
-        <div class="mt-4 flex items-center justify-between text-sm text-[#646D77]">
-          <span>Page {{ currentPage() }} of {{ totalPages() }}</span>
-          <div class="flex gap-2">
-            <button (click)="prevPage()" [disabled]="currentPage() <= 1"
-              class="rounded-md border border-[#c9c9c9] px-3 py-1.5 text-sm disabled:opacity-40">
-              Previous
-            </button>
-            <button (click)="nextPage()" [disabled]="currentPage() >= totalPages()"
-              class="rounded-md border border-[#c9c9c9] px-3 py-1.5 text-sm disabled:opacity-40">
-              Next
-            </button>
-          </div>
-        </div>
-      </div>
+      </app-base-table>
     </div>
   `,
 })
 export class AuditLogsListComponent implements OnInit {
   private auditLogService = inject(AuditLogService);
+  protected loader = new LatestLoader();
+  private language = inject(LanguageService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
+  protected queryState = readTableQuery(this.route.snapshot.queryParamMap);
+  protected search = this.queryState.search;
 
-  logs = signal<AuditLog[]>([]);
+  tableRef = viewChild<BaseTableComponent>('table');
+  pageSize = signal(50);
+  logs = signal<any[]>([]);
+  totalCount = signal(0);
   entities = signal<string[]>([]);
-  selectedEntity = '';
-  currentPage = signal(1);
-  totalPages = signal(1);
+  selectedEntity = this.route.snapshot.queryParamMap.get('entity') || '';
+
+  columns: TableColumn[] = [
+    { field: 'action', header: 'Action', format: (v) => ({ badge: v, badgeClass: this.getSeverity(v) }) },
+    { field: 'entity', header: 'Entity' },
+    { field: 'user', header: 'User', format: (v) => this.language.localizedValue(v?.name) || v?.email || '-' },
+    { field: 'changes', header: 'Changes', format: (v) => displayAuditChanges(v, this.language.language()) },
+    { field: 'createdAt', header: 'Date', format: (v) => formatDateTime(v, this.language.language()) },
+  ];
 
   ngOnInit(): void {
     this.auditLogService.getEntities().subscribe((e) => this.entities.set(e));
-    this.loadLogs();
-  }
-
-  loadLogs(): void {
-    this.auditLogService.getLogs(this.currentPage(), 50, this.selectedEntity || undefined).subscribe((res) => {
-      this.logs.set(res.logs);
-      this.totalPages.set(res.totalPages);
+    this.loadLogs(this.queryState.page);
+    // Back/forward button: external entity change → reapply + reload.
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      const entity = params.get('entity') || '';
+      if (entity !== this.selectedEntity) {
+        this.selectedEntity = entity;
+        this.tableRef()?.resetPage();
+        this.loadLogs(1);
+      }
     });
   }
 
-  nextPage(): void {
-    this.currentPage.update((p) => p + 1);
-    this.loadLogs();
+  private syncEntityParam(): void {
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { entity: this.selectedEntity || null },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
   }
 
-  prevPage(): void {
-    this.currentPage.update((p) => Math.max(1, p - 1));
-    this.loadLogs();
+  loadLogs(page = 1): void {
+    this.loader.load(
+      this.auditLogService.getLogs(page, this.pageSize(), this.selectedEntity || undefined, undefined, this.search),
+      (res) => { this.logs.set(res.logs.map((l) => ({ ...l, id: l._id }))); this.totalCount.set(res.total); },
+    );
+  }
+
+  onSearch(query: string): void { this.search = query; this.loadLogs(1); }
+
+  onFilterChange(): void {
+    this.tableRef()?.resetPage();
+    this.syncEntityParam();
+    this.loadLogs(1);
+  }
+
+  onPageChange(page: number): void {
+    this.loadLogs(page);
   }
 
   getSeverity(action: string): string {

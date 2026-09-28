@@ -27,18 +27,22 @@ export class AuditLogService {
   private http = inject(HttpClient);
   private url = `${environment.apiUrl}audit-logs`;
 
-  getLogs(page = 1, limit = 50, entity?: string, action?: string): Observable<AuditLogResponse> {
+  getLogs(page = 1, limit = 50, entity?: string, action?: string, search?: string): Observable<AuditLogResponse> {
     let params = new HttpParams().set('page', page).set('limit', limit);
     if (entity) params = params.set('entity', entity);
     if (action) params = params.set('action', action);
+    if (search) params = params.set('search', search);
     return this.http.get<AuditLogResponse>(this.url, { params });
   }
 
-  getMyLogs(page = 1, limit = 50, entity?: string, action?: string): Observable<AuditLogResponse> {
+  getMyLogs(page = 1, limit = 50, entity?: string, action?: string, sortBy?: string, sortDir?: string, search?: string): Observable<AuditLogResponse> {
     let params = new HttpParams().set('page', page).set('limit', limit);
     if (entity) params = params.set('entity', entity);
     if (action) params = params.set('action', action);
-    return this.http.get<AuditLogResponse>(`${this.url}my`, { params });
+    if (sortBy) params = params.set('sortBy', sortBy);
+    if (sortDir) params = params.set('sortDir', sortDir);
+    if (search) params = params.set('search', search);
+    return this.http.get<AuditLogResponse>(`${this.url}/my`, { params });
   }
 
   getEntities(): Observable<string[]> {

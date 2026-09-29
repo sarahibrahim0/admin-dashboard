@@ -13,18 +13,18 @@ import { DetailHeaderComponent } from '../../../shared/ui/detail-header.componen
   imports: [TranslatePipe, DetailHeaderComponent],
   styles: `
     :host { display: block; }
-    :host ::ng-deep .rich-text { line-height: 1.75; }
+    :host ::ng-deep .rich-text { line-height: 1.75; color: var(--ink); }
     :host ::ng-deep .rich-text p { margin: 0 0 0.75rem; }
     :host ::ng-deep .rich-text h1,
     :host ::ng-deep .rich-text h2,
-    :host ::ng-deep .rich-text h3 { margin: 1rem 0 0.5rem; font-weight: 600; color: #18181B; }
+    :host ::ng-deep .rich-text h3 { margin: 1rem 0 0.5rem; font-weight: 600; color: var(--heading); }
     :host ::ng-deep .rich-text ul { list-style: disc !important; padding-left: 1.5rem; }
     :host ::ng-deep .rich-text ol { list-style: decimal !important; padding-left: 1.5rem; }
-    :host ::ng-deep .rich-text a { color: #FD8F5F; text-decoration: underline !important; }
+    :host ::ng-deep .rich-text a { color: var(--primary); text-decoration: underline !important; }
     :host ::ng-deep .rich-text img { max-width: 100%; height: auto; border-radius: 0.5rem; }
     :host ::ng-deep .rich-text iframe.ql-video,
     :host ::ng-deep .rich-text video.ql-video { display: block; width: 100%; max-width: 100%; min-height: 320px; border: 0; border-radius: 0.5rem; }
-    :host ::ng-deep .rich-text pre.ql-syntax { margin: 0.75rem 0; padding: 0.5rem 0.75rem; overflow-x: auto; border-radius: 0.25rem; background: #23241f; color: #f8f8f2; font-family: monospace; white-space: pre-wrap; }
+    :host ::ng-deep .rich-text pre.ql-syntax { margin: 0.75rem 0; padding: 0.5rem 0.75rem; overflow-x: auto; border-radius: 0.25rem; background: var(--surface-subtle); color: var(--ink); font-family: monospace; white-space: pre-wrap; }
   `,
   template: `
     <div class="w-full space-y-6">

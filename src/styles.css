@@ -1,60 +1,172 @@
 @import 'tailwindcss';
 
-@theme {
-  /* Modern indigo system — Linear / shadcn-inspired (2025–26).
-     primary #6366F1 (indigo-500) = vivid accent for links, icons, active.
-     Solid fills (buttons, chips) use --color-primary-hover #4F46E5 for AA.
-     salmon/almond kept as aliases so old classes keep rendering indigo. */
-  --color-salmon: #6366F1;
-  --color-hover-salmon: #4F46E5;
-  --color-primary: #6366F1;
-  --color-primary-hover: #4F46E5;
-  --color-primary-soft: #E0E7FF;
-  --color-almond: #E0E7FF;
-  --color-almond-soft: #EEF2FF;
-  --color-surface: #F4F4F5;
-  --color-card: #FFFFFF;
-  --color-border: #E4E4E7;
-  --color-ink: #18181B;
-  --color-blue-black: #18181B;
-  --color-muted: #52525B;
-  --color-faint: #71717A;
-  --color-body-gray: #52525B;
-  --color-heading: #18181B;
-  --color-error: #DC2626;
-  --color-success: #059669;
-  --color-warning: #D97706;
-  --color-info: #6366F1;
-  --color-hover-salmon-old: #4F46E5;
-  --color-border-light: #E4E4E7;
-  --color-link-gray: #A1A1AA;
+/* ============================================================
+   THEME TOKENS
+   ------------------------------------------------------------
+   Every colour in the app resolves through the names below.
+   Light values live on :root; dark values override the exact
+   same names on .admin-dark. Tailwind utilities (@theme inline),
+   the design-system classes and the legacy-hex escape hatches
+   all read from here, so flipping the theme never needs a
+   second parallel set of rules.
+   ============================================================ */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces — the light end of one elevation ladder. */
+  --surface: #f4f4f5; /* page canvas */
+  --card: #ffffff; /* cards, tables, header, sidebar */
+  --surface-raised: #f4f4f5; /* tinted legacy backgrounds */
+  --surface-subtle: #fafafa; /* wells, table head, code blocks */
+  --surface-utility: #f4f4f5; /* the bg-surface utility */
+  --surface-hover: #f4f4f5; /* hover fills */
+  --elevated: #18181b; /* avatar chips, solid fills */
+
+  /* Lines */
+  --border: #e4e4e7;
+  --border-light: #e4e4e7;
+  --border-strong: #d4d4d8; /* inputs and resting controls */
+
+  /* Text */
+  --ink: #18181b;
+  --heading: #18181b;
+  --muted: #52525b;
+  --faint: #71717a;
+  --body-gray: #52525b;
+  --link-gray: #a1a1aa;
+  --on-primary: #ffffff;
+
+  /* Brand — indigo. Text/icon accents use the 500 step for
+     contrast on dark surfaces; solid fills use the 600 step so
+     white label text clears AA in both themes. */
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-fill: #4f46e5;
+  --primary-fill-hover: #4338ca;
+  --primary-soft: #e0e7ff; /* badge / chip fill */
+  --primary-soft-text: #4f46e5;
+  --primary-soft-border: #c7d2fe;
+  --primary-faint: #eef2ff; /* gradient stops */
+  --ring: #6366f1;
+
+  /* Status */
+  --error: #dc2626;
+  --error-fill: #dc2626;
+  --error-fill-hover: #b91c1c;
+  --error-soft: #fef2f2;
+  --success: #059669;
+  --warning: #d97706;
+  --info: #6366f1;
+
+  /* Effects */
+  --shadow-sm: 0 0.25rem 0.75rem rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 0.25rem 0.75rem rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 0.5rem 1.5rem rgba(15, 23, 42, 0.12);
+  --primary-glow: 0 0.2rem 0.5rem rgba(79, 70, 229, 0.2);
+  --primary-glow-hover: 0 0.3rem 0.75rem rgba(79, 70, 229, 0.28);
+  --primary-tint: rgba(37, 99, 235, 0.08);
+  --scrollbar-thumb: #bababa;
+  --scrollbar-track: #f4f4f5;
 }
 
-/* Dark mode variable flips — token utilities (bg-surface, bg-card,
-   border-border, text-ink, text-muted, text-faint, bg-primary, …)
-   follow automatically. */
-app-admin-shell .admin-dark {
-  --color-surface: #0B0B0C;
-  --color-card: #18181B;
-  --color-border: #27272A;
-  --color-ink: #FAFAFA;
-  --color-blue-black: #FAFAFA;
-  --color-muted: #A1A1AA;
-  --color-faint: #A1A1AA;
-  --color-body-gray: #A1A1AA;
-  --color-heading: #FAFAFA;
-  --color-primary: #A5B4FC;
-  --color-primary-hover: #C7D2FE;
-  --color-salmon: #A5B4FC;
-  --color-hover-salmon: #C7D2FE;
-  --color-primary-soft: #312E81;
-  --color-almond: #312E81;
-  --color-almond-soft: #1E1B4B;
+/* Dark end of the same ladder. Neutral zinc throughout — no blue
+   tint on surfaces, borders or inputs, so cards, controls and
+   tables read as one system instead of competing greys. */
+.admin-dark {
+  color-scheme: dark;
+
+  --surface: #09090b;
+  --card: #18181b;
+  --surface-raised: #18181b;
+  --surface-subtle: #0f0f11;
+  --surface-utility: #1f1f23;
+  --surface-hover: #27272a;
+  --elevated: #27272a;
+
+  --border: #27272a;
+  --border-light: #27272a;
+  --border-strong: #3f3f46;
+
+  --ink: #fafafa;
+  --heading: #fafafa;
+  --muted: #a1a1aa;
+  --faint: #8b8b93;
+  --body-gray: #a1a1aa;
+  --link-gray: #a1a1aa;
+  --on-primary: #ffffff;
+
+  --primary: #818cf8;
+  --primary-hover: #6366f1;
+  --primary-fill: #4f46e5;
+  --primary-fill-hover: #4338ca;
+  --primary-soft: #1e1b4b;
+  --primary-soft-text: #c7d2fe;
+  --primary-soft-border: #3730a3;
+  --primary-faint: #1e1b4b;
+  --ring: #818cf8;
+
+  --error: #f87171;
+  --error-fill: #dc2626;
+  --error-fill-hover: #b91c1c;
+  --error-soft: #2a1215;
+  --success: #34d399;
+  --warning: #fbbf24;
+  --info: #818cf8;
+
+  --shadow-sm: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.5);
+  --primary-glow: 0 0.2rem 0.5rem rgba(79, 70, 229, 0.35);
+  --primary-glow-hover: 0 0.3rem 0.75rem rgba(79, 70, 229, 0.45);
+  --primary-tint: rgba(129, 140, 248, 0.14);
+  --scrollbar-thumb: #3f3f46;
+  --scrollbar-track: #0f0f11;
+}
+
+/* Tailwind bridge. `inline` makes each utility reference the token
+   directly, so bg-surface / text-blue-black / border-border follow
+   the theme with no per-theme utility overrides. salmon / almond
+   stay as aliases so the existing class names keep rendering
+   indigo. */
+@theme inline {
+  --color-salmon: var(--primary);
+  --color-hover-salmon: var(--primary-hover);
+  --color-hover-salmon-old: var(--primary-hover);
+  --color-almond: var(--primary-soft);
+  --color-almond-soft: var(--primary-faint);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+
+  --color-surface: var(--surface-utility);
+  --color-card: var(--card);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-surface-hover: var(--surface-hover);
+  --color-elevated: var(--elevated);
+
+  --color-border: var(--border);
+  --color-border-light: var(--border-light);
+  --color-border-strong: var(--border-strong);
+
+  --color-ink: var(--ink);
+  --color-blue-black: var(--ink);
+  --color-heading: var(--heading);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-body-gray: var(--body-gray);
+  --color-link-gray: var(--link-gray);
+
+  --color-error: var(--error);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
 }
 
 * {
   scrollbar-width: auto;
-  scrollbar-color: rgb(186, 186, 186) #F4F4F5;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
   scroll-behavior: smooth;
 }
 
@@ -98,7 +210,7 @@ html[dir="rtl"] .rich-text ol {
 html[dir="rtl"] .rich-text blockquote,
 html[dir="rtl"] .ql-snow .ql-editor blockquote {
   border-left: 0;
-  border-right: 3px solid #6366F1;
+  border-right: 3px solid var(--primary);
   padding-left: 0;
   padding-right: 1rem;
 }
@@ -166,39 +278,50 @@ app-admin-shell main .mx-auto[class*="max-w-"] {
   margin-right: 0;
 }
 
+/* ============================================================
+   Legacy arbitrary-value hexes
+   ------------------------------------------------------------
+   Older templates hardcode pastel hexes in Tailwind arbitrary
+   values (bg-[#F6F8FE], text-[#797979], …). Map each one onto
+   the token that means the same thing. Because the rules read
+   variables rather than hexes, one rule serves both themes.
+   ============================================================ */
+
+app-admin-shell .bg-white,
+app-admin-shell .bg-\[white\] {
+  background-color: var(--card) !important;
+  box-shadow: var(--shadow-sm);
+}
+
 app-admin-shell .border-\[\#F6F8FE\],
 app-admin-shell .border-\[\#eadbd4\],
 app-admin-shell .border-\[\#c9c9c9\],
 app-admin-shell .border-\[\#eff2f5\] {
-  border-color: #E4E4E7 !important;
+  border-color: var(--border) !important;
 }
 
 app-admin-shell .bg-\[\#F6F8FE\],
 app-admin-shell .bg-\[\#ecd7cd\],
 app-admin-shell .bg-\[\#f8eeea\] {
-  background-color: #F4F4F5 !important;
+  background-color: var(--surface-raised) !important;
 }
 
 app-admin-shell .text-\[\#646D77\],
 app-admin-shell .text-\[\#797979\] {
-  color: #52525B !important;
+  color: var(--muted) !important;
 }
 
 app-admin-shell .text-\[\#c9c9c9\] {
-  color: #71717A !important;
+  color: var(--faint) !important;
 }
 
-app-admin-shell .admin-dark {
-  background: #171a25 !important;
-  color: #e7e9f2;
+/* Stale pre-indigo hover on the "clear filters" link. */
+app-admin-shell .hover\:text-\[\#e9855a\]:hover {
+  color: var(--primary-hover) !important;
 }
 
 app-admin-shell .rounded-lg {
   border-radius: 0.625rem;
-}
-
-app-admin-shell .bg-white {
-  box-shadow: 0 0.25rem 0.75rem rgba(15, 23, 42, 0.06);
 }
 
 app-admin-shell input:not([type="checkbox"]):not([type="radio"]),
@@ -211,14 +334,14 @@ app-admin-shell textarea {
 app-admin-shell button.bg-salmon,
 app-admin-shell a.bg-salmon {
   border-radius: 0.475rem;
-  background-color: #4F46E5 !important;
-  box-shadow: 0 0.2rem 0.5rem rgba(79, 70, 229, 0.2);
+  background-color: var(--primary-fill) !important;
+  box-shadow: var(--primary-glow);
 }
 
 app-admin-shell button.bg-salmon:hover,
 app-admin-shell a.bg-salmon:hover {
-  background-color: #4338CA !important;
-  box-shadow: 0 0.3rem 0.75rem rgba(79, 70, 229, 0.28);
+  background-color: var(--primary-fill-hover) !important;
+  box-shadow: var(--primary-glow-hover);
 }
 
 app-admin-shell .rounded-full {
@@ -233,7 +356,7 @@ app-admin-shell h4 {
 }
 
 app-admin-shell label {
-  color: #52525B;
+  color: var(--muted);
   font-weight: 600;
 }
 
@@ -250,61 +373,15 @@ app-admin-shell table tbody tr {
 }
 
 app-admin-shell .animate-spin {
-  border-color: #6366F1;
+  border-color: var(--primary);
   border-top-color: transparent;
-}
-
-app-admin-shell .admin-dark main {
-  background: #171a25;
-}
-
-app-admin-shell .admin-dark .bg-white,
-app-admin-shell .admin-dark .bg-\[white\] {
-  background-color: #18181B !important;
-}
-
-app-admin-shell .admin-dark .bg-\[\#f4f5f8\] {
-  background-color: #171a25 !important;
-}
-
-app-admin-shell .admin-dark .border-\[\#F6F8FE\],
-app-admin-shell .admin-dark .border-\[\#eadbd4\],
-app-admin-shell .admin-dark .border-\[\#c9c9c9\] {
-  border-color: #353b4d !important;
-}
-
-app-admin-shell .admin-dark .text-blue-black,
-app-admin-shell .admin-dark .text-\[\#18181B\] {
-  color: #f3f4f8 !important;
-}
-
-app-admin-shell .admin-dark .text-\[\#646D77\],
-app-admin-shell .admin-dark .text-\[\#797979\] {
-  color: #b9bfce !important;
-}
-
-app-admin-shell .admin-dark .text-\[\#c9c9c9\] {
-  color: #737b8f !important;
-}
-
-app-admin-shell .admin-dark input,
-app-admin-shell .admin-dark select,
-app-admin-shell .admin-dark textarea {
-  background-color: #1b2030 !important;
-  border-color: #41495e !important;
-  color: #f3f4f8 !important;
-}
-
-app-admin-shell .admin-dark .hover\:bg-white:hover,
-app-admin-shell .admin-dark .hover\:bg-\[\#f8eeea\]:hover {
-  background-color: #2b3141 !important;
 }
 
 a { text-decoration: none !important; }
 ul { list-style: none !important; padding: 0; }
 
 :focus-visible {
-  outline: 2px solid #6366F1;
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 
@@ -330,19 +407,19 @@ ul { list-style: none !important; padding: 0; }
 }
 
 .p-rating .p-rating-icon.p-rating-icon-active {
-  color: #6366F1 !important;
+  color: var(--primary) !important;
 }
 
 .p-rating .p-rating-icon.pi-star-fill {
-  color: #6366F1 !important;
+  color: var(--primary) !important;
 }
 
 .p-rating:not(.p-disabled):not(.p-readonly) .p-rating-icon:hover {
-  color: #4F46E5 !important;
+  color: var(--primary-hover) !important;
 }
 
 .p-rating:not(.p-disabled):not(.p-readonly) .p-rating-icon {
-  color: #6366F1 !important;
+  color: var(--primary) !important;
 }
 
 /* ============================================================
@@ -381,56 +458,57 @@ ul { list-style: none !important; padding: 0; }
 }
 
 .btn-primary {
-  background-color: #4F46E5;
-  color: #fff;
-  box-shadow: 0 0.2rem 0.5rem rgba(79, 70, 229, 0.2);
+  background-color: var(--primary-fill);
+  color: var(--on-primary);
+  box-shadow: var(--primary-glow);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: #4338CA;
-  box-shadow: 0 0.3rem 0.75rem rgba(79, 70, 229, 0.28);
+  background-color: var(--primary-fill-hover);
+  box-shadow: var(--primary-glow-hover);
 }
 
 .btn-secondary {
-  background-color: #fff;
-  border-color: #E4E4E7;
-  color: #52525B;
+  background-color: var(--card);
+  border-color: var(--border);
+  color: var(--muted);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background-color: #F4F4F5;
+  background-color: var(--surface-hover);
+  color: var(--ink);
 }
 
 .btn-danger {
-  background-color: #DC2626;
-  color: #fff;
+  background-color: var(--error-fill);
+  color: var(--on-primary);
 }
 
 .btn-danger:hover:not(:disabled) {
-  background-color: #B91C1C;
+  background-color: var(--error-fill-hover);
 }
 
 .btn-danger-outline {
-  background-color: #fff;
-  border-color: #DC2626;
-  color: #DC2626;
+  background-color: var(--card);
+  border-color: var(--error);
+  color: var(--error);
 }
 
 .btn-danger-outline:hover:not(:disabled) {
-  background-color: #FEF3F2;
+  background-color: var(--error-soft);
 }
 
 .btn-ghost {
   background: transparent;
   border-color: transparent;
-  color: #6366F1;
+  color: var(--primary);
   text-transform: none;
   letter-spacing: normal;
   padding: 0.5rem 0.75rem;
 }
 
 .btn-ghost:hover:not(:disabled) {
-  background-color: rgba(37, 99, 235, 0.08);
+  background-color: var(--primary-tint);
 }
 
 .link-back {
@@ -440,7 +518,7 @@ ul { list-style: none !important; padding: 0; }
   margin-bottom: 0.5rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #6366F1;
+  color: var(--primary);
   background: none;
   border: none;
   padding: 0;
@@ -448,7 +526,7 @@ ul { list-style: none !important; padding: 0; }
 }
 
 .link-back:hover {
-  color: #4F46E5;
+  color: var(--primary-hover);
 }
 
 /* Page header: back (row 1) / eyebrow / title / subtitle left, actions right */
@@ -469,7 +547,7 @@ ul { list-style: none !important; padding: 0; }
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: #71717A;
+  color: var(--faint);
 }
 
 .page-title {
@@ -478,13 +556,13 @@ ul { list-style: none !important; padding: 0; }
   line-height: 2.25rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #18181B;
+  color: var(--heading);
 }
 
 .page-subtitle {
   margin-top: 0.25rem;
   font-size: 0.875rem;
-  color: #52525B;
+  color: var(--muted);
 }
 
 .page-actions {
@@ -503,7 +581,7 @@ ul { list-style: none !important; padding: 0; }
   justify-content: flex-end;
   padding-top: 1.25rem;
   margin-top: 1.5rem;
-  border-top: 1px solid #E4E4E7;
+  border-top: 1px solid var(--border);
 }
 
 @media (min-width: 640px) {
@@ -529,10 +607,10 @@ app-page-header {
 /* Detail / form header card: shared by all VIEW + ADD/EDIT pages.
    List pages keep the plain app-page-header row. */
 .detail-header {
-  background-color: #fff;
-  border: 1px solid #E4E4E7;
+  background-color: var(--card);
+  border: 1px solid var(--border);
   border-radius: 0.625rem;
-  box-shadow: 0 0.25rem 0.75rem rgba(15, 23, 42, 0.05);
+  box-shadow: var(--shadow-md);
   padding: 1rem 1.25rem;
   display: flex;
   flex-direction: column;
@@ -546,7 +624,7 @@ app-page-header {
   gap: 0.375rem;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #52525B;
+  color: var(--muted);
   background: none;
   border: none;
   border-radius: 0.475rem;
@@ -557,8 +635,8 @@ app-page-header {
 }
 
 .detail-back:hover {
-  color: #6366F1;
-  background-color: rgba(37, 99, 235, 0.08);
+  color: var(--primary);
+  background-color: var(--primary-tint);
 }
 
 .detail-back i {
@@ -589,9 +667,9 @@ html[dir="rtl"] .detail-back i {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: #4F46E5;
-  background-color: #E0E7FF;
-  border: 1px solid #C7D2FE;
+  color: var(--primary-soft-text);
+  background-color: var(--primary-soft);
+  border: 1px solid var(--primary-soft-border);
   border-radius: 999px;
   padding: 0.25rem 0.625rem;
   margin-bottom: 0.5rem;
@@ -601,7 +679,7 @@ html[dir="rtl"] .detail-back i {
   font-size: 1.5rem;
   line-height: 2rem;
   font-weight: 700;
-  color: #18181B;
+  color: var(--heading);
   overflow-wrap: anywhere;
 }
 
@@ -613,7 +691,7 @@ html[dir="rtl"] .detail-back i {
 .detail-subtitle {
   margin-top: 0.25rem;
   font-size: 0.875rem;
-  color: #52525B;
+  color: var(--muted);
 }
 
 .detail-side {
@@ -638,10 +716,10 @@ html[dir="rtl"] .detail-back i {
   position: sticky;
   bottom: 1rem;
   z-index: 20;
-  background-color: #fff;
-  border: 1px solid #E4E4E7;
+  background-color: var(--card);
+  border: 1px solid var(--border);
   border-radius: 0.625rem;
-  box-shadow: 0 0.5rem 1.5rem rgba(15, 23, 42, 0.12);
+  box-shadow: var(--shadow-lg);
   padding: 0.75rem 1rem;
 }
 
@@ -649,10 +727,10 @@ html[dir="rtl"] .detail-back i {
    settings panels. Replaces repeated
    `rounded-lg border border-[#eadbd4] bg-white p-6 sm:p-8` strings. */
 .card {
-  background-color: #fff;
-  border: 1px solid #E4E4E7;
+  background-color: var(--card);
+  border: 1px solid var(--border);
   border-radius: 0.625rem;
-  box-shadow: 0 0.25rem 0.75rem rgba(15, 23, 42, 0.05);
+  box-shadow: var(--shadow-md);
   padding: 1.5rem;
 }
 
@@ -668,203 +746,119 @@ html[dir="rtl"] .detail-back i {
   font-size: 1.25rem;
   line-height: 1.75rem;
   font-weight: 700;
-  color: #18181B;
+  color: var(--heading);
 }
 
 /* Spec rows (dl/dt/dd) on detail pages. */
 .spec-dt {
-  color: #71717A;
+  color: var(--faint);
 }
 
 .spec-dd {
   margin-top: 0.25rem;
   font-weight: 600;
-  color: #18181B;
+  color: var(--ink);
 }
 
-/* Dark mode — static utilities + legacy hardcoded hexes.
-   Token utilities (bg-surface, bg-card, border-border, text-ink,
-   text-muted, text-faint, text-primary, bg-primary) already flip
-   via the .admin-dark variable overrides above. */
+/* ============================================================
+   DARK MODE — escape hatches
+   ------------------------------------------------------------
+   Only the arbitrary hexes that have no light-mode counterpart
+   mapping above. Everything else flips through the tokens.
+   ============================================================ */
+
 .admin-dark {
-  background-color: #0A0A0C !important;
-  color: #F4F4F5;
-  color-scheme: dark;
+  background-color: var(--surface) !important;
+  color: var(--ink);
 }
 
-.admin-dark main {
-  background-color: #0A0A0C !important;
-}
-
+.admin-dark main,
 .admin-dark aside,
 .admin-dark header {
-  background-color: #0A0A0C !important;
-  border-color: #27272A !important;
-  color: #F4F4F5;
+  background-color: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--ink);
 }
 
 .admin-dark .bg-white,
 .admin-dark .bg-\[white\] {
-  background-color: #18181B !important;
+  background-color: var(--card) !important;
 }
 
 .admin-dark .bg-surface {
-  background-color: #18181B !important;
+  background-color: var(--surface-utility) !important;
 }
 
-.admin-dark .hover\:bg-surface:hover {
-  background-color: #27272A !important;
-}
-
-.admin-dark .hover\:bg-white:hover {
-  background-color: #27272A !important;
-}
-
-.admin-dark .border-border {
-  border-color: #27272A !important;
-}
-
-.admin-dark .text-ink,
-.admin-dark .text-blue-black,
-.admin-dark .text-\[\#18181B\] {
-  color: #F4F4F5 !important;
-}
-
-.admin-dark .text-muted,
-.admin-dark .text-\[\#646D77\],
-.admin-dark .text-\[\#797979\],
-.admin-dark .text-\[\#7e8299\] {
-  color: #A1A1AA !important;
-}
-
-.admin-dark .text-faint,
-.admin-dark .text-\[\#c9c9c9\],
-.admin-dark .text-\[\#a1a5b7\] {
-  color: #A1A1AA !important;
-}
-
-.admin-dark label {
-  color: #D4D4D8 !important;
-}
-
-.admin-dark .bg-\[\#F6F8FE\],
-.admin-dark .bg-\[\#ecd7cd\],
-.admin-dark .bg-\[\#f8eeea\],
 .admin-dark .bg-\[\#f5f8fa\],
 .admin-dark .bg-\[\#fbfcfe\],
-.admin-dark .bg-\[\#f8fbff\] {
-  background-color: #18181B !important;
+.admin-dark .bg-\[\#f8fbff\],
+.admin-dark .bg-\[\#f4f5f8\],
+.admin-dark .bg-\[\#fafbfc\] {
+  background-color: var(--card) !important;
 }
 
-.admin-dark .border-\[\#F6F8FE\],
-.admin-dark .border-\[\#eadbd4\],
-.admin-dark .border-\[\#c9c9c9\],
-.admin-dark .border-\[\#eff2f5\],
+.admin-dark .hover\:bg-surface:hover,
+.admin-dark .hover\:bg-white:hover,
+.admin-dark .hover\:bg-\[\#f8fbff\]:hover,
+.admin-dark .hover\:bg-\[\#f8eeea\]:hover,
+.admin-dark .focus\:bg-white:focus {
+  background-color: var(--surface-hover) !important;
+}
+
 .admin-dark .border-\[\#e3e8ef\] {
-  border-color: #27272A !important;
+  border-color: var(--border) !important;
 }
 
-.admin-dark input,
+.admin-dark .text-\[\#18181B\] {
+  color: var(--ink) !important;
+}
+
+.admin-dark .text-\[\#7e8299\] {
+  color: var(--muted) !important;
+}
+
+.admin-dark .text-\[\#a1a5b7\] {
+  color: var(--faint) !important;
+}
+
+/* Inputs are inset wells: one step darker than the card they sit on,
+   with a lighter border so the control reads as editable. */
+.admin-dark input:not([type="checkbox"]):not([type="radio"]),
 .admin-dark select,
 .admin-dark textarea {
-  background-color: #0A0A0C !important;
-  border-color: #52525B !important;
-  color: #F4F4F5 !important;
+  background-color: var(--surface-subtle) !important;
+  border-color: var(--border-strong) !important;
+  color: var(--ink) !important;
 }
 
 .admin-dark input::placeholder,
 .admin-dark textarea::placeholder {
-  color: #71717A !important;
+  color: var(--faint) !important;
+}
+
+.admin-dark option {
+  background-color: var(--card);
+  color: var(--ink);
 }
 
 .admin-dark table thead tr {
-  background-color: #18181B !important;
+  background-color: var(--surface-subtle) !important;
+}
+
+.admin-dark table thead tr + tr {
+  background-color: var(--card) !important;
 }
 
 .admin-dark table tbody tr:hover {
-  background-color: #27272A !important;
+  background-color: var(--surface-hover) !important;
 }
 
-.admin-dark .btn-secondary {
-  background-color: #18181B;
-  border-color: #52525B;
-  color: #F4F4F5;
+/* bg-blue-black doubles as the avatar fill and the mobile-drawer
+   scrim; neither works if it resolves to the body text colour. */
+.admin-dark .bg-blue-black {
+  background-color: var(--elevated) !important;
 }
 
-.admin-dark .btn-secondary:hover:not(:disabled) {
-  background-color: #27272A;
-}
-
-.admin-dark .btn-ghost {
-  color: #A5B4FC;
-}
-
-.admin-dark .link-back {
-  color: #A5B4FC;
-}
-
-.admin-dark .page-title {
-  color: #F4F4F5;
-}
-
-.admin-dark .detail-header {
-  background-color: #18181B;
-  border-color: #27272A;
-}
-
-.admin-dark .detail-title {
-  color: #F4F4F5;
-}
-
-.admin-dark .detail-subtitle {
-  color: #A1A1AA;
-}
-
-.admin-dark .detail-back {
-  color: #A1A1AA;
-}
-
-.admin-dark .detail-back:hover {
-  color: #A5B4FC;
-  background-color: rgba(147, 197, 253, 0.12);
-}
-
-.admin-dark .detail-chip {
-  background-color: #312E81;
-  border-color: #6366F1;
-  color: #C7D2FE;
-}
-
-.admin-dark .form-actions-sticky {
-  background-color: #18181B;
-  border-color: #27272A;
-}
-
-.admin-dark .card {
-  background-color: #18181B;
-  border-color: #27272A;
-}
-
-.admin-dark .section-title {
-  color: #F4F4F5;
-}
-
-.admin-dark .spec-dt {
-  color: #A1A1AA;
-}
-
-.admin-dark .spec-dd {
-  color: #F4F4F5;
-}
-.admin-dark .page-subtitle,
-.admin-dark .page-eyebrow {
-  color: #A1A1AA;
-}
-
-.admin-dark .form-actions {
-  border-top-color: #27272A;
-}
-
-.admin-dark .bg-white {
-  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.3);
+.admin-dark .bg-blue-black\/30 {
+  background-color: rgba(0, 0, 0, 0.7) !important;
 }

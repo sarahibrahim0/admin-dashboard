@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { MediaService } from '../../../core/services/media.service';
+import { EntityService } from '../../../core/services/entity.service';
 import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 import { LanguageService } from '../../../core/services/language.service';
 import { FormFieldComponent } from '../../../shared/forms/form-field.component';
@@ -187,6 +188,7 @@ export class ProductFormComponent implements OnInit {
   protected router = inject(Router);
   private toast = inject(ToastService);
   private http = inject(HttpClient);
+private entityService = inject(EntityService);
 private media = inject(MediaService);
   private language = inject(LanguageService);
   private fb = inject(FormBuilder);
@@ -455,9 +457,11 @@ private media = inject(MediaService);
     };
     if (this.image) body.image = this.image;
 
+    // Images reach the server as Cloudinary references produced by MediaService,
+    // so the product routes are plain JSON - no multipart anywhere in this flow.
     const baseReq = this.isEdit()
-      ? this.http.put<any>(`${environment.apiUrl}products/${this.productId}`, body)
-      : this.http.post<any>(`${environment.apiUrl}products`, body);
+      ? this.entityService.update<any>('products', this.productId, body)
+      : this.entityService.create<any>('products', body);
     baseReq.subscribe({
       next: (res: any) => {
         const wasEdit = this.isEdit();
@@ -474,7 +478,7 @@ private media = inject(MediaService);
           }
         };
         if (this.gallery().length) {
-          this.http.put<any>(`${environment.apiUrl}products/gallery-images/${productId}`, { images: this.gallery() }).subscribe({
+          this.entityService.updateRoot<any>(`products/gallery-images/${productId}`, { images: this.gallery() }).subscribe({
             next: () => finish(),
             error: () => finish(),
           });

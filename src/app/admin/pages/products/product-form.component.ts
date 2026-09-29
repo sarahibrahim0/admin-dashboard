@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
+import { MediaService } from '../../../core/services/media.service';
 import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 import { LanguageService } from '../../../core/services/language.service';
 import { FormFieldComponent } from '../../../shared/forms/form-field.component';
@@ -186,6 +187,7 @@ export class ProductFormComponent implements OnInit {
   protected router = inject(Router);
   private toast = inject(ToastService);
   private http = inject(HttpClient);
+private media = inject(MediaService);
   private language = inject(LanguageService);
   private fb = inject(FormBuilder);
 
@@ -316,6 +318,7 @@ export class ProductFormComponent implements OnInit {
     const file = input.files?.[0];
     input.value = '';
     if (!file) return;
+    if (!this.media.validateImages([file])) return;
     this.pendingMainFile.set(file);
     this.showUploadDialog.set(true);
   }
@@ -325,7 +328,9 @@ export class ProductFormComponent implements OnInit {
     const files = input.files;
     input.value = '';
     if (!files?.length) return;
-    this.pendingGalleryFiles.set(Array.from(files));
+    const selected = Array.from(files);
+    if (!this.media.validateImages(selected)) return;
+    this.pendingGalleryFiles.set(selected);
     this.showUploadDialog.set(true);
   }
 
@@ -343,20 +348,25 @@ export class ProductFormComponent implements OnInit {
     this.showUploadDialog.set(false);
     if (mainFile) {
       this.imageUploading.set(true);
-      const fd = new FormData();
-      fd.append('image', mainFile);
-      fd.append('folder', 'products');
-      this.http.post<any>(`${environment.apiUrl}media/image`, fd).subscribe({
-        next: (res) => { this.image = res.image; this.imagePreview.set(res.image.url); this.imageUploading.set(false); this.mediaDirty.set(true); },
+      this.media.uploadImage(mainFile, 'products').subscribe({
+        next: (image) => {
+          this.image = image;
+          this.imagePreview.set(image.url);
+          this.imageUploading.set(false);
+          this.mediaDirty.set(true);
+          this.toast.success('Image uploaded');
+        },
         error: () => this.imageUploading.set(false),
       });
     } else if (galleryFiles.length) {
       this.galleryUploading.set(true);
-      const fd = new FormData();
-      galleryFiles.forEach((f) => fd.append('images', f));
-      fd.append('folder', 'products/gallery');
-      this.http.post<any>(`${environment.apiUrl}media/images`, fd).subscribe({
-        next: (res) => { this.gallery.update((g) => [...g, ...res.images]); this.galleryUploading.set(false); this.mediaDirty.set(true); },
+      this.media.uploadImages(galleryFiles, 'products/gallery').subscribe({
+        next: (images) => {
+          this.gallery.update((g) => [...g, ...images]);
+          this.galleryUploading.set(false);
+          this.mediaDirty.set(true);
+          this.toast.success('Images uploaded');
+        },
         error: () => this.galleryUploading.set(false),
       });
     }
@@ -390,17 +400,15 @@ export class ProductFormComponent implements OnInit {
     input.accept = 'image/*';
     input.onchange = () => {
       const file = input.files?.[0];
+      input.value = '';
       if (!file) return;
       this.editorImageUploading.set(true);
-      const formData = new FormData();
-      formData.append('image', file);
-      formData.append('folder', 'products/editor/images');
-      this.http.post<any>(`${environment.apiUrl}media/image`, formData).subscribe({
-        next: (res) => {
+      this.media.uploadImage(file, 'products/editor/images').subscribe({
+        next: (image) => {
           const editor = this.editorRefs[editorKey];
           const range = editor?.getSelection(true);
-          if (editor && range && res.image?.url) {
-            editor.insertEmbed(range.index, 'image', res.image.url, 'user');
+          if (editor && range) {
+            editor.insertEmbed(range.index, 'image', image.url, 'user');
             editor.setSelection(range.index + 1, 0, 'user');
           }
           this.editorImageUploading.set(false);

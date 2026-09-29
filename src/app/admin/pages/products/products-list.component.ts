@@ -114,11 +114,20 @@ export class ProductsListComponent implements OnInit {
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
+    input.value = '';
     if (!file) return;
+    if (!/\.csv$/i.test(file.name)) {
+      this.toast.error('Please choose a .csv file.');
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      this.toast.error('CSV must be 2MB or smaller.');
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => this.importRows(this.parseCsv(String(reader.result || '')));
+    reader.onerror = () => this.toast.error('Could not read that file.');
     reader.readAsText(file);
-    input.value = '';
   }
 
   private parseCsv(text: string): string[][] {

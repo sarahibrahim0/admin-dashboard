@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
+import { MediaService } from '../../../core/services/media.service';
 import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 import { FormFieldComponent } from '../../../shared/forms/form-field.component';
 import { LocalizedFieldComponent } from '../../../shared/forms/localized-field.component';
@@ -114,6 +115,7 @@ private fb = inject(FormBuilder);
   categoryId = '';
   image: { url: string; publicId: string } | null = null;
   preview = signal<string>('');
+  private readonly media = inject(MediaService);
 form: FormGroup;
 
   fc(key: string): FormControl {
@@ -176,6 +178,7 @@ form: FormGroup;
     const file = input.files?.[0];
     input.value = '';
     if (!file) return;
+    if (!this.media.validateImages([file])) return;
     this.pendingFile.set(file);
     this.showUploadDialog.set(true);
   }
@@ -191,19 +194,18 @@ form: FormGroup;
     this.showUploadDialog.set(false);
     if (!file) return;
     this.uploading.set(true);
-    const formData = new FormData();
-    formData.append('image', file);
-    formData.append('folder', 'categories');
-    this.http.post<any>(`${environment.apiUrl}media/image`, formData).subscribe({
-        next: (res) => {
-          this.image = res.image;
-          this.preview.set(res.image.url);
-          this.uploading.set(false);
-          this.mediaDirty.set(true);
-        },
+    this.media.uploadImage(file, 'categories').subscribe({
+      next: (image) => {
+        this.image = image;
+        this.preview.set(image.url);
+        this.uploading.set(false);
+        this.mediaDirty.set(true);
+        this.toast.success('Image uploaded');
+      },
       error: () => this.uploading.set(false),
     });
   }
+
 
   submit(): void {
     if (this.uploading()) return;

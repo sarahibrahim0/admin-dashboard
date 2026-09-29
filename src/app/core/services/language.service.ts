@@ -148,6 +148,10 @@ const translations: Record<Language, Record<string, string>> = {
     'checkout & payments': 'Checkout & payments', 'enable cash on delivery': 'Enable Cash on Delivery', 'default currency': 'Default currency',
     'country-based payments': 'Country-based payments', 'global payment defaults. country-specific payment methods are set per country.': 'Global payment defaults. Country-specific payment methods are set per country.',
     'manage which payment methods are available in each country, and the currency used there.': 'Manage which payment methods are available in each country, and the currency used there.',
+    'You are offline. Check your connection and try again.': 'You are offline. Check your connection and try again.',
+    'The server is temporarily unreachable. Please try again.': 'The server is temporarily unreachable. Please try again.',
+    'You are offline. Some features will not work until you reconnect.': 'You are offline. Some features will not work until you reconnect.',
+    'The server is temporarily unreachable. We will keep trying.': 'The server is temporarily unreachable. We will keep trying.',
   },
   ar: {
     'search...': 'بحث...', selected: 'محدد', 'no data found': 'لا توجد بيانات', showing: 'عرض', to: 'إلى', of: 'من', previous: 'السابق', next: 'التالي', clear: 'مسح', cancel: 'إلغاء', confirm: 'تأكيد', delete: 'حذف', close: 'إغلاق', review: 'مراجعة', yes: 'نعم', no: 'لا', 'total reviews': 'إجمالي التقييمات', 'expand sidebar': 'توسيع القائمة الجانبية', 'collapse sidebar': 'طي القائمة الجانبية',
@@ -296,6 +300,10 @@ const translations: Record<Language, Record<string, string>> = {
     'checkout & payments': 'الدفع والمدفوعات', 'enable cash on delivery': 'تفعيل الدفع عند الاستلام', 'default currency': 'العملة الافتراضية',
     'country-based payments': 'مدفوعات حسب الدولة', 'global payment defaults. country-specific payment methods are set per country.': 'الإعدادات الافتراضية للدفع. طرق الدفع الخاصة بكل دولة تُضبط داخل الدولة نفسها.',
     'manage which payment methods are available in each country, and the currency used there.': 'إدارة طرق الدفع المتاحة في كل دولة والعملة المستخدمة فيها.',
+    'You are offline. Check your connection and try again.': 'أنت غير متصل بالإنترنت. تحقق من اتصالك وحاول مرة أخرى.',
+    'The server is temporarily unreachable. Please try again.': 'الخادم غير متاح مؤقتًا. يرجى المحاولة مرة أخرى.',
+    'You are offline. Some features will not work until you reconnect.': 'أنت غير متصل بالإنترنت. بعض الميزات لن تعمل حتى تعيد الاتصال.',
+    'The server is temporarily unreachable. We will keep trying.': 'الخادم غير متاح مؤقتًا. سنواصل المحاولة.',
   },
 };
 

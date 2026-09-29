@@ -6,13 +6,16 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { networkInterceptor } from './core/interceptors/network.interceptor';
 import { AuthStore } from './core/stores/auth.store';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    // networkInterceptor first: it must see the raw HttpErrorResponse before
+    // authInterceptor normalizes it into a plain ApiError.
+    provideHttpClient(withInterceptors([networkInterceptor, authInterceptor])),
     provideAnimationsAsync(),
     provideAppInitializer(() => {
       inject(AuthStore).startTokenRefresh();

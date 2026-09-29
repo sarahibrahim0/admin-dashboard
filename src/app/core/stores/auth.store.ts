@@ -1,6 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { firstValueFrom, throwError } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { firstValueFrom } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 import { RegisterRequest, User } from '../models';
 import { AuthService } from '../services/auth.service';
 import { EntityService } from '../services/entity.service';
@@ -134,21 +134,13 @@ export class AuthStore {
   /**
    * Fetches the signed-in admin and refreshes the store.
    *
-   * `GET /users/profile` is shadowed by `GET /users/:id` in the backend route
-   * order, so it 404s. The record fetched by id is the exact same document, so
-   * fall back to it rather than leaving the profile page empty.
+   * The backend serves this from its own `/users/profile` route, which reads
+   * the caller's id out of the token rather than the request path.
    */
   async loadProfile(): Promise<User | null> {
     if (!this.token()) return null;
     try {
-      const user = await firstValueFrom(
-        this.auth.profile().pipe(
-          catchError((err) => {
-            const id = this.userId() ?? this.user()?.id;
-            return id ? this.auth.me(id) : throwError(() => err);
-          }),
-        ),
-      );
+      const user = await firstValueFrom(this.auth.profile());
       this.user.set(user);
       return user;
     } catch (err) {
@@ -157,19 +149,9 @@ export class AuthStore {
     }
   }
 
-  /**
-   * Saves the signed-in admin's own profile.
-   *
-   * Same route-shadowing problem as `loadProfile`, so fall back to
-   * `PUT /users/:id` with the id we already hold when the root route 404s.
-   */
+  /** Saves the signed-in admin's own profile. */
   async saveProfile(body: Record<string, unknown>): Promise<User> {
-    const id = this.userId() ?? this.user()?.id;
-    const user = await firstValueFrom(
-      this.entity.updateRoot<User>('users/profile', body).pipe(
-        catchError((err) => (id ? this.entity.update<User>('users', id, body) : throwError(() => err))),
-      ),
-    );
+    const user = await firstValueFrom(this.entity.updateRoot<User>('users/profile', body));
     this.user.set(user);
     return user;
   }

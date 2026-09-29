@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output, inject, computed, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map } from 'rxjs/operators';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 import { LanguageService } from '../../core/services/language.service';
 
@@ -21,7 +23,7 @@ interface SidebarSection {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, CommonModule, TranslatePipe],
+  imports: [RouterLink, CommonModule, TranslatePipe],
   template: `
     <aside
       class="fixed inset-y-0 left-0 z-40 flex -translate-x-full flex-col border-e border-border bg-white transition-all duration-300 md:translate-x-0"
@@ -54,8 +56,10 @@ interface SidebarSection {
                 [routerLink]="item.route"
                 (click)="closeMobile()"
                 [attr.title]="(rail() && !mobileOpen) ? (language.isArabic() ? item.labelAr : item.label) : null"
-                routerLinkActive="bg-surface text-primary shadow-sm active"
-                [routerLinkActiveOptions]="{ exact: item.route === '/admin/settings' || item.route === '/admin/payments' }"
+                [class.active]="isActive(item)"
+                [class.bg-surface]="isActive(item)"
+                [class.text-primary]="isActive(item)"
+                [class.shadow-sm]="isActive(item)"
                 [class.justify-center]="rail() && !mobileOpen"
                 [class.px-2]="rail() && !mobileOpen"
                 class="group relative flex items-center gap-3 rounded-md border border-transparent px-3 py-2.5 text-sm font-medium text-blue-black transition-all duration-200 hover:border-border hover:bg-surface hover:text-primary">
@@ -96,6 +100,14 @@ export class SidebarComponent {
   private readonly mqLg = matchMedia('(min-width: 1024px)');
   private readonly isMedium = signal(false);
   rail = computed(() => this.isCollapsed() || this.isMedium());
+  private readonly router = inject(Router);
+  private readonly currentUrl = toSignal(
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      map(() => this.router.url),
+    ),
+    { initialValue: this.router.url },
+  );
 
   constructor() {
     this.updateMedia();
@@ -107,6 +119,33 @@ export class SidebarComponent {
     this.isMedium.set(this.mqMd.matches && !this.mqLg.matches);
   }
   protected readonly language = inject(LanguageService);
+
+  private static path(url: string): string {
+    const path = url.split('?')[0].split('#')[0].replace(/\/+$/, '');
+    return path || '/';
+  }
+
+  /**
+   * An item is active when the current URL is the item route or one of its
+   * descendants. When several items match, only the most specific one wins, so
+   * `/admin/products/low-stock` lights up "Low Stock" but not "Products" (same
+   * for Transactions vs Payment Methods, and Settings vs Shipping/Profile).
+   */
+  isActive(item: SidebarItem): boolean {
+    const url = SidebarComponent.path(this.currentUrl());
+    const route = SidebarComponent.path(item.route);
+    if (url !== route && !url.startsWith(`${route}/`)) return false;
+    return !this.sections.some((section) =>
+      section.items.some((other) => {
+        if (other.route === item.route) return false;
+        const otherRoute = SidebarComponent.path(other.route);
+        return (
+          otherRoute.length > route.length &&
+          (url === otherRoute || url.startsWith(`${otherRoute}/`))
+        );
+      }),
+    );
+  }
 
   sections: SidebarSection[] = [
     {
@@ -182,6 +221,7 @@ export class SidebarComponent {
        'wallet': 'M21 7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2V7zM16 14a1 1 0 100-2 1 1 0 000 2z',
        'globe': 'M12 21a9 9 0 100-18 9 9 0 000 18zM3.6 9h16.8M3.6 15h16.8M12 3a15 15 0 010 18 15 15 0 010-18',
        'banknote': 'M2 6h20v12H2zM12 15a3 3 0 100-6 3 3 0 000 6zM6 9v.01M18 15v.01',
+      'exclamation-triangle': 'M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01',
       };
     return icons[icon] || 'M12 2v20M2 12h20';
   }

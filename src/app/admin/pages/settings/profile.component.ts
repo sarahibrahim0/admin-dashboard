@@ -1,9 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { EntityService } from '../../../core/services/entity.service';
+import { MediaService } from '../../../core/services/media.service';
+import { normalizeApiError } from '../../../core/services/api-error';
 import { AuthStore } from '../../../core/stores/auth.store';
-import { environment } from '../../../../environments/environment';
 import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 import { LanguageService } from '../../../core/services/language.service';
 import { FormFieldComponent } from '../../../shared/forms/form-field.component';
@@ -84,7 +84,12 @@ import { DetailHeaderComponent } from '../../../shared/ui/detail-header.componen
           <input #fileInput type="file" (change)="onImageSelect($event)" accept="image/*" class="hidden" />
           <button type="button" (click)="fileInput.click()" class="btn btn-secondary btn-sm mt-2">{{ 'Select photo' | translate }}</button>
           @if (selectedFileName()) { <p class="mt-1 truncate text-xs text-[#646D77]">{{ selectedFileName() }}</p> }
-          @if (uploading()) { <p class="mt-1 text-xs text-salmon">{{ 'Uploading picture...' | translate }}</p> }
+          @if (uploading()) {
+            <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-border">
+              <div class="h-full rounded-full bg-primary transition-all duration-200" [style.width.%]="uploadPercent()"></div>
+            </div>
+            <p class="mt-1 text-xs text-salmon">{{ 'Uploading picture...' | translate }} {{ uploadPercent() }}%</p>
+          }
           <p class="mt-1 text-xs text-[#797979]">{{ 'Use a square image for the best result.' | translate }}</p>
         </aside>
       </div>
@@ -97,13 +102,14 @@ import { DetailHeaderComponent } from '../../../shared/ui/detail-header.componen
 })
 export class ProfileComponent implements OnInit {
   private entityService = inject(EntityService);
-  private http = inject(HttpClient);
+  private media = inject(MediaService);
   private auth = inject(AuthStore);
   private language = inject(LanguageService);
   private toast = inject(ToastService);
   private fb = inject(FormBuilder);
   saving = signal(false);
   uploading = signal(false);
+  uploadPercent = signal(0);
   showSaveDialog = signal(false);
   pendingFile = signal<File | null>(null);
   showUploadDialog = signal(false);
@@ -135,22 +141,36 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.entityService.getRoot<any>('users/profile').subscribe((user) => {
-      const name = splitLocalized(user.name);
-      this.form.patchValue({
-        nameEn: name.en,
-        nameAr: name.ar,
-        email: user.email || '',
-        phone: user.phone || '',
-        password: '',
-        city: user.city || '',
-        country: user.country || '',
-      });
-      if (user.image?.url) {
-        this.image = user.image;
-        this.imagePreview.set(user.image.url);
-      }
+    this.patch(this.auth.user());
+    void this.auth.loadProfile().then(
+      (user) => this.patch(user),
+      (err) => {
+        // Only surface a problem when there is genuinely nothing to show: the
+        // store already holds the admin, so a failed refresh is not a failure
+        // of this page.
+        if (!this.auth.user() && !this.form.controls.nameEn.value) {
+          this.toast.error(normalizeApiError(err).message);
+        }
+      },
+    );
+  }
+
+  private patch(user: any): void {
+    if (!user) return;
+    const name = splitLocalized(user.name);
+    this.form.patchValue({
+      nameEn: name.en,
+      nameAr: name.ar,
+      email: user.email || '',
+      phone: user.phone || '',
+      password: '',
+      city: user.city || '',
+      country: user.country || '',
     });
+    if (user.image?.url) {
+      this.image = user.image;
+      this.imagePreview.set(user.image.url);
+    }
   }
 
   onImageSelect(event: Event): void {
@@ -158,6 +178,7 @@ export class ProfileComponent implements OnInit {
     const file = input.files?.[0];
     input.value = '';
     if (!file) return;
+    if (!this.media.validateImages([file])) return;
     this.pendingFile.set(file);
     this.selectedFileName.set(file.name);
     this.showUploadDialog.set(true);
@@ -176,17 +197,16 @@ export class ProfileComponent implements OnInit {
     this.showUploadDialog.set(false);
     if (!file) return;
     this.uploading.set(true);
-    const formData = new FormData();
-    formData.append('image', file);
-    formData.append('folder', 'admins');
-    this.http.post<any>(`${environment.apiUrl}media/image`, formData).subscribe({
-      next: (response) => {
-        this.image = response.image;
-        this.imagePreview.set(response.image.url);
+    this.uploadPercent.set(0);
+    this.media.uploadImage(file, 'admins', (pct) => this.uploadPercent.set(pct)).subscribe({
+      next: (image) => {
+        this.image = image;
+        this.imagePreview.set(image.url);
         const currentUser = this.auth.user();
-        if (currentUser) this.auth.user.set({ ...currentUser, image: response.image });
+        if (currentUser) this.auth.user.set({ ...currentUser, image });
         this.uploading.set(false);
         this.mediaDirty.set(true);
+        this.toast.success('Photo uploaded');
       },
       error: () => this.uploading.set(false),
     });
@@ -200,16 +220,16 @@ export class ProfileComponent implements OnInit {
     }
     this.saving.set(true);
     const v = this.form.getRawValue();
-    const body: any = {
+    const body: Record<string, unknown> = {
       ...v,
       name: joinLocalized(v.nameEn, v.nameAr),
     };
-    delete body.nameEn;
-    delete body.nameAr;
-    if (!body.password) delete body.password;
-    if (this.image) body.image = this.image;
-    this.entityService.updateRoot<any>('users/profile', body).subscribe({
-      next: (user) => {
+    delete body['nameEn'];
+    delete body['nameAr'];
+    if (!body['password']) delete body['password'];
+    if (this.image) body['image'] = this.image;
+    void this.auth.saveProfile(body).then(
+      (user) => {
         this.auth.user.set(this.image && !user.image ? { ...user, image: this.image } : user);
         this.form.controls.password.setValue('');
         this.form.markAsPristine();
@@ -217,10 +237,10 @@ export class ProfileComponent implements OnInit {
         this.toast.success('Profile saved');
         this.saving.set(false);
       },
-      error: (err) => {
-        this.toast.error(err.error?.message || 'Could not save profile');
+      (err) => {
+        this.toast.error(normalizeApiError(err).message);
         this.saving.set(false);
       },
-    });
+    );
   }
 }

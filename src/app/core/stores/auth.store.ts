@@ -1,14 +1,16 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { firstValueFrom, throwError } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { RegisterRequest, User } from '../models';
 import { AuthService } from '../services/auth.service';
+import { EntityService } from '../services/entity.service';
 import { normalizeApiError } from '../services/api-error';
 import { clearStorageKey, getStorageKey, setStorageKey } from '../utils/storage';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore {
   private auth = inject(AuthService);
+  private entity = inject(EntityService);
 
   private refreshTimer: ReturnType<typeof setInterval> | null = null;
   private readonly accessTokenLifetimeMs = 15 * 60 * 1000;
@@ -126,12 +128,50 @@ export class AuthStore {
   }
 
   async loadUser(): Promise<void> {
-    if (!this.token()) return;
+    await this.loadProfile();
+  }
+
+  /**
+   * Fetches the signed-in admin and refreshes the store.
+   *
+   * `GET /users/profile` is shadowed by `GET /users/:id` in the backend route
+   * order, so it 404s. The record fetched by id is the exact same document, so
+   * fall back to it rather than leaving the profile page empty.
+   */
+  async loadProfile(): Promise<User | null> {
+    if (!this.token()) return null;
     try {
-      this.user.set(await firstValueFrom(this.auth.profile()));
-    } catch {
+      const user = await firstValueFrom(
+        this.auth.profile().pipe(
+          catchError((err) => {
+            const id = this.userId() ?? this.user()?.id;
+            return id ? this.auth.me(id) : throwError(() => err);
+          }),
+        ),
+      );
+      this.user.set(user);
+      return user;
+    } catch (err) {
       this.user.set(null);
+      throw err;
     }
+  }
+
+  /**
+   * Saves the signed-in admin's own profile.
+   *
+   * Same route-shadowing problem as `loadProfile`, so fall back to
+   * `PUT /users/:id` with the id we already hold when the root route 404s.
+   */
+  async saveProfile(body: Record<string, unknown>): Promise<User> {
+    const id = this.userId() ?? this.user()?.id;
+    const user = await firstValueFrom(
+      this.entity.updateRoot<User>('users/profile', body).pipe(
+        catchError((err) => (id ? this.entity.update<User>('users', id, body) : throwError(() => err))),
+      ),
+    );
+    this.user.set(user);
+    return user;
   }
 
   logout(): void {

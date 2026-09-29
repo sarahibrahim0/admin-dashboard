@@ -1,8 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { LoginResponse, RegisterRequest, User } from '../models';
+
+/** Some deployments wrap single records in `{ data }` / `{ user }`; unwrap so callers always get the user. */
+function unwrapUser(res: any): User {
+  return (res?.data ?? res?.user ?? res) as User;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -18,11 +24,11 @@ export class AuthService {
   }
 
   me(id: string): Observable<User> {
-    return this.http.get<User>(`${this.base}/${id}`);
+    return this.http.get<User>(`${this.base}/${id}`).pipe(map(unwrapUser));
   }
 
   profile(): Observable<User> {
-    return this.http.get<User>(`${this.base}/profile`);
+    return this.http.get<User>(`${this.base}/profile`).pipe(map(unwrapUser));
   }
 
   refresh(refreshToken: string): Observable<{ accessToken: string; refreshToken: string }> {

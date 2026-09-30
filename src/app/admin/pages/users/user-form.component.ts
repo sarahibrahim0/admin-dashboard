@@ -206,11 +206,12 @@ private fb = inject(FormBuilder);
     };
     delete body.nameEn;
     delete body.nameAr;
-    // The backend rejects isAdmin/role from a non-admin, so never send them
-    // from a form the viewer is not allowed to change them in.
+    // The backend rejects isAdmin/role/isActive from a non-admin, so never
+    // send them from a form the viewer is not allowed to change them in.
     if (!this.auth.isAdmin()) {
       delete body.isAdmin;
       delete body.role;
+      delete body.isActive;
     }
     // An empty role means "clear it", not "send an empty string".
     if (body.role === '' || body.role === null) body.role = null;

@@ -92,6 +92,30 @@ describe('UserFormComponent role assignment', () => {
     req.flush({});
   });
 
+  it('never lets a non-admin send isActive either', () => {
+    // Disabling an account blocks sign-in, so it has to be admin-only.
+    component.form.patchValue({ nameEn: 'Sara', email: 'sara@example.com', phone: '0100', isActive: false });
+    component.form.markAsDirty();
+    component.submit();
+
+    const req = http.expectOne(`${environment.apiUrl}users`);
+    expect('isActive' in req.request.body).toBeFalse();
+    req.flush({});
+  });
+
+  it('sends isActive when an admin disables an account', () => {
+    signInAsAdmin();
+    createAndLoadRoles();
+
+    component.form.patchValue({ nameEn: 'Sara', email: 'sara@example.com', phone: '0100', isActive: false });
+    component.form.markAsDirty();
+    component.submit();
+
+    const req = http.expectOne(`${environment.apiUrl}users`);
+    expect(req.request.body.isActive).toBeFalse();
+    req.flush({});
+  });
+
   it('sends null rather than an empty string to clear a role', () => {
     signInAsAdmin();
     createAndLoadRoles();

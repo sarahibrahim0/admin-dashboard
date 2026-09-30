@@ -56,6 +56,41 @@ import { ToastService } from '../../../shared/ui/toast.service';
               [id]="'user-active'">
             </app-form-field>
           </div>
+          @if (auth.isAdmin()) {
+            <div class="mt-6 border-t border-[#e8e8e8] pt-6">
+              <h3 class="section-title mb-1">{{ 'Access' | translate }}</h3>
+              <p class="mb-5 text-xs text-[#646D77]">
+                {{ 'Choose what this account is allowed to do.' | translate }}
+              </p>
+              <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div>
+                  <label class="block text-sm font-medium text-[#646D77]" for="user-role">
+                    {{ 'Role' | translate }}
+                  </label>
+                  <select
+                    id="user-role"
+                    [formControl]="form.controls.role"
+                    class="mt-1 w-full rounded-md border border-[#c9c9c9] bg-white px-3 py-2 text-sm outline-none focus:border-salmon">
+                    <option [ngValue]="''">{{ 'No role' | translate }}</option>
+                    @for (role of roles(); track role.id) {
+                      <option [ngValue]="role.id">{{ roleName(role) }}</option>
+                    }
+                  </select>
+                  @if (rolesLoading()) {
+                    <p class="mt-1 text-xs text-[#646D77]">{{ 'Loading roles...' | translate }}</p>
+                  }
+                </div>
+                <div class="flex items-end">
+                  <app-form-field
+                    [control]="form.controls.isAdmin"
+                    [type]="'checkbox'"
+                    [checkboxLabel]="'Admin (full access)'"
+                    [id]="'user-admin'">
+                  </app-form-field>
+                </div>
+              </div>
+            </div>
+          }
           <div class="mt-6">
             <label class="block text-sm font-medium text-[#646D77]">{{ 'Password' | translate }}</label>
             @if (isEdit()) {
@@ -75,7 +110,6 @@ private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   protected router = inject(Router);
   private http = inject(HttpClient);
-  private auth = inject(AuthStore);
   private toast = inject(ToastService);
   private language = inject(LanguageService);
 
@@ -84,6 +118,14 @@ private fb = inject(FormBuilder);
   submitError = signal<string | null>(null);
   showSaveDialog = signal(false);
   userId = '';
+  roles = signal<any[]>([]);
+  rolesLoading = signal(false);
+  protected auth = inject(AuthStore);
+
+  /** Role names are localized, so resolve them the same way the list pages do. */
+  roleName(role: any): string {
+    return this.language.localizedValue(role?.name) || role?.name || '-';
+  }
 
   confirmSave(): void {
     this.showSaveDialog.set(false);
@@ -108,10 +150,15 @@ private fb = inject(FormBuilder);
     password: [''],
     city: [''],
     country: [''],
+    role: [''],
+    isAdmin: [false],
   });
 
   ngOnInit(): void {
     this.userId = this.route.snapshot.paramMap.get('id') || '';
+    // The role list is admin-only, so only ask for it when it is actually
+    // reachable. A 403 here would otherwise block the whole form.
+    if (this.auth.isAdmin()) this.loadRoles();
     if (this.userId) {
       this.isEdit.set(true);
       this.http.get<any>(`${environment.apiUrl}users/${this.userId}`).subscribe((u) => {
@@ -124,9 +171,23 @@ private fb = inject(FormBuilder);
           phone: u.phone || '',
           city: u.city || '',
           country: u.country || '',
+          // Populated on the server, so accept either shape defensively.
+          role: typeof u.role === 'string' ? u.role : (u.role?.id || u.role?._id || ''),
+          isAdmin: u.isAdmin === true,
         });
       });
     }
+  }
+
+  private loadRoles(): void {
+    this.rolesLoading.set(true);
+    this.http.get<any[]>(`${environment.apiUrl}roles`).subscribe({
+      next: (list) => {
+        this.roles.set(Array.isArray(list) ? list : []);
+        this.rolesLoading.set(false);
+      },
+      error: () => this.rolesLoading.set(false),
+    });
   }
 
   submit(): void {
@@ -145,6 +206,14 @@ private fb = inject(FormBuilder);
     };
     delete body.nameEn;
     delete body.nameAr;
+    // The backend rejects isAdmin/role from a non-admin, so never send them
+    // from a form the viewer is not allowed to change them in.
+    if (!this.auth.isAdmin()) {
+      delete body.isAdmin;
+      delete body.role;
+    }
+    // An empty role means "clear it", not "send an empty string".
+    if (body.role === '' || body.role === null) body.role = null;
     // Never let an admin deactivate their own account (would lock them out).
     if (this.isEdit() && this.userId && this.userId === this.auth.userId()) {
       body.isActive = true;

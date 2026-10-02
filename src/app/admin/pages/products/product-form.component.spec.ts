@@ -39,6 +39,20 @@ describe('ProductFormComponent uploads', () => {
     });
   });
 
+  describe('category dropdown', () => {
+    it('asks for active categories only', () => {
+      component.ngOnInit();
+
+      const req = mock.expectOne((r) => r.url === `${environment.apiUrl}categories/`);
+      // A new product must not be assignable to a category hidden from the store.
+      expect(req.request.params.get('filter')).toBe(JSON.stringify({ isActive: 'true' }));
+      req.flush({ data: [{ _id: 'c1', name: { en: 'Shoes' } }] });
+
+      expect(component.categories()).toEqual([{ id: 'c1', name: { en: 'Shoes' } }]);
+      mock.verify();
+    });
+  });
+
   describe('main image', () => {
     it('uploads to /media/image under the products folder', () => {
       const file = png('main.png');

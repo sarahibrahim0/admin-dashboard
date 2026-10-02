@@ -267,7 +267,11 @@ private media = inject(MediaService);
   }
 
   ngOnInit(): void {
-    this.http.get<any>(`${environment.apiUrl}categories/`, { params: { limit: '100' } }).subscribe({
+    // Only active categories: a new product should not be assignable to a
+    // category that is hidden from the storefront.
+    this.http.get<any>(`${environment.apiUrl}categories/`, {
+      params: { limit: '100', filter: JSON.stringify({ isActive: 'true' }) },
+    }).subscribe({
       next: (res) => {
         const list = Array.isArray(res) ? res : (res?.data || []);
         this.categories.set(list.map((c: any) => ({ id: c._id || c.id, name: c.name })));

@@ -206,7 +206,10 @@ export class CouponFormComponent implements OnInit {
 
   private loadCategories(): void {
     this.categoriesLoading.set(true);
-    this.http.get<any>(`${environment.apiUrl}categories/`, { params: { limit: '100' } }).subscribe({
+    // Only active categories are offered.
+    this.http.get<any>(`${environment.apiUrl}categories/`, {
+      params: { limit: '100', filter: JSON.stringify({ isActive: 'true' }) },
+    }).subscribe({
       next: (res) => {
         const list = Array.isArray(res) ? res : (res?.data || []);
         this.categories.set(list.map((c: any) => ({ id: c._id || c.id, name: c.name })));

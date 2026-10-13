@@ -182,8 +182,12 @@ export class CouponFormComponent implements OnInit {
           value: c.value ?? 0,
           maxUses: c.maxUses ?? 0,
           minSubtotal: c.minSubtotal ?? 0,
-          productIds: Array.isArray(c.productIds) ? c.productIds.map((x: any) => x._id || x.id || x) : [],
-          categoryIds: Array.isArray(c.categoryIds) ? c.categoryIds.map((x: any) => x._id || x.id || x) : [],
+          productIds: Array.isArray(c.products || c.productIds)
+            ? (c.products || c.productIds).map((x: any) => x._id || x.id || x)
+            : [],
+          categoryIds: Array.isArray(c.categories || c.categoryIds)
+            ? (c.categories || c.categoryIds).map((x: any) => x._id || x.id || x)
+            : [],
           validFrom: c.validFrom || '',
           validUntil: c.validUntil || '',
           active: c.active ?? true,

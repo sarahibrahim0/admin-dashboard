@@ -19,7 +19,7 @@ import { formatDateTime } from '../../../shared/utils/datetime';
       <app-page-header title="{{ 'Transactions' | translate }}" eyebrow="{{ 'Payments' | translate }}" subtitle="{{ 'Every payment attempt recorded from the storefront, across all countries.' | translate }}">
         <a actions routerLink="/admin/payments/methods" class="btn btn-secondary"><i class="bi bi-wallet2"></i>{{ 'Payment Methods' | translate }}</a>
       </app-page-header>
-      <app-base-table #table [columns]="columns" [actions]="actions" [data]="transactions" [totalCount]="totalCount" [serverSidePagination]="true" [pageSize]="pageSize" (searchChange)="onSearch($event)" [initialSortField]="sortBy" [initialSortDir]="sortDir" [initialSearch]="search" [initialFilters]="filters" [initialPage]="currentPage" [syncQueryParams]="true" (sortChange)="onSort($event)" (filterChange)="onFilter($event)" [loading]="loader.loading()" [error]="loader.error()" (pageChange)="onPageChange($event)" />
+      <app-base-table #table [columns]="columns" [actions]="actions" [data]="transactions" [totalCount]="totalCount" [serverSidePagination]="true" [pageSize]="pageSize" (searchChange)="onSearch($event)" [initialSortField]="sortBy" [initialSortDir]="sortDir" [initialSearch]="search" [initialFilters]="filters" [initialPage]="currentPage" [syncQueryParams]="true" (sortChange)="onSort($event)" (filterChange)="onFilter($event)" [loading]="loader.loading()" [error]="loader.error()" (pageChange)="onPageChange($event)" (rowClick)="openDetail($event)" (actionClick)="handleAction($event)" />
     </div>
   `,
 })
@@ -64,7 +64,18 @@ export class TransactionsListComponent implements OnInit {
     },
     { field: 'createdAt', header: 'Date', sortable: true, format: (v, row) => formatDateTime(v || row.dateOrdered || row.date, this.language.language()) },
   ];
-  actions: TableAction[] = [];
+  actions: TableAction[] = [
+    { type: 'view', icon: 'bi bi-eye', title: 'View', class: 'text-[#797979] hover:bg-[#f1faff] hover:text-[#1e6bb8]' },
+  ];
+
+  handleAction(event: { action: string; row: any }): void {
+    if (event.action === 'view') this.openDetail(event.row);
+  }
+
+  protected openDetail(row: any): void {
+    const id = row.id || row._id;
+    if (id) this.router.navigate(['/admin/payments', id]);
+  }
 
   ngOnInit(): void {
     this.loadTransactions();

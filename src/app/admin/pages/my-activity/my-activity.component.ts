@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { AuditLogService, AuditLog } from '../../../core/services/audit-log.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { displayAuditChanges } from '../../../shared/utils/audit-display';
+import { auditEntityRoute } from '../../../shared/utils/audit-navigation';
 import { formatDateTime } from '../../../shared/utils/datetime';
 import { BaseTableComponent } from '../../../shared/table/base-table.component';
 import { readTableQuery } from '../../../shared/table/table-query';
@@ -50,6 +51,7 @@ import { LatestLoader } from '../../../shared/utils/latest-loader';
           [loading]="loader.loading()" [error]="loader.error()" (pageChange)="onPageChange($event)"
           (searchChange)="onSearch($event)"
           (sortChange)="onSort($event)"
+          (rowClick)="onRowClick($event)"
         />
       </section>
     </div>
@@ -118,6 +120,11 @@ export class MyActivityComponent implements OnInit {
     this.sortDir = event.dir;
     this.currentPage.set(1);
     this.loadLogs();
+  }
+
+  onRowClick(log: AuditLog): void {
+    const route = auditEntityRoute(log?.entity, log?.entityId, log?.action);
+    if (route) void this.router.navigate(route);
   }
 
   private syncEntityParam(): void {

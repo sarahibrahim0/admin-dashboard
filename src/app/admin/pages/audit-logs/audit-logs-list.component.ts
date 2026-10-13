@@ -2,9 +2,10 @@ import { Component, DestroyRef, inject, OnInit, signal, viewChild } from '@angul
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AuditLogService } from '../../../core/services/audit-log.service';
+import { AuditLogService, AuditLog } from '../../../core/services/audit-log.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { displayAuditChanges } from '../../../shared/utils/audit-display';
+import { auditEntityRoute } from '../../../shared/utils/audit-navigation';
 import { formatDateTime } from '../../../shared/utils/datetime';
 import { BaseTableComponent } from '../../../shared/table/base-table.component';
 import { readTableQuery } from '../../../shared/table/table-query';
@@ -21,7 +22,7 @@ import { LatestLoader } from '../../../shared/utils/latest-loader';
     <div class="space-y-6">
       <app-page-header title="{{ 'Audit Logs' | translate }}" eyebrow="{{ 'Security' | translate }}" subtitle="{{ 'Review system activity and changes.' | translate }}"></app-page-header>
 
-      <app-base-table #table [columns]="columns" [data]="logs" [totalCount]="totalCount" [serverSidePagination]="true" [pageSize]="pageSize" (searchChange)="onSearch($event)" [initialSearch]="queryState.search" [initialPage]="queryState.page" [syncQueryParams]="true" [loading]="loader.loading()" [error]="loader.error()" (pageChange)="onPageChange($event)">
+      <app-base-table #table [columns]="columns" [data]="logs" [totalCount]="totalCount" [serverSidePagination]="true" [pageSize]="pageSize" (searchChange)="onSearch($event)" [initialSearch]="queryState.search" [initialPage]="queryState.page" [syncQueryParams]="true" [loading]="loader.loading()" [error]="loader.error()" (pageChange)="onPageChange($event)" (rowClick)="onRowClick($event)">
         <div actions>
           <select [(ngModel)]="selectedEntity" (ngModelChange)="onFilterChange()"
             class="w-full rounded-md border border-[#c9c9c9] px-2 py-1.5 text-sm sm:w-48">
@@ -100,6 +101,11 @@ export class AuditLogsListComponent implements OnInit {
 
   onPageChange(page: number): void {
     this.loadLogs(page);
+  }
+
+  onRowClick(log: AuditLog): void {
+    const route = auditEntityRoute(log?.entity, log?.entityId, log?.action);
+    if (route) void this.router.navigate(route);
   }
 
   getSeverity(action: string): string {

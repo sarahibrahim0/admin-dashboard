@@ -50,6 +50,11 @@ export class PaymentMethodsListComponent implements OnInit {
       }),
     },
     { field: 'code', header: 'Code', sortable: true, filterable: true, filterType: 'text', placeholder: 'code', format: (v) => v || '-' },
+    {
+      field: 'provider', header: 'Provider', sortable: true, filterable: true, filterType: 'text', placeholder: 'provider',
+      format: (v) => ({ badge: v || '—', badgeClass: 'bg-[#6366F1]10 text-[#6366F1]' }),
+    },
+    { field: 'mode', header: 'Mode', sortable: true, format: (v) => v || '-' },
     { field: 'description', header: 'Description', format: (v) => this.language.localizedValue(v) },
     {
       field: 'countries', header: 'Countries',

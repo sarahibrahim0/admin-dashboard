@@ -435,6 +435,13 @@ Fields marked `localized` accept either:
 - `409` — `{ "message": "insufficient stock for <name>" }`
 - `400` — `{ "message": "<coupon error reason>" }`
 
+**Coupons:** A coupon restricted to `products`/`categories` may only discount the
+eligible line items (an item counts if its product id **or** its category id is in
+the coupon). `minSubtotal` is checked against the eligible subtotal, so a
+restricted coupon fails with `{ "message": "COUPON_MIN_SUBTOTAL", "minSubtotal": N }`
+when the eligible items are below the minimum. A global coupon (no restrictions)
+applies to the whole order subtotal. Usage is incremented only when the order settles.
+
 ### POST `/orders/confirm`
 **Body:** `{ "sessionId": "string (required)" }`
 **Response 200:** Order object (with `paymentStatus: 'paid'`)
@@ -547,6 +554,7 @@ Fields marked `localized` accept either:
 |--------|----------|------|-------------|
 | GET | `/coupons/` | Admin | List all coupons |
 | POST | `/coupons/` | Admin | Create coupon |
+| GET | `/coupons/:id` | Admin | Get a coupon by id |
 | POST | `/coupons/validate` | None | Validate coupon code |
 | PUT | `/coupons/:id` | Admin | Update coupon |
 | DELETE | `/coupons/:id` | Admin | Delete coupon |
@@ -557,10 +565,15 @@ Fields marked `localized` accept either:
 ```json
 {
   "_id": "string", "code": "UPPERCASE", "type": "percent|fixed",
-  "value": 10, "maxUses": 100, "usedCount": 5, "active": true,
+  "value": 10, "minSubtotal": 0, "maxUses": 100, "usedCount": 5, "active": true,
+  "products": ["ObjectId"], "categories": ["ObjectId"],
   "validFrom": "Date", "validUntil": "Date", "dateCreated": "Date"
 }
 ```
+
+### GET `/coupons/:id`
+**Response 200:** Single coupon object
+**Errors:** `404` — `{ "message": "coupon not found" }`
 
 ### POST `/coupons/`
 **Body:**
@@ -569,9 +582,13 @@ Fields marked `localized` accept either:
   "code": "string (required)", "type": "percent|fixed (required)",
   "value": "number (required)", "maxUses": "number (optional, 0=unlimited)",
   "active": "boolean (optional)", "validFrom": "ISO date (optional)",
-  "validUntil": "ISO date (optional)"
+  "validUntil": "ISO date (optional)",
+  "products": ["ObjectId (optional)"], "categories": ["ObjectId (optional)"]
 }
 ```
+`products`/`categories` restrict the coupon to specific items (an item matches by
+product id **or** category id). Leave both empty for a whole-order (global) coupon.
+The legacy `productIds`/`categoryIds` names are accepted on create/update too.
 **Response 201:** Created coupon object
 
 ### POST `/coupons/validate`
@@ -1049,7 +1066,67 @@ All endpoints require **JWT** auth.
 
 ---
 
-# 19. Webhooks
+# 19. Payments (Config-Driven Gateways)
+
+Payment methods are the single source of truth for checkout. Each method has a
+`provider` (`stripe | paymob | paypal | cod`), a `mode` (`test | live`), and
+optional per-method gateway credentials stored **encrypted, write-only** (they
+are never returned verbatim — `toJSON` masks them as `••••…last4` and the API
+ignores masked echoes, so the dashboard must leave a field blank to keep its
+current secret).
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/payment-methods` | payment-methods:read | List (filters: `name`, `code`, `provider`, `mode`, `isActive`; sort: `name`, `code`, `provider`, `mode`, `sortOrder`, `updatedAt`) |
+| GET | `/payment-methods/:id` | payment-methods:read | Detail |
+| POST | `/payment-methods` | payment-methods:create | Create method |
+| PUT | `/payment-methods/:id` | payment-methods:update | Update method |
+| DELETE | `/payment-methods/:id` | payment-methods:delete | Delete method |
+| DELETE | `/payment-methods/` (bulk) | payment-methods:delete | Delete many |
+| POST | `/payment-methods/:id/test` | payment-methods:update | Validate stored gateway credentials against the provider |
+| GET | `/countries/:code/payment-methods` | None | Storefront: active methods for a country's currency, sorted by `sortOrder` |
+| GET | `/transactions` | transactions:read | List (filters: `status`; sort: `reference`, `orderId`, `amount`, `status`, `createdAt`) |
+| GET | `/transactions/:id` | admin | Transaction detail |
+| POST | `/transactions/:id/refund` | transactions:refund | Full/partial gateway refund |
+
+### Payment method payload (create/update)
+```json
+{
+  "name": { "en": "Card", "ar": "بطاقة" },
+  "code": "card",
+  "description": { "en": "", "ar": "" },
+  "icon": "💳",
+  "color": "#6366F1",
+  "isActive": true,
+  "provider": "stripe",
+  "mode": "live",
+  "credentials": { "secret_key": "sk_live_..." },
+  "supportedCurrencies": ["EGP", "USD"],
+  "minAmount": 0,
+  "maxAmount": 0,
+  "sortOrder": 0,
+  "supportsRefund": true,
+  "instructions": { "en": "", "ar": "" },
+  "countries": ["<countryId>"]
+}
+```
+`0` for `minAmount`/`maxAmount` = no limit. Supported credential keys per provider:
+
+- **stripe:** `secret_key`, `publishable_key`, `webhook_secret`
+- **paymob:** `secret_key`, `public_key`, `integration_id`, `hmac_secret`
+- **paypal:** `client_id`, `client_secret`
+
+### POST `/transactions/:id/refund`
+**Body:** `{ "amount": 12.5, "reason": "cancelled by customer" }` (`amount`/`reason` optional — amount defaults to the transaction amount).
+**Success 200:** `{ "success": true, "message": "refund completed", "transaction": {...}, "orderId": "…", "refundId": "…" }`
+Calls the provider refund (Stripe/PayPal by capture id, Paymob by payment id),
+updates the order (`paymentStatus: 'refunded'`, `refunded += amount`, `refunds.push`),
+and records the refunded transaction. COD and methods with `supportsRefund: false`
+are rejected. **Errors:** `409` when not paid, `502` when the gateway call fails.
+
+---
+
+# 20. Webhooks
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
@@ -1065,9 +1142,15 @@ All endpoints require **JWT** auth.
 **Response 200:** `{ "received": true }`
 **Errors:** `400` — `"Webhook Error: <message>"` (string)
 
+### POST `/webhooks/paymob`
+**Body:** Raw JSON (Paymob transaction event). HMAC verified with the signing
+secret of the payment method on the order (`hmac_secret`, fallback `PAYMOB_HMAC_SECRET`).
+Events are deduplicated per `provider + eventId` to make retries idempotent.
+`transaction.success` marks the order paid; failures mark it failed.
+
 ---
 
-# 20. Audit Logs
+# 21. Audit Logs
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
@@ -1097,6 +1180,9 @@ All endpoints require **JWT** auth.
 ---
 
 # Quick Reference: All 101 Endpoints
+
+> Newer config-driven payment endpoints are appended as rows 102+ below. Row
+> numbers are historical identifiers, not a strict ordering of the router.
 
 | # | Method | Route | Auth |
 |---|--------|-------|------|
@@ -1150,11 +1236,12 @@ All endpoints require **JWT** auth.
 | 48 | DELETE | `/reviews/` (bulk) | JWT |
 | 49 | GET | `/coupons/` | Admin |
 | 50 | POST | `/coupons/` | Admin |
-| 51 | POST | `/coupons/validate` | None |
-| 52 | PUT | `/coupons/:id` | Admin |
-| 53 | DELETE | `/coupons/:id` | Admin |
-| 54 | DELETE | `/coupons/` (bulk) | Admin |
-| 55 | GET | `/content/` | Admin |
+| 51 | GET | `/coupons/:id` | Admin |
+| 52 | POST | `/coupons/validate` | None |
+| 53 | PUT | `/coupons/:id` | Admin |
+| 54 | DELETE | `/coupons/:id` | Admin |
+| 55 | DELETE | `/coupons/` (bulk) | Admin |
+| 56 | GET | `/content/` | Admin |
 | 56 | GET | `/content/:key` | None |
 | 57 | POST | `/content/` | Admin |
 | 58 | POST | `/content/contact-message` | None |
@@ -1201,3 +1288,14 @@ All endpoints require **JWT** auth.
 | 99 | GET | `/audit-logs/my` | JWT |
 | 100 | GET | `/audit-logs/` | Admin |
 | 101 | GET | `/audit-logs/entities` | Admin |
+| 102 | GET | `/payment-methods` | payment-methods:read |
+| 103 | POST | `/payment-methods` | payment-methods:create |
+| 104 | PUT | `/payment-methods/:id` | payment-methods:update |
+| 105 | POST | `/payment-methods/:id/test` | payment-methods:update |
+| 106 | DELETE | `/payment-methods/:id` | payment-methods:delete |
+| 107 | GET | `/countries/:code/payment-methods` | None |
+| 108 | GET | `/transactions` | transactions:read |
+| 109 | GET | `/transactions/:id` | admin |
+| 110 | POST | `/transactions/:id/refund` | transactions:refund |
+| 111 | POST | `/orders/confirm-paypal` | None |
+| 112 | POST | `/webhooks/paymob` | Paymob HMAC |

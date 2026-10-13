@@ -4,12 +4,40 @@ import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { environment } from '../../../../../environments/environment';
 import { TranslatePipe } from '../../../../shared/i18n/translate.pipe';
-import { FormFieldComponent } from '../../../../shared/forms/form-field.component';
+import { LanguageService } from '../../../../core/services/language.service';
+import { FormFieldComponent, FormFieldOption } from '../../../../shared/forms/form-field.component';
 import { LocalizedFieldComponent } from '../../../../shared/forms/localized-field.component';
 import { FormConfirmsComponent } from '../../../../shared/confirm-dialog/form-confirms.component';
 import { joinLocalized, splitLocalized } from '../../../../shared/utils/localized';
 import { DetailHeaderComponent } from '../../../../shared/ui/detail-header.component';
 import { ToastService } from '../../../../shared/ui/toast.service';
+
+interface CredField {
+  key: string;
+  label: string;
+  secret?: boolean;
+}
+
+const PROVIDER_CREDENTIALS: Record<string, CredField[]> = {
+  stripe: [
+    { key: 'secret_key', label: 'Secret key', secret: true },
+    { key: 'publishable_key', label: 'Publishable key' },
+    { key: 'webhook_secret', label: 'Webhook signing secret', secret: true },
+  ],
+  paymob: [
+    { key: 'secret_key', label: 'Secret key', secret: true },
+    { key: 'public_key', label: 'Publishable key' },
+    { key: 'integration_id', label: 'Integration id' },
+    { key: 'hmac_secret', label: 'HMAC secret', secret: true },
+  ],
+  paypal: [
+    { key: 'client_id', label: 'Client id' },
+    { key: 'client_secret', label: 'Client secret', secret: true },
+  ],
+  cod: [],
+};
+
+const PROVIDER_LABELS: Record<string, string> = { stripe: 'Stripe', paymob: 'Paymob', paypal: 'PayPal', cod: 'Cash on Delivery' };
 
 @Component({
   selector: 'app-payment-method-form',
@@ -60,6 +88,64 @@ import { ToastService } from '../../../../shared/ui/toast.service';
             </app-localized-field>
           </div>
         </section>
+
+        <section class="card">
+          <div class="mb-5 flex items-center justify-between gap-4">
+            <h3 class="section-title">{{ 'Payment gateway' | translate }}</h3>
+            @if (isEdit()) {
+              <button type="button" class="btn btn-outline" [disabled]="testing()" (click)="testConnection()">
+                <i class="bi bi-plug me-1"></i>{{ testing() ? ('Loading' | translate) : ('Test connection' | translate) }}
+              </button>
+            }
+          </div>
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div>
+              <app-form-field [control]="fc('provider')" [label]="'Gateway provider' | translate" type="select" [options]="providerOptions" [placeholder]="'—'"></app-form-field>
+            </div>
+            <div>
+              <app-form-field [control]="fc('mode')" [label]="'Mode' | translate" type="select" [options]="modeOptions" [placeholder]="'—'"></app-form-field>
+            </div>
+          </div>
+          @if (credentialFields().length > 0) {
+            <div class="mt-5">
+              <p class="text-sm font-medium text-[#646D77]">{{ 'Gateway credentials' | translate }}</p>
+              <p class="mt-0.5 text-xs text-[#797979]">{{ 'Stored keys are never read back. Leave blank to keep the current value.' | translate }}</p>
+              <div class="mt-3 space-y-4">
+                @for (f of credentialFields(); track f.key) {
+                  <app-form-field [control]="credentialsControl(f.key)" [label]="f.label" [type]="f.secret ? 'password' : 'text'" [id]="'cred-' + f.key"></app-form-field>
+                }
+              </div>
+            </div>
+          }
+          <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div>
+              <app-form-field [control]="fc('supportedCurrencies')" [label]="'Supported currencies' | translate" [placeholder]="'EGP, USD'"></app-form-field>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <app-form-field [control]="fc('minAmount')" [label]="'Minimum amount' | translate" type="number"></app-form-field>
+              <app-form-field [control]="fc('maxAmount')" [label]="'Maximum amount' | translate" type="number"></app-form-field>
+            </div>
+          </div>
+          <p class="mt-1 text-xs text-[#797979]">{{ '0 = no limit. Leave blank to allow any amount.' | translate }}</p>
+          <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div>
+              <app-form-field [control]="fc('sortOrder')" [label]="'Sort order' | translate" type="number"></app-form-field>
+            </div>
+            <div class="flex items-end pb-1">
+              <app-form-field [control]="fc('supportsRefund')" [type]="'checkbox'" [checkboxLabel]="('Supports refunds' | translate)"></app-form-field>
+            </div>
+          </div>
+          <div class="mt-5">
+            <app-localized-field
+              [label]="'Instructions for the customer' | translate"
+              mode="textarea"
+              [rows]="3"
+              [controlEn]="fc('instructionsEn')"
+              [controlAr]="fc('instructionsAr')"
+              [placeholder]="'Pay via your card...'">
+            </app-localized-field>
+          </div>
+        </section>
         </div>
         <aside class="card relative min-w-0 self-start">
           <h3 class="section-title mb-5">{{ 'Appearance' | translate }}</h3>
@@ -68,7 +154,7 @@ import { ToastService } from '../../../../shared/ui/toast.service';
             <app-form-field [control]="fc('color')" [label]="'Color' | translate" type="color" id="method-color"></app-form-field>
           </div>
           <div class="mt-4">
-            <app-form-field [control]="fc('isActive')" [type]="'checkbox'" [checkboxLabel]="('Status' | translate) + ' (' + ((fc('isActive').value ? 'Active' : 'Inactive') | translate) + ')'" id="method-active"></app-form-field>
+            <app-form-field [control]="fc('isActive')" [type]="'checkbox'" [checkboxLabel]="activeLabel()" id="method-active"></app-form-field>
           </div>
           <div class="mt-4 flex items-center gap-2 rounded-md border border-[#F6F8FE] bg-[#FAFBFF] px-3 py-2.5 text-sm">
             <span class="text-lg">{{ fc('icon').value || '💳' }}</span>
@@ -88,15 +174,35 @@ export class PaymentMethodFormComponent implements OnInit {
   protected router = inject(Router);
   private toast = inject(ToastService);
   private http = inject(HttpClient);
+  private language = inject(LanguageService);
 
   isEdit = signal(false);
   saving = signal(false);
+  testing = signal(false);
   submitError = signal<string | null>(null);
   methodId = '';
   form: FormGroup;
+  credentialFields = signal<CredField[]>([]);
+
+  providerOptions: FormFieldOption[] = ['stripe', 'paymob', 'paypal', 'cod'].map((p) => ({ value: p, label: PROVIDER_LABELS[p] || p }));
+  modeOptions: FormFieldOption[] = [
+    { value: 'test', label: 'Test' },
+    { value: 'live', label: 'Live' },
+  ];
+
+  private maskedCredentials: Record<string, string> = {};
 
   fc(key: string): FormControl {
     return this.form.controls[key] as FormControl;
+  }
+
+  credentialsControl(key: string): FormControl | null {
+    const group = this.form.controls['credentials'] as FormGroup | undefined;
+    return group ? (group.controls[key] as FormControl) ?? null : null;
+  }
+
+  activeLabel(): string {
+    return this.language.translate(this.fc('isActive').value ? 'Active' : 'Inactive');
   }
 
   constructor() {
@@ -109,7 +215,30 @@ export class PaymentMethodFormComponent implements OnInit {
       icon: [''],
       color: ['#6366F1'],
       isActive: [true],
+      provider: ['', Validators.required],
+      mode: ['test'],
+      credentials: this.fb.group({}),
+      supportedCurrencies: [''],
+      minAmount: [null],
+      maxAmount: [null],
+      sortOrder: [0],
+      supportsRefund: [true],
+      instructionsEn: [''],
+      instructionsAr: [''],
     });
+    this.fc('credentials');
+    this.fc('provider').valueChanges.subscribe((p: string) => this.rebuildCredentials(p || ''));
+    this.rebuildCredentials(this.fc('provider').value || '');
+  }
+
+  private rebuildCredentials(provider: string): void {
+    const fields = PROVIDER_CREDENTIALS[provider] || [];
+    const controls: Record<string, unknown> = {};
+    for (const f of fields) {
+      controls[f.key] = [this.maskedCredentials[f.key] || ''];
+    }
+    this.form.setControl('credentials', this.fb.group(controls));
+    this.credentialFields.set(fields);
   }
 
   ngOnInit(): void {
@@ -119,6 +248,8 @@ export class PaymentMethodFormComponent implements OnInit {
       this.http.get<any>(`${environment.apiUrl}payment-methods/${this.methodId}`).subscribe((m) => {
         const name = splitLocalized(m.name);
         const description = splitLocalized(m.description);
+        const instructions = splitLocalized(m.instructions);
+        this.maskedCredentials = m.credentials || {};
         this.form.patchValue({
           nameEn: name.en,
           nameAr: name.ar,
@@ -128,6 +259,15 @@ export class PaymentMethodFormComponent implements OnInit {
           icon: m.icon || '',
           color: m.color || '#6366F1',
           isActive: m.isActive ?? true,
+          provider: m.provider || '',
+          mode: m.mode || 'test',
+          supportedCurrencies: Array.isArray(m.supportedCurrencies) ? m.supportedCurrencies.join(', ') : (m.supportedCurrencies || ''),
+          minAmount: m.minAmount ?? null,
+          maxAmount: m.maxAmount ?? null,
+          sortOrder: m.sortOrder ?? 0,
+          supportsRefund: m.supportsRefund ?? true,
+          instructionsEn: instructions.en,
+          instructionsAr: instructions.ar,
         });
       });
     }
@@ -140,6 +280,24 @@ export class PaymentMethodFormComponent implements OnInit {
     this.submit();
   }
 
+  testConnection(): void {
+    this.testing.set(true);
+    this.http.post<any>(`${environment.apiUrl}payment-methods/${this.methodId}/test`, {}).subscribe({
+      next: (res) => {
+        this.testing.set(false);
+        if (res?.ok) {
+          this.toast.success(res?.message || 'Connection OK');
+        } else {
+          this.toast.error(res?.message || 'Connection test failed');
+        }
+      },
+      error: (err) => {
+        this.testing.set(false);
+        this.toast.error(err?.error?.message || 'Connection test failed');
+      },
+    });
+  }
+
   submit(): void {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     if (this.form.pristine) {
@@ -149,6 +307,12 @@ export class PaymentMethodFormComponent implements OnInit {
     this.saving.set(true);
     this.submitError.set(null);
     const v = this.form.getRawValue();
+    const rawCreds = (this.form.controls['credentials'] as FormGroup)?.getRawValue() || {};
+    const credentials: Record<string, string> = {};
+    for (const key of Object.keys(rawCreds)) {
+      const val = String(rawCreds[key] ?? '').trim();
+      if (val && !val.includes('••••')) credentials[key] = val;
+    }
     const body: any = {
       name: joinLocalized(v.nameEn, v.nameAr),
       code: v.code.trim().toLowerCase(),
@@ -156,6 +320,17 @@ export class PaymentMethodFormComponent implements OnInit {
       icon: v.icon,
       color: v.color,
       isActive: v.isActive,
+      provider: v.provider,
+      mode: v.mode,
+      credentials,
+      supportedCurrencies: v.supportedCurrencies
+        ? v.supportedCurrencies.split(',').map((s: string) => s.trim().toUpperCase()).filter(Boolean)
+        : [],
+      minAmount: v.minAmount === null || v.minAmount === '' ? undefined : Number(v.minAmount),
+      maxAmount: v.maxAmount === null || v.maxAmount === '' ? undefined : Number(v.maxAmount),
+      sortOrder: Number(v.sortOrder ?? 0),
+      supportsRefund: v.supportsRefund,
+      instructions: joinLocalized(v.instructionsEn, v.instructionsAr),
     };
     const req = this.isEdit()
       ? this.http.put<any>(`${environment.apiUrl}payment-methods/${this.methodId}`, body)

@@ -67,6 +67,11 @@ export class RolesListComponent implements OnInit {
     coupons: 'Coupons',
     reviews: 'Reviews',
     roles: 'Roles',
+    payments: 'Payments',
+    countries: 'Countries',
+    currencies: 'Currencies',
+    'audit-logs': 'Audit Logs',
+    settings: 'Settings',
   };
 
   ngOnInit(): void {

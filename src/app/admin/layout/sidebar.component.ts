@@ -5,6 +5,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs/operators';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 import { LanguageService } from '../../core/services/language.service';
+import { AuthStore } from '../../core/stores/auth.store';
 
 interface SidebarItem {
   label: string;
@@ -46,7 +47,7 @@ interface SidebarSection {
         </div>
       </div>
       <nav class="flex-1 overflow-y-auto p-3" [attr.lang]="language.language()">
-        @for (section of sections; track section.title) {
+        @for (section of visibleSections(); track section.title) {
           <div class="mb-4">
             <h3 class="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.12em] text-faint" [class.hidden]="rail() && !mobileOpen">
               {{ language.isArabic() ? section.titleAr : section.title }}
@@ -101,6 +102,7 @@ export class SidebarComponent {
   private readonly isMedium = signal(false);
   rail = computed(() => this.isCollapsed() || this.isMedium());
   private readonly router = inject(Router);
+  private readonly auth = inject(AuthStore);
   private readonly currentUrl = toSignal(
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
@@ -119,6 +121,20 @@ export class SidebarComponent {
     this.isMedium.set(this.mqMd.matches && !this.mqLg.matches);
   }
   protected readonly language = inject(LanguageService);
+
+  visibleSections = computed(() => {
+    const role = this.auth.user()?.role;
+    if (!role) return this.sections;
+
+    return this.sections
+      .map((section) => ({
+        ...section,
+        items: section.items.filter((item) =>
+          !item.permission || role.permissions?.includes(item.permission),
+        ),
+      }))
+      .filter((section) => section.items.length > 0);
+  });
 
   private static path(url: string): string {
     const path = url.split('?')[0].split('#')[0].replace(/\/+$/, '');
@@ -150,38 +166,38 @@ export class SidebarComponent {
   sections: SidebarSection[] = [
     {
       title: 'Dashboard', titleAr: 'لوحة التحكم',
-      items: [{ label: 'Overview', labelAr: 'نظرة عامة', icon: 'chart-bar', route: '/admin/dashboard' }],
+      items: [{ label: 'Overview', labelAr: 'نظرة عامة', icon: 'chart-bar', route: '/admin/dashboard', permission: 'dashboard:read' }],
     },
     {
       title: 'Content', titleAr: 'المحتوى',
       items: [
-        { label: 'Products', labelAr: 'المنتجات', icon: 'box', route: '/admin/products' },
-        { label: 'Low Stock', labelAr: 'مخزون منخفض', icon: 'exclamation-triangle', route: '/admin/products/low-stock' },
-        { label: 'Categories', labelAr: 'التصنيفات', icon: 'tags', route: '/admin/categories' },
-        { label: 'Coupons', labelAr: 'الكوبونات', icon: 'ticket', route: '/admin/coupons' },
+        { label: 'Products', labelAr: 'المنتجات', icon: 'box', route: '/admin/products', permission: 'products:read' },
+        { label: 'Low Stock', labelAr: 'مخزون منخفض', icon: 'exclamation-triangle', route: '/admin/products/low-stock', permission: 'products:read' },
+        { label: 'Categories', labelAr: 'التصنيفات', icon: 'tags', route: '/admin/categories', permission: 'categories:read' },
+        { label: 'Coupons', labelAr: 'الكوبونات', icon: 'ticket', route: '/admin/coupons', permission: 'coupons:read' },
       ],
     },
     {
       title: 'Commerce', titleAr: 'التجارة',
       items: [
-        { label: 'Orders', labelAr: 'الطلبات', icon: 'shopping-cart', route: '/admin/orders' },
-        { label: 'Reviews', labelAr: 'التقييمات', icon: 'star', route: '/admin/reviews' },
+        { label: 'Orders', labelAr: 'الطلبات', icon: 'shopping-cart', route: '/admin/orders', permission: 'orders:read' },
+        { label: 'Reviews', labelAr: 'التقييمات', icon: 'star', route: '/admin/reviews', permission: 'reviews:read' },
       ],
     },
     {
       title: 'Payments', titleAr: 'المدفوعات',
       items: [
-        { label: 'Transactions', labelAr: 'العمليات', icon: 'credit-card', route: '/admin/payments' },
-        { label: 'Payment Methods', labelAr: 'طرق الدفع', icon: 'wallet', route: '/admin/payments/methods' },
-        { label: 'Countries', labelAr: 'الدول', icon: 'globe', route: '/admin/countries' },
-        { label: 'Currencies', labelAr: 'العملات', icon: 'banknote', route: '/admin/currencies' },
+        { label: 'Transactions', labelAr: 'العمليات', icon: 'credit-card', route: '/admin/payments', permission: 'payments:read' },
+        { label: 'Payment Methods', labelAr: 'طرق الدفع', icon: 'wallet', route: '/admin/payments/methods', permission: 'payments:read' },
+        { label: 'Countries', labelAr: 'الدول', icon: 'globe', route: '/admin/countries', permission: 'countries:read' },
+        { label: 'Currencies', labelAr: 'العملات', icon: 'banknote', route: '/admin/currencies', permission: 'currencies:read' },
       ],
     },
     {
       title: 'People', titleAr: 'المستخدمون',
       items: [
-        { label: 'Users', labelAr: 'المستخدمون', icon: 'users', route: '/admin/users' },
-        { label: 'Roles', labelAr: 'الأدوار', icon: 'shield', route: '/admin/roles' },
+        { label: 'Users', labelAr: 'المستخدمون', icon: 'users', route: '/admin/users', permission: 'users:read' },
+        { label: 'Roles', labelAr: 'الأدوار', icon: 'shield', route: '/admin/roles', permission: 'roles:read' },
       ],
     },
     {
@@ -193,10 +209,10 @@ export class SidebarComponent {
     {
       title: 'System', titleAr: 'النظام',
       items: [
-        { label: 'Audit Logs', labelAr: 'سجل التدقيق', icon: 'list', route: '/admin/audit-logs' },
-        { label: 'Shipping', labelAr: 'الشحن', icon: 'truck', route: '/admin/settings/shipping' },
+        { label: 'Audit Logs', labelAr: 'سجل التدقيق', icon: 'list', route: '/admin/audit-logs', permission: 'audit-logs:read' },
+        { label: 'Shipping', labelAr: 'الشحن', icon: 'truck', route: '/admin/settings/shipping', permission: 'settings:read' },
         { label: 'Profile', labelAr: 'الملف الشخصي', icon: 'user', route: '/admin/settings/profile' },
-        { label: 'Settings', labelAr: 'الإعدادات', icon: 'cog', route: '/admin/settings' },
+        { label: 'Settings', labelAr: 'الإعدادات', icon: 'cog', route: '/admin/settings', permission: 'settings:read' },
       ],
     },
   ];

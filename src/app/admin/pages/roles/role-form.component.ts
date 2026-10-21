@@ -139,6 +139,41 @@ private fb = inject(FormBuilder);
       { key: 'coupons:write', label: 'Write' },
       { key: 'coupons:delete', label: 'Delete' },
     ]},
+    { key: 'orders', label: 'Orders', permissions: [
+      { key: 'orders:read', label: 'Read' },
+      { key: 'orders:write', label: 'Write' },
+      { key: 'orders:delete', label: 'Delete' },
+    ]},
+    { key: 'reviews', label: 'Reviews', permissions: [
+      { key: 'reviews:read', label: 'Read' },
+      { key: 'reviews:write', label: 'Write' },
+      { key: 'reviews:delete', label: 'Delete' },
+    ]},
+    { key: 'payments', label: 'Payments', permissions: [
+      { key: 'payments:read', label: 'Read' },
+      { key: 'payments:write', label: 'Write' },
+      { key: 'payments:delete', label: 'Delete' },
+    ]},
+    { key: 'countries', label: 'Countries', permissions: [
+      { key: 'countries:read', label: 'Read' },
+      { key: 'countries:write', label: 'Write' },
+      { key: 'countries:delete', label: 'Delete' },
+    ]},
+    { key: 'currencies', label: 'Currencies', permissions: [
+      { key: 'currencies:read', label: 'Read' },
+      { key: 'currencies:write', label: 'Write' },
+      { key: 'currencies:delete', label: 'Delete' },
+    ]},
+    { key: 'audit-logs', label: 'Audit Logs', permissions: [
+      { key: 'audit-logs:read', label: 'Read' },
+      { key: 'audit-logs:write', label: 'Write' },
+      { key: 'audit-logs:delete', label: 'Delete' },
+    ]},
+    { key: 'settings', label: 'Settings', permissions: [
+      { key: 'settings:read', label: 'Read' },
+      { key: 'settings:write', label: 'Write' },
+      { key: 'settings:delete', label: 'Delete' },
+    ]},
   ];
 
   ngOnInit(): void {

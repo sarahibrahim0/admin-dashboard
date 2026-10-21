@@ -53,6 +53,7 @@ import { DetailHeaderComponent } from '../../../shared/ui/detail-header.componen
         <div>
           <label class="block text-sm font-medium text-[#646D77]" for="profile-role">{{ 'Role' | translate }}</label>
           <select id="profile-role" [formControl]="form.controls.role"
+            style="color: #182635 !important; -webkit-text-fill-color: #182635 !important; background-color: #ffffff !important; color-scheme: light"
             class="mt-1 w-full rounded-md border border-[#c9c9c9] bg-white px-3 py-2 text-sm !text-[#182635] outline-none [color-scheme:light] focus:border-salmon">
             <option value="" style="color: #182635; background-color: #ffffff">{{ 'No role' | translate }}</option>
             @for (role of roles(); track role._id || role.id) {

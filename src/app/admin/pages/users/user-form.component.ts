@@ -84,7 +84,7 @@ import { ToastService } from '../../../shared/ui/toast.service';
                   <app-form-field
                     [control]="form.controls.isAdmin"
                     [type]="'checkbox'"
-                    [checkboxLabel]="'Admin (full access)'"
+                    [checkboxLabel]="'Admin account' | translate"
                     [id]="'user-admin'">
                   </app-form-field>
                 </div>

@@ -1,9 +1,11 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { firstValueFrom } from 'rxjs';
 import { EntityService } from '../../../core/services/entity.service';
 import { MediaService } from '../../../core/services/media.service';
 import { normalizeApiError } from '../../../core/services/api-error';
 import { AuthStore } from '../../../core/stores/auth.store';
+import { Role, User } from '../../../core/models';
 import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 import { LanguageService } from '../../../core/services/language.service';
 import { FormFieldComponent } from '../../../shared/forms/form-field.component';
@@ -48,6 +50,19 @@ import { DetailHeaderComponent } from '../../../shared/ui/detail-header.componen
           [required]="true"
           [id]="'profile-phone'">
         </app-form-field>
+        <div>
+          <label class="block text-sm font-medium text-[#646D77]" for="profile-role">{{ 'Role' | translate }}</label>
+          <select id="profile-role" [formControl]="form.controls.role"
+            class="mt-1 w-full rounded-md border border-[#c9c9c9] bg-white px-3 py-2 text-sm outline-none focus:border-salmon">
+            <option value="">{{ 'No role' | translate }}</option>
+            @for (role of roles(); track role._id || role.id) {
+              <option [value]="role._id || role.id">{{ roleName(role) }}</option>
+            }
+          </select>
+          @if (rolesLoading()) {
+            <p class="mt-1 text-xs text-[#646D77]">{{ 'Loading roles...' | translate }}</p>
+          }
+        </div>
         <app-form-field
           [control]="form.controls.password"
           [label]="'New password' | translate"
@@ -115,12 +130,14 @@ export class ProfileComponent implements OnInit {
   showUploadDialog = signal(false);
   selectedFileName = signal('');
   mediaDirty = signal(false);
+  roles = signal<Role[]>([]);
+  rolesLoading = signal(false);
 
   confirmSave(): void {
     this.showSaveDialog.set(false);
     this.save();
   }
-  image: { url: string; publicId: string } | null = null;
+  image: { url: string; publicId?: string } | null = null;
   imagePreview = signal('');
 
   form = this.fb.group({
@@ -131,7 +148,12 @@ export class ProfileComponent implements OnInit {
     password: [''],
     city: [''],
     country: [''],
+    role: [''],
   });
+
+  roleName(role: Role): string {
+    return this.language.localizedValue(role.name) || role.name || '-';
+  }
 
   displayName(): string {
     return this.language.localizedValue({
@@ -142,6 +164,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.patch(this.auth.user());
+    this.loadRoles();
     void this.auth.loadProfile().then(
       (user) => this.patch(user),
       (err) => {
@@ -155,7 +178,7 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  private patch(user: any): void {
+  private patch(user: User | null): void {
     if (!user) return;
     const name = splitLocalized(user.name);
     this.form.patchValue({
@@ -166,11 +189,28 @@ export class ProfileComponent implements OnInit {
       password: '',
       city: user.city || '',
       country: user.country || '',
+      role: this.roleId(user.role),
     });
     if (user.image?.url) {
       this.image = user.image;
       this.imagePreview.set(user.image.url);
     }
+  }
+
+  private loadRoles(): void {
+    this.rolesLoading.set(true);
+    this.entityService.listPaginated<Role>('roles', { limit: '200' }).subscribe({
+      next: (res) => this.roles.set(res.data),
+      error: (err) => {
+        this.toast.error(normalizeApiError(err).message);
+        this.rolesLoading.set(false);
+      },
+      complete: () => this.rolesLoading.set(false),
+    });
+  }
+
+  private roleId(role: Role | string | null | undefined): string {
+    return typeof role === 'string' ? role : role?._id || role?.id || '';
   }
 
   onImageSelect(event: Event): void {
@@ -212,7 +252,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  save(): void {
+  async save(): Promise<void> {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     if (this.form.pristine && !this.mediaDirty()) {
       this.toast.info('No changes to save');
@@ -220,27 +260,72 @@ export class ProfileComponent implements OnInit {
     }
     this.saving.set(true);
     const v = this.form.getRawValue();
+    const currentUser = this.auth.user();
+    const currentRoleId = this.roleId(currentUser?.role);
+    const selectedRoleId = v.role || '';
+    const roleChanged = selectedRoleId !== currentRoleId;
     const body: Record<string, unknown> = {
       ...v,
       name: joinLocalized(v.nameEn, v.nameAr),
     };
     delete body['nameEn'];
     delete body['nameAr'];
+    delete body['role'];
     if (!body['password']) delete body['password'];
     if (this.image) body['image'] = this.image;
-    void this.auth.saveProfile(body).then(
-      (user) => {
-        this.auth.user.set(this.image && !user.image ? { ...user, image: this.image } : user);
-        this.form.controls.password.setValue('');
-        this.form.markAsPristine();
-        this.mediaDirty.set(false);
-        this.toast.success('Profile saved');
-        this.saving.set(false);
-      },
-      (err) => {
-        this.toast.error(normalizeApiError(err).message);
-        this.saving.set(false);
-      },
-    );
+
+    try {
+      const user = await this.saveProfileAndRole(body, selectedRoleId, roleChanged, currentUser);
+      this.auth.user.set(this.image && !user.image ? { ...user, image: this.image } : user);
+      this.form.controls.password.setValue('');
+      this.form.markAsPristine();
+      this.mediaDirty.set(false);
+      this.toast.success('Profile saved');
+    } catch (err: any) {
+      this.toast.error(
+        err?.profileSaved
+          ? 'Profile saved, but role could not be updated'
+          : normalizeApiError(err).message,
+      );
+    } finally {
+      this.saving.set(false);
+    }
+  }
+
+  private async saveProfileAndRole(
+    body: Record<string, unknown>,
+    selectedRoleId: string,
+    roleChanged: boolean,
+    currentUser: User | null,
+  ): Promise<User> {
+    const savedUser = await this.auth.saveProfile(body);
+    if (!roleChanged) return savedUser;
+
+    const userId = this.auth.userId() || currentUser?.id || currentUser?._id;
+    if (!userId) {
+      throw Object.assign(new Error('Profile saved, but role could not be updated'), {
+        profileSaved: true,
+      });
+    }
+
+    try {
+      const response = await firstValueFrom(
+        this.entityService.update<User>('users', userId, { role: selectedRoleId || null }),
+      );
+      const selectedRole = this.roles().find(
+        (role) => (role._id || role.id) === selectedRoleId,
+      );
+      const responseRole =
+        response?.role && typeof response.role === 'object' ? response.role : undefined;
+      return {
+        ...savedUser,
+        role: selectedRoleId ? selectedRole || responseRole || savedUser.role : undefined,
+      };
+    } catch (err) {
+      throw Object.assign(
+        err instanceof Error ? err : new Error(normalizeApiError(err).message),
+        { profileSaved: true },
+      );
+    }
   }
 }

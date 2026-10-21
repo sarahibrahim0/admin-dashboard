@@ -4,6 +4,8 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { provideRouter } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { ToastService } from '../../../shared/ui/toast.service';
+import { AuthStore } from '../../../core/stores/auth.store';
+import { Role, User } from '../../../core/models';
 import { ProfileComponent } from './profile.component';
 
 /**
@@ -86,6 +88,101 @@ describe('ProfileComponent upload', () => {
     expect(component.uploading()).toBeFalse();
     expect(component.imagePreview()).toBe('');
     expect(toasts.toasts().some((t) => t.key === 'unsupported file')).toBeTrue();
+    mock.verify();
+  });
+
+  it('updates the signed-in admin role from the profile form', async () => {
+    const auth = TestBed.inject(AuthStore);
+    const currentRole: Role = {
+      id: 'role-1',
+      _id: 'role-1',
+      name: 'Admin',
+      permissions: [],
+      isDefault: false,
+    };
+    const selectedRole: Role = {
+      id: 'role-2',
+      _id: 'role-2',
+      name: 'Editor',
+      permissions: ['products:read'],
+      isDefault: false,
+    };
+    const user: User = {
+      id: 'user-1',
+      _id: 'user-1',
+      name: 'Admin',
+      email: 'admin@example.com',
+      phone: '0100',
+      isAdmin: true,
+      role: currentRole,
+    };
+    auth.token.set('test-token');
+    auth.userId.set('user-1');
+    auth.user.set(user);
+    component.roles.set([currentRole, selectedRole]);
+    component.form.patchValue({
+      nameEn: 'Admin',
+      email: 'admin@example.com',
+      phone: '0100',
+      role: 'role-2',
+    });
+    component.form.markAsDirty();
+
+    const save = component.save();
+    const profileRequest = mock.expectOne(`${environment.apiUrl}users/profile`);
+    expect('role' in profileRequest.request.body).toBeFalse();
+    profileRequest.flush(user);
+
+    await Promise.resolve();
+    await Promise.resolve();
+    const roleRequest = mock.expectOne(`${environment.apiUrl}users/user-1`);
+    expect(roleRequest.request.method).toBe('PUT');
+    expect(roleRequest.request.body).toEqual({ role: 'role-2' });
+    roleRequest.flush({ ...user, role: selectedRole });
+    await save;
+
+    expect(auth.user()?.role).toEqual(selectedRole);
+    expect(component.form.pristine).toBeTrue();
+    expect(toasts.toasts().some((toast) => toast.key === 'Profile saved')).toBeTrue();
+    mock.verify();
+  });
+
+  it('sends null when clearing the profile role', async () => {
+    const auth = TestBed.inject(AuthStore);
+    auth.token.set('test-token');
+    auth.userId.set('user-1');
+    auth.user.set({
+      id: 'user-1',
+      _id: 'user-1',
+      name: 'Admin',
+      email: 'admin@example.com',
+      phone: '0100',
+      isAdmin: true,
+      role: {
+        id: 'role-1',
+        _id: 'role-1',
+        name: 'Admin',
+        permissions: [],
+        isDefault: false,
+      },
+    });
+    component.form.patchValue({
+      nameEn: 'Admin',
+      email: 'admin@example.com',
+      phone: '0100',
+      role: '',
+    });
+    component.form.markAsDirty();
+
+    const save = component.save();
+    mock.expectOne(`${environment.apiUrl}users/profile`).flush(auth.user());
+
+    await Promise.resolve();
+    await Promise.resolve();
+    const roleRequest = mock.expectOne(`${environment.apiUrl}users/user-1`);
+    expect(roleRequest.request.body).toEqual({ role: null });
+    roleRequest.flush({ ...auth.user(), role: null });
+    await save;
     mock.verify();
   });
 });

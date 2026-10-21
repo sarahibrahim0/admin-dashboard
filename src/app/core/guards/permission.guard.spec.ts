@@ -23,7 +23,7 @@ describe('permissionGuard', () => {
   beforeEach(() => {
     loggedIn = true;
     user = signal<GuardUser>({
-      isAdmin: true,
+      isAdmin: false,
       role: { permissions: ['products:read'] },
     });
     loadProfile = jasmine.createSpy('loadProfile').and.callFake(async () => user());
@@ -34,6 +34,7 @@ describe('permissionGuard', () => {
           provide: AuthStore,
           useValue: {
             isLoggedIn: () => loggedIn,
+            isAdmin: () => user()?.isAdmin === true,
             user,
             loadProfile,
           },
@@ -60,7 +61,7 @@ describe('permissionGuard', () => {
 
   it('denies a permission removed from the refreshed role', async () => {
     loadProfile.and.callFake(async () => {
-      user.set({ isAdmin: true, role: { permissions: [] } });
+      user.set({ isAdmin: false, role: { permissions: [] } });
       return user();
     });
 
@@ -68,8 +69,14 @@ describe('permissionGuard', () => {
     expect(result).toEqual(TestBed.inject(Router).parseUrl('/admin/settings/profile'));
   });
 
-  it('preserves full access for accounts without an assigned role', async () => {
-    user.set({ isAdmin: true, role: null });
+  it('allows admins all permissions regardless of their assigned role', async () => {
+    user.set({ isAdmin: true, role: { permissions: [] } });
+    expect(await canActivate('products:read')).toBeTrue();
+    expect(loadProfile).not.toHaveBeenCalled();
+  });
+
+  it('preserves access for non-admin accounts without an assigned role', async () => {
+    user.set({ isAdmin: false, role: null });
     expect(await canActivate('products:read')).toBeTrue();
   });
 

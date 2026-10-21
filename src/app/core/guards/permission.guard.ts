@@ -6,8 +6,9 @@ export const permissionGuard: CanActivateFn = async (route) => {
   const auth = inject(AuthStore);
   const router = inject(Router);
   if (!auth.isLoggedIn()) return router.createUrlTree(['/login']);
+  if (auth.isAdmin()) return true;
 
-  // Refresh the assigned role so permission edits take effect on the next navigation.
+  // Refresh non-admin role permissions so edits take effect on the next navigation.
   await auth.loadProfile();
 
   const requiredPermission = route.data?.['permission'] as string;

@@ -154,11 +154,13 @@ export class CouponFormComponent implements OnInit {
   onProductsChange(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.form.controls.productIds.setValue(Array.from(select.selectedOptions).map((o) => o.value));
+    this.form.controls.productIds.markAsDirty();
   }
 
   onCategoriesChange(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.form.controls.categoryIds.setValue(Array.from(select.selectedOptions).map((o) => o.value));
+    this.form.controls.categoryIds.markAsDirty();
   }
 
   isProductSelected(id: string): boolean {

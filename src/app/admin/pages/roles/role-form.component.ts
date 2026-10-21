@@ -179,6 +179,7 @@ isDependent(key: string): boolean {
       group.permissions.forEach((p) => perms.delete(p.key));
     }
     this.form.controls.permissions.setValue([...perms]);
+    this.form.controls.permissions.markAsDirty();
   }
 
   togglePermission(key: string, event: Event): void {
@@ -186,6 +187,7 @@ isDependent(key: string): boolean {
     const perms = new Set(this.form.controls.permissions.value || []);
     checked ? perms.add(key) : perms.delete(key);
     this.form.controls.permissions.setValue([...perms]);
+    this.form.controls.permissions.markAsDirty();
   }
 
   submit(): void {

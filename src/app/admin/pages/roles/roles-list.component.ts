@@ -10,6 +10,8 @@ import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 import { LatestLoader } from '../../../shared/utils/latest-loader';
 import { readTableQuery } from '../../../shared/table/table-query';
 import { formatAddedOn, formatDateTime } from '../../../shared/utils/datetime';
+import { ToastService } from '../../../shared/ui/toast.service';
+import { normalizeApiError } from '../../../core/services/api-error';
 
 @Component({
   selector: 'app-roles-list',
@@ -38,6 +40,7 @@ export class RolesListComponent implements OnInit {
   protected loader = new LatestLoader();
   protected router = inject(Router);
   private language = inject(LanguageService);
+  private toast = inject(ToastService);
   private route = inject(ActivatedRoute);
   roles = signal<any[]>([]);
   totalCount = signal(0);
@@ -134,6 +137,10 @@ export class RolesListComponent implements OnInit {
         this.deleteId = null;
         this.loadRoles();
         this.showDeleteDialog.set(false);
+      }, (err) => {
+        this.deleteId = null;
+        this.showDeleteDialog.set(false);
+        this.toast.error(normalizeApiError(err).message);
       });
     }
   }

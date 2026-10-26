@@ -5,6 +5,7 @@ import { AuthStore } from '../../../core/stores/auth.store';
 import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 import { LanguageService } from '../../../core/services/language.service';
 import { FormFieldComponent } from '../../../shared/forms/form-field.component';
+import { normalizeApiError } from '../../../core/services/api-error';
 
 @Component({
   selector: 'app-reset-password',
@@ -68,12 +69,31 @@ export class ResetPasswordComponent implements OnInit {
     confirmPassword: ['', Validators.required],
   });
 
-  ngOnInit(): void { this.token = this.route.snapshot.queryParamMap.get('token') || ''; }
+  ngOnInit(): void {
+    this.token = this.route.snapshot.queryParamMap.get('token') || '';
+    if (!this.token) {
+      this.auth.error.set(this.language.translate('Reset link is missing or invalid. Please request a new one.'));
+    }
+  }
 
   async submit(): Promise<void> {
+    if (!this.token) {
+      this.auth.error.set(this.language.translate('Reset link is missing or invalid. Please request a new one.'));
+      return;
+    }
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     const { password, confirmPassword } = this.form.getRawValue();
-    if (!password || password !== confirmPassword) { this.auth.error.set(this.language.translate('Passwords do not match')); return; }
-    try { await this.auth.resetPassword(this.token, password); this.success.set(this.language.translate('Password updated successfully! Redirecting to login...')); setTimeout(() => this.router.navigate(['/login']), 2000); } catch {}
+    if (!password || password !== confirmPassword) {
+      this.auth.error.set(this.language.translate('Passwords do not match'));
+      return;
+    }
+    this.success.set('');
+    try {
+      await this.auth.resetPassword(this.token, password);
+      this.success.set(this.language.translate('Password updated successfully! Redirecting to login...'));
+      setTimeout(() => this.router.navigate(['/login']), 2000);
+    } catch (err) {
+      this.auth.error.set(normalizeApiError(err).message);
+    }
   }
 }

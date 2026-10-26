@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClient, HttpInterceptorFn, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { authInterceptor } from './auth.interceptor';
+import { LanguageService } from '../services/language.service';
 
 describe('authInterceptor', () => {
   let http: HttpClient;
@@ -36,6 +37,15 @@ describe('authInterceptor', () => {
     http.get('/api/test').subscribe();
     const req = mock.expectOne('/api/test');
     expect(req.request.headers.has('Authorization')).toBeFalse();
+    expect(req.request.headers.get('x-language')).toBe('en');
+    req.flush({});
+  });
+
+  it('sends the selected language with API requests', () => {
+    TestBed.inject(LanguageService).setLanguage('ar');
+    http.get('/api/test').subscribe();
+    const req = mock.expectOne('/api/test');
+    expect(req.request.headers.get('x-language')).toBe('ar');
     req.flush({});
   });
 });

@@ -9,6 +9,7 @@ import { FormFieldComponent, FormFieldConfig } from '../../../shared/forms/form-
 import { LocalizedFieldComponent } from '../../../shared/forms/localized-field.component';
 import { CountrySelectComponent } from '../../../shared/forms/country-select.component';
 import { AuthStore } from '../../../core/stores/auth.store';
+import { normalizeApiError } from '../../../core/services/api-error';
 import { FormConfirmsComponent } from '../../../shared/confirm-dialog/form-confirms.component';
 import { joinLocalized, splitLocalized } from '../../../shared/utils/localized';
 
@@ -62,33 +63,35 @@ import { ToastService } from '../../../shared/ui/toast.service';
               <p class="mb-5 text-xs text-[#646D77]">
                 {{ 'Choose what this account is allowed to do.' | translate }}
               </p>
-              <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <div>
-                  <label class="block text-sm font-medium text-[#646D77]" for="user-role">
-                    {{ 'Role' | translate }}
-                  </label>
-                  <select
-                    id="user-role"
-                    [formControl]="form.controls.role"
-                    class="mt-1 w-full rounded-md border border-[#c9c9c9] bg-white px-3 py-2 text-sm outline-none focus:border-salmon">
-                    <option [ngValue]="''">{{ 'No role' | translate }}</option>
-                    @for (role of roles(); track role.id) {
-                      <option [ngValue]="role.id">{{ roleName(role) }}</option>
+              @if (auth.hasPermission('roles:write')) {
+                <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                  <div>
+                    <label class="block text-sm font-medium text-[#646D77]" for="user-role">
+                      {{ 'Role' | translate }}
+                    </label>
+                    <select
+                      id="user-role"
+                      [formControl]="form.controls.role"
+                      class="mt-1 w-full rounded-md border border-[#c9c9c9] bg-white px-3 py-2 text-sm outline-none focus:border-salmon">
+                      <option [ngValue]="''">{{ 'No role' | translate }}</option>
+                      @for (role of roles(); track role.id) {
+                        <option [ngValue]="role.id">{{ roleName(role) }}</option>
+                      }
+                    </select>
+                    @if (rolesLoading()) {
+                      <p class="mt-1 text-xs text-[#646D77]">{{ 'Loading roles...' | translate }}</p>
                     }
-                  </select>
-                  @if (rolesLoading()) {
-                    <p class="mt-1 text-xs text-[#646D77]">{{ 'Loading roles...' | translate }}</p>
-                  }
+                  </div>
+                  <div class="flex items-end">
+                    <app-form-field
+                      [control]="form.controls.isAdmin"
+                      [type]="'checkbox'"
+                      [checkboxLabel]="'Admin account' | translate"
+                      [id]="'user-admin'">
+                    </app-form-field>
+                  </div>
                 </div>
-                <div class="flex items-end">
-                  <app-form-field
-                    [control]="form.controls.isAdmin"
-                    [type]="'checkbox'"
-                    [checkboxLabel]="'Admin account' | translate"
-                    [id]="'user-admin'">
-                  </app-form-field>
-                </div>
-              </div>
+              }
             </div>
           }
           <div class="mt-6">
@@ -158,7 +161,7 @@ private fb = inject(FormBuilder);
     this.userId = this.route.snapshot.paramMap.get('id') || '';
     // The role list is admin-only, so only ask for it when it is actually
     // reachable. A 403 here would otherwise block the whole form.
-    if (this.auth.isAdmin()) this.loadRoles();
+    if (this.auth.hasPermission('roles:write')) this.loadRoles();
     if (this.userId) {
       this.isEdit.set(true);
       this.http.get<any>(`${environment.apiUrl}users/${this.userId}`).subscribe((u) => {
@@ -186,7 +189,10 @@ private fb = inject(FormBuilder);
         this.roles.set(Array.isArray(list) ? list : []);
         this.rolesLoading.set(false);
       },
-      error: () => this.rolesLoading.set(false),
+      error: (err) => {
+        this.rolesLoading.set(false);
+        this.toast.error(normalizeApiError(err).message);
+      },
     });
   }
 
@@ -213,6 +219,10 @@ private fb = inject(FormBuilder);
       delete body.role;
       delete body.isActive;
     }
+    if (!this.auth.hasPermission('roles:write')) {
+      delete body.isAdmin;
+      delete body.role;
+    }
     // An empty role means "clear it", not "send an empty string".
     if (body.role === '' || body.role === null) body.role = null;
     // Never let an admin deactivate their own account (would lock them out).
@@ -223,8 +233,15 @@ private fb = inject(FormBuilder);
       ? this.http.put<any>(`${environment.apiUrl}users/${this.userId}`, body)
       : this.http.post<any>(`${environment.apiUrl}users`, body);
     req.subscribe({
-      next: () => {
+      next: async () => {
         this.saving.set(false);
+        if (this.userId === this.auth.userId() && body.role !== undefined) {
+          try {
+            await this.auth.loadProfile();
+          } catch (err) {
+            this.toast.error(err instanceof Error ? err.message : 'Could not refresh role permissions');
+          }
+        }
         if (this.isEdit()) {
           this.form.markAsPristine();
           this.toast.success('Saved successfully');

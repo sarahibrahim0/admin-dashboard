@@ -17,6 +17,8 @@ interface PermissionGroup {
 
 import { DetailHeaderComponent } from '../../../shared/ui/detail-header.component';
 import { ToastService } from '../../../shared/ui/toast.service';
+import { AuthStore } from '../../../core/stores/auth.store';
+import { normalizeApiError } from '../../../core/services/api-error';
 
 @Component({
   selector: 'app-role-form',
@@ -46,31 +48,41 @@ import { ToastService } from '../../../shared/ui/toast.service';
         </section>
         <section class="card">
           <h3 class="section-title mb-5">{{ 'Permissions' | translate }}</h3>
+          <label class="mb-5 flex cursor-pointer items-center gap-2 text-sm font-semibold text-[#646D77]">
+            <input
+              type="checkbox"
+              [checked]="allPermissionsSelected()"
+              [indeterminate]="somePermissionsSelected() && !allPermissionsSelected()"
+              (change)="toggleAllPermissions($event)"
+              class="rounded accent-salmon" />
+            {{ 'Select all permissions' | translate }}
+          </label>
           <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
             @for (group of permissionGroups; track group.key) {
               <div class="rounded-lg border border-[#eadbd4] bg-almond/50 p-5">
                 <div class="mb-2 flex items-center justify-between">
                   <h4 class="text-base font-bold text-blue-black">{{ group.label | translate }}</h4>
                 </div>
-                <div>
-                  <label class="flex cursor-pointer items-center gap-2 text-sm font-medium text-[#646D77]">
-                    <input type="checkbox" [checked]="hasRead(group)" (change)="toggleRead(group, $event)" class="rounded accent-salmon" />
-                    {{ 'Read' | translate }}
-                  </label>
-                </div>
+                <label class="mb-3 flex cursor-pointer items-center gap-2 text-sm font-medium text-[#646D77]">
+                  <input
+                    type="checkbox"
+                    [checked]="isGroupFullySelected(group)"
+                    [indeterminate]="hasGroupPermission(group) && !isGroupFullySelected(group)"
+                    (change)="toggleGroupPermissions(group, $event)"
+                    class="rounded accent-salmon" />
+                  {{ 'Select all' | translate }}
+                </label>
                 <div class="mt-3 space-y-2">
                   @for (p of group.permissions; track p.key) {
-                    @if (p.key !== group.key + ':read') {
-                      <label class="flex cursor-pointer items-center gap-2 text-sm text-[#646D77]">
-                        <input
-                          type="checkbox"
-                          [checked]="hasPermission(p.key)"
-                          [disabled]="isDependent(p.key) && !hasRead(group)"
-                          (change)="togglePermission(p.key, $event)"
-                          class="rounded accent-salmon" />
-                        {{ p.label | translate }}
-                      </label>
-                    }
+                    <label class="flex cursor-pointer items-center gap-2 text-sm text-[#646D77]">
+                      <input
+                        type="checkbox"
+                        [checked]="hasPermission(p.key)"
+                        [disabled]="isDependent(p.key) && !hasRead(group)"
+                        (change)="togglePermission(p.key, $event)"
+                        class="rounded accent-salmon" />
+                      {{ p.label | translate }}
+                    </label>
                   }
                 </div>
               </div>
@@ -88,6 +100,7 @@ private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   protected router = inject(Router);
   private toast = inject(ToastService);
+  private auth = inject(AuthStore);
   private http = inject(HttpClient);
   private language = inject(LanguageService);
 
@@ -111,67 +124,67 @@ private fb = inject(FormBuilder);
 
   permissionGroups: PermissionGroup[] = [
     { key: 'dashboard', label: 'Dashboard', permissions: [
-      { key: 'dashboard:read', label: 'Read' },
-      { key: 'dashboard:write', label: 'Write' },
+      { key: 'dashboard:read', label: 'View' },
+      { key: 'dashboard:write', label: 'Edit' },
     ]},
 { key: 'categories', label: 'Categories', permissions: [
-      { key: 'categories:read', label: 'Read' },
-      { key: 'categories:write', label: 'Write' },
+      { key: 'categories:read', label: 'View' },
+      { key: 'categories:write', label: 'Edit' },
       { key: 'categories:delete', label: 'Delete' },
     ]},
     { key: 'products', label: 'Products', permissions: [
-      { key: 'products:read', label: 'Read' },
-      { key: 'products:write', label: 'Write' },
+      { key: 'products:read', label: 'View' },
+      { key: 'products:write', label: 'Edit' },
       { key: 'products:delete', label: 'Delete' },
     ]},
     { key: 'users', label: 'Users', permissions: [
-      { key: 'users:read', label: 'Read' },
-      { key: 'users:write', label: 'Write' },
+      { key: 'users:read', label: 'View' },
+      { key: 'users:write', label: 'Edit' },
       { key: 'users:delete', label: 'Delete' },
     ]},
     { key: 'roles', label: 'Roles', permissions: [
-      { key: 'roles:read', label: 'Read' },
-      { key: 'roles:write', label: 'Write' },
+      { key: 'roles:read', label: 'View' },
+      { key: 'roles:write', label: 'Edit' },
       { key: 'roles:delete', label: 'Delete' },
     ]},
     { key: 'coupons', label: 'Coupons', permissions: [
-      { key: 'coupons:read', label: 'Read' },
-      { key: 'coupons:write', label: 'Write' },
+      { key: 'coupons:read', label: 'View' },
+      { key: 'coupons:write', label: 'Edit' },
       { key: 'coupons:delete', label: 'Delete' },
     ]},
     { key: 'orders', label: 'Orders', permissions: [
-      { key: 'orders:read', label: 'Read' },
-      { key: 'orders:write', label: 'Write' },
+      { key: 'orders:read', label: 'View' },
+      { key: 'orders:write', label: 'Edit' },
       { key: 'orders:delete', label: 'Delete' },
     ]},
     { key: 'reviews', label: 'Reviews', permissions: [
-      { key: 'reviews:read', label: 'Read' },
-      { key: 'reviews:write', label: 'Write' },
+      { key: 'reviews:read', label: 'View' },
+      { key: 'reviews:write', label: 'Edit' },
       { key: 'reviews:delete', label: 'Delete' },
     ]},
     { key: 'payments', label: 'Payments', permissions: [
-      { key: 'payments:read', label: 'Read' },
-      { key: 'payments:write', label: 'Write' },
+      { key: 'payments:read', label: 'View' },
+      { key: 'payments:write', label: 'Edit' },
       { key: 'payments:delete', label: 'Delete' },
     ]},
     { key: 'countries', label: 'Countries', permissions: [
-      { key: 'countries:read', label: 'Read' },
-      { key: 'countries:write', label: 'Write' },
+      { key: 'countries:read', label: 'View' },
+      { key: 'countries:write', label: 'Edit' },
       { key: 'countries:delete', label: 'Delete' },
     ]},
     { key: 'currencies', label: 'Currencies', permissions: [
-      { key: 'currencies:read', label: 'Read' },
-      { key: 'currencies:write', label: 'Write' },
+      { key: 'currencies:read', label: 'View' },
+      { key: 'currencies:write', label: 'Edit' },
       { key: 'currencies:delete', label: 'Delete' },
     ]},
     { key: 'audit-logs', label: 'Audit Logs', permissions: [
-      { key: 'audit-logs:read', label: 'Read' },
-      { key: 'audit-logs:write', label: 'Write' },
+      { key: 'audit-logs:read', label: 'View' },
+      { key: 'audit-logs:write', label: 'Edit' },
       { key: 'audit-logs:delete', label: 'Delete' },
     ]},
     { key: 'settings', label: 'Settings', permissions: [
-      { key: 'settings:read', label: 'Read' },
-      { key: 'settings:write', label: 'Write' },
+      { key: 'settings:read', label: 'View' },
+      { key: 'settings:write', label: 'Edit' },
       { key: 'settings:delete', label: 'Delete' },
     ]},
   ];
@@ -200,19 +213,50 @@ private fb = inject(FormBuilder);
     return this.hasPermission(`${group.key}:read`);
   }
 
-isDependent(key: string): boolean {
+  hasGroupPermission(group: PermissionGroup): boolean {
+    return group.permissions.some((permission) => this.hasPermission(permission.key));
+  }
+
+  isGroupFullySelected(group: PermissionGroup): boolean {
+    return group.permissions.every((permission) => this.hasPermission(permission.key));
+  }
+
+  allPermissionsSelected(): boolean {
+    return this.permissionGroups.every((group) => this.isGroupFullySelected(group));
+  }
+
+  somePermissionsSelected(): boolean {
+    return this.permissionGroups.some((group) => this.hasGroupPermission(group));
+  }
+
+  isDependent(key: string): boolean {
     return !key.endsWith(':read');
   }
 
-  toggleRead(group: PermissionGroup, event: Event): void {
+  toggleGroupPermissions(group: PermissionGroup, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
     const perms = new Set(this.form.controls.permissions.value || []);
-    const readKey = `${group.key}:read`;
     if (checked) {
-      perms.add(readKey);
+      group.permissions.forEach((permission) => perms.add(permission.key));
     } else {
-      group.permissions.forEach((p) => perms.delete(p.key));
+      group.permissions.forEach((permission) => perms.delete(permission.key));
     }
+    this.form.controls.permissions.setValue([...perms]);
+    this.form.controls.permissions.markAsDirty();
+  }
+
+  toggleAllPermissions(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    const perms = new Set(this.form.controls.permissions.value || []);
+    this.permissionGroups.forEach((group) => {
+      group.permissions.forEach((permission) => {
+        if (checked) {
+          perms.add(permission.key);
+        } else {
+          perms.delete(permission.key);
+        }
+      });
+    });
     this.form.controls.permissions.setValue([...perms]);
     this.form.controls.permissions.markAsDirty();
   }
@@ -220,7 +264,15 @@ isDependent(key: string): boolean {
   togglePermission(key: string, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
     const perms = new Set(this.form.controls.permissions.value || []);
-    checked ? perms.add(key) : perms.delete(key);
+    if (checked) {
+      perms.add(key);
+    } else {
+      perms.delete(key);
+      if (key.endsWith(':read')) {
+        const group = this.permissionGroups.find((permissionGroup) => key === `${permissionGroup.key}:read`);
+        group?.permissions.forEach((permission) => perms.delete(permission.key));
+      }
+    }
     this.form.controls.permissions.setValue([...perms]);
     this.form.controls.permissions.markAsDirty();
   }
@@ -245,11 +297,19 @@ isDependent(key: string): boolean {
       ? this.http.put<any>(`${environment.apiUrl}roles/${this.roleId}`, body)
       : this.http.post<any>(`${environment.apiUrl}roles`, body);
     req.subscribe({
-      next: () => {
+      next: async () => {
         this.saving.set(false);
         if (this.isEdit()) {
           this.form.markAsPristine();
           this.toast.success('Saved successfully');
+          try {
+            const currentRoleRefreshed = await this.auth.refreshCurrentRole(this.roleId);
+            if (currentRoleRefreshed && !this.auth.hasPermission('roles:write')) {
+              await this.router.navigateByUrl('/admin/dashboard');
+            }
+          } catch (err) {
+            this.toast.error(normalizeApiError(err).message);
+          }
         } else {
           this.toast.success('Saved successfully');
           this.router.navigate(['/admin/roles']);

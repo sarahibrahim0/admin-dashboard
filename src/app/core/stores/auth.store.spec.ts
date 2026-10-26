@@ -49,6 +49,92 @@ describe('AuthStore', () => {
     expect(localStorage.getItem('ecom.refreshToken')).toBe('ref_123');
   });
 
+  it('loads current role permissions when the profile only returns a role id', async () => {
+    store.token.set('acc_123');
+
+    const profilePromise = store.loadProfile();
+    http.expectOne(`${environment.apiUrl}users/profile`).flush({
+      id: 'u1',
+      _id: 'u1',
+      name: 'Test',
+      email: 'test@test.com',
+      isAdmin: true,
+      role: 'role-1',
+    });
+    await Promise.resolve();
+    http.expectOne(`${environment.apiUrl}roles/role-1`).flush({
+      id: 'role-1',
+      _id: 'role-1',
+      name: 'Editor',
+      permissions: ['products:read'],
+      isDefault: false,
+    });
+
+    const user = await profilePromise;
+    expect(user?.role?.permissions).toEqual(['products:read']);
+    expect(store.hasPermission('products:read')).toBeTrue();
+    expect(store.hasPermission('users:write')).toBeFalse();
+  });
+
+  it('refreshes permissions immediately when the signed-in user role is updated', async () => {
+    store.token.set('acc_123');
+    store.user.set({
+      id: 'u1',
+      _id: 'u1',
+      name: 'Test',
+      email: 'test@test.com',
+      phone: '',
+      isAdmin: true,
+      role: {
+        id: 'role-1',
+        _id: 'role-1',
+        name: 'Editor',
+        permissions: ['roles:write'],
+        isDefault: false,
+      },
+    });
+
+    const refreshPromise = store.refreshCurrentRole('role-1');
+    http.expectOne(`${environment.apiUrl}users/profile`).flush({
+      id: 'u1',
+      _id: 'u1',
+      isAdmin: true,
+      role: 'role-1',
+    });
+    await Promise.resolve();
+    http.expectOne(`${environment.apiUrl}roles/role-1`).flush({
+      id: 'role-1',
+      _id: 'role-1',
+      permissions: ['products:read'],
+    });
+
+    await expectAsync(refreshPromise).toBeResolvedTo(true);
+    expect(store.hasPermission('roles:write')).toBeFalse();
+    expect(store.hasPermission('products:read')).toBeTrue();
+  });
+
+  it('does not reload the profile when another role is updated', async () => {
+    store.token.set('acc_123');
+    store.user.set({
+      id: 'u1',
+      _id: 'u1',
+      name: 'Test',
+      email: 'test@test.com',
+      phone: '',
+      isAdmin: true,
+      role: {
+        id: 'role-1',
+        _id: 'role-1',
+        name: 'Editor',
+        permissions: [],
+        isDefault: false,
+      },
+    });
+
+    await expectAsync(store.refreshCurrentRole('role-2')).toBeResolvedTo(false);
+    http.expectNone(`${environment.apiUrl}users/profile`);
+  });
+
   it('logout clears state', () => {
     localStorage.setItem('ecom.token', 'test');
     localStorage.setItem('ecom.userId', 'u1');

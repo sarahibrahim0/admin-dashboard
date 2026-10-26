@@ -123,16 +123,11 @@ export class SidebarComponent {
   protected readonly language = inject(LanguageService);
 
   visibleSections = computed(() => {
-    if (this.auth.isAdmin()) return this.sections;
-
-    const role = this.auth.user()?.role;
-    if (!role) return this.sections;
-
     return this.sections
       .map((section) => ({
         ...section,
         items: section.items.filter((item) =>
-          !item.permission || role.permissions?.includes(item.permission),
+          !item.permission || this.auth.hasPermission(item.permission),
         ),
       }))
       .filter((section) => section.items.length > 0);

@@ -1,7 +1,7 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
-import { RegisterRequest, User } from '../models';
+import { RegisterRequest, Role, User } from '../models';
 import { AuthService } from '../services/auth.service';
 import { EntityService } from '../services/entity.service';
 import { normalizeApiError } from '../services/api-error';
@@ -15,6 +15,8 @@ export class AuthStore {
   private refreshTimer: ReturnType<typeof setInterval> | null = null;
   private readonly accessTokenLifetimeMs = 15 * 60 * 1000;
   private readonly refreshMarginMs = 3 * 60 * 1000;
+  private profileRequest: Promise<User | null> | null = null;
+  private profileRevision = 0;
 
   readonly token = signal<string | null>(getStorageKey('ecom.token'));
   readonly refreshToken = signal<string | null>(getStorageKey('ecom.refreshToken'));
@@ -139,14 +141,59 @@ export class AuthStore {
    */
   async loadProfile(): Promise<User | null> {
     if (!this.token()) return null;
-    try {
-      const user = await firstValueFrom(this.auth.profile());
-      this.user.set(user);
+    if (this.profileRequest) return this.profileRequest;
+
+    const revision = ++this.profileRevision;
+    const request = (async (): Promise<User> => {
+      const profile = await firstValueFrom(this.auth.profile());
+      const roleReference = (profile as User & { role?: unknown }).role;
+      let role = roleReference as User['role'];
+
+      if (typeof roleReference === 'string' && roleReference) {
+        role = await firstValueFrom(this.entity.get<Role>('roles', roleReference));
+      } else if (roleReference && typeof roleReference === 'object') {
+        const roleRecord = roleReference as { id?: string; _id?: string; permissions?: string[] };
+        const roleId = roleRecord.id || roleRecord._id;
+        if (roleId) {
+          role = await firstValueFrom(this.entity.get<Role>('roles', roleId));
+        }
+      }
+
+      const user = { ...profile, role };
+      if (revision === this.profileRevision) this.user.set(user);
       return user;
+    })();
+    this.profileRequest = request;
+
+    try {
+      return await request;
     } catch (err) {
-      this.user.set(null);
+      if (revision === this.profileRevision) this.user.set(null);
       throw err;
+    } finally {
+      if (this.profileRequest === request) this.profileRequest = null;
     }
+  }
+
+  async refreshCurrentRole(roleId: string): Promise<boolean> {
+    const roleReference: unknown = this.user()?.role;
+    const assignedRoleId = typeof roleReference === 'string'
+      ? roleReference
+      : roleReference && typeof roleReference === 'object'
+        ? (roleReference as { id?: string; _id?: string }).id
+          || (roleReference as { id?: string; _id?: string })._id
+        : undefined;
+    if (assignedRoleId !== roleId) return false;
+
+    this.profileRevision++;
+    this.profileRequest = null;
+    await this.loadProfile();
+    return true;
+  }
+
+  hasPermission(permission: string): boolean {
+    const role = this.user()?.role;
+    return !!role && typeof role === 'object' && role.permissions?.includes(permission) === true;
   }
 
   /** Saves the signed-in admin's own profile. */

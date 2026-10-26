@@ -120,8 +120,9 @@ Fields marked `localized` accept either:
 ### POST `/users/login`
 **Body:**
 ```json
-{ "email": "string (required)", "password": "string (required)" }
+{ "email": "string (required)", "password": "string (required)", "keepMeLoggedIn": "boolean (optional, default false)" }
 ```
+`keepMeLoggedIn: true` issues a 30-day refresh token ("Keep me logged in"); otherwise the refresh token lasts 7 days. The flag is preserved across `/auth/refresh` rotation.
 **Response 200:**
 ```json
 { "user": "email", "token": "string", "refreshToken": "string", "userId": "string" }
@@ -198,7 +199,8 @@ Fields marked `localized` accept either:
 {
   "name": "string", "email": "string", "password": "string", "phone": "string",
   "phoneDialCode": "string", "street": "string", "apartment": "string",
-  "city": "string", "zip": "string", "country": "string", "isAdmin": "boolean"
+  "city": "string", "zip": "string", "country": "string", "isAdmin": "boolean",
+  "role": "ObjectId or null"
 }
 ```
 **Response 200:** Updated user object

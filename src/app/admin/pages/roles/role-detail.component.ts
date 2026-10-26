@@ -31,7 +31,7 @@ import { DetailHeaderComponent } from '../../../shared/ui/detail-header.componen
                 @if (permsFor(group.key).length > 0) {
                   <div class="flex flex-wrap gap-1.5">
                     @for (p of permsFor(group.key); track p) {
-                      <span class="inline-block rounded-full bg-almond px-2.5 py-1 text-xs font-medium text-blue-black">{{ p }}</span>
+                      <span class="inline-block rounded-full bg-almond px-2.5 py-1 text-xs font-medium text-blue-black">{{ permissionLabel(p) | translate }}</span>
                     }
                   </div>
                 } @else {
@@ -70,6 +70,14 @@ export class RoleDetailComponent implements OnInit {
 
   permsFor(group: string): string[] {
     return ((this.role()?.permissions || []) as string[]).filter((p) => p === group || p.startsWith(group + ':'));
+  }
+
+  permissionLabel(permission: string): string {
+    const action = permission.split(':').pop();
+    if (action === 'read') return 'View';
+    if (action === 'write') return 'Edit';
+    if (action === 'delete') return 'Delete';
+    return permission;
   }
 
   ngOnInit(): void {

@@ -1,10 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { AuthStore } from '../../../core/stores/auth.store';
 import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 import { LanguageService } from '../../../core/services/language.service';
 import { FormFieldComponent } from '../../../shared/forms/form-field.component';
+import { normalizeApiError } from '../../../core/services/api-error';
 
 @Component({
   selector: 'app-forgot-password',
@@ -48,7 +49,6 @@ import { FormFieldComponent } from '../../../shared/forms/form-field.component';
 })
 export class ForgotPasswordComponent {
   protected readonly auth = inject(AuthStore);
-  private router = inject(Router);
   private language = inject(LanguageService);
   private fb = inject(FormBuilder);
   success = signal('');
@@ -59,6 +59,12 @@ export class ForgotPasswordComponent {
 
   async submit(): Promise<void> {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
-    try { await this.auth.forgotPassword(this.form.controls.email.value?.trim() ?? ''); this.success.set(this.language.translate('Check your email for the reset link.')); } catch {}
+    this.success.set('');
+    try {
+      await this.auth.forgotPassword(this.form.controls.email.value?.trim() ?? '');
+      this.success.set(this.language.translate('Check your email for the reset link.'));
+    } catch (err) {
+      this.auth.error.set(normalizeApiError(err).message);
+    }
   }
 }

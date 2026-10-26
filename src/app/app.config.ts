@@ -8,6 +8,7 @@ import Aura from '@primeng/themes/aura';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { networkInterceptor } from './core/interceptors/network.interceptor';
+import { permissionInterceptor } from './core/interceptors/permission.interceptor';
 import { AuthStore } from './core/stores/auth.store';
 import { clearLazyChunkReloadAttempt, recoverFromLazyChunkError } from './core/utils/lazy-chunk-recovery';
 
@@ -23,7 +24,7 @@ export const appConfig: ApplicationConfig = {
     ),
     // networkInterceptor first: it must see the raw HttpErrorResponse before
     // authInterceptor normalizes it into a plain ApiError.
-    provideHttpClient(withInterceptors([networkInterceptor, authInterceptor])),
+    provideHttpClient(withInterceptors([networkInterceptor, authInterceptor, permissionInterceptor])),
     provideAnimationsAsync(),
     provideAppInitializer(() => {
       inject(AuthStore).startTokenRefresh();

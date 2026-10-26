@@ -50,6 +50,7 @@ import { DetailHeaderComponent } from '../../../shared/ui/detail-header.componen
           [required]="true"
           [id]="'profile-phone'">
         </app-form-field>
+        @if (auth.hasPermission('users:write') && auth.hasPermission('roles:write')) {
         <div>
           <label class="block text-sm font-medium text-[#646D77]" for="profile-role">{{ 'Role' | translate }}</label>
           <select id="profile-role" [formControl]="form.controls.role"
@@ -64,6 +65,7 @@ import { DetailHeaderComponent } from '../../../shared/ui/detail-header.componen
             <p class="mt-1 text-xs text-[#646D77]">{{ 'Loading roles...' | translate }}</p>
           }
         </div>
+        }
         <app-form-field
           [control]="form.controls.password"
           [label]="'New password' | translate"
@@ -119,7 +121,7 @@ import { DetailHeaderComponent } from '../../../shared/ui/detail-header.componen
 export class ProfileComponent implements OnInit {
   private entityService = inject(EntityService);
   private media = inject(MediaService);
-  private auth = inject(AuthStore);
+  protected auth = inject(AuthStore);
   private language = inject(LanguageService);
   private toast = inject(ToastService);
   private fb = inject(FormBuilder);
@@ -165,7 +167,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.patch(this.auth.user());
-    this.loadRoles();
+    if (this.auth.hasPermission('users:write') && this.auth.hasPermission('roles:write')) this.loadRoles();
     void this.auth.loadProfile().then(
       (user) => this.patch(user),
       (err) => {

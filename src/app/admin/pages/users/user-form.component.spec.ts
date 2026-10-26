@@ -28,6 +28,7 @@ describe('UserFormComponent role assignment', () => {
           useValue: {
             isAdmin: () => isAdmin,
             userId: () => 'other',
+            hasPermission: (permission: string) => isAdmin && permission === 'roles:write',
           },
         },
       ],

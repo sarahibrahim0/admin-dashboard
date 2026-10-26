@@ -61,8 +61,12 @@ const translations: Record<Language, Record<string, string>> = {
     'save site settings': 'Save site settings', 'open navigation menu': 'Open navigation menu', 'open profile': 'Open profile', 'close navigation menu': 'Close navigation menu',
     'email address': 'Email Address', 'phone number': 'Phone number', 'coupon code': 'Coupon code', 'select type': 'Select type', 'select country': 'Select country', password: 'Password', 'enter your password': 'Enter your password', 'keep me logged in': 'Keep me logged in',
     'signing in...': 'Signing in...', 'sign in': 'Sign In', 'enter your email to receive a reset link': 'Enter your email to receive a reset link',
+    'you do not have permission to access this page.': 'You do not have permission to access this page.',
+    'this page does not have a permission configured.': 'This page does not have a permission configured.',
+    'cannot delete default role': 'Cannot delete default role',
     'sending...': 'Sending...', 'send reset link': 'Send Reset Link', 'back to login': 'Back to Login',
     'check your email for the reset link.': 'Check your email for the reset link.',
+    'reset link is missing or invalid. please request a new one.': 'Reset link is missing or invalid. Please request a new one.',
     'enter your new password': 'Enter your new password', 'enter new password': 'Enter new password', 'confirm password': 'Confirm Password',
     'confirm new password': 'Confirm new password', 'resetting...': 'Resetting...',
     'passwords do not match': 'Passwords do not match', 'password updated successfully! redirecting to login...': 'Password updated successfully! Redirecting to login...',
@@ -235,8 +239,12 @@ const translations: Record<Language, Record<string, string>> = {
     'save site settings': 'حفظ إعدادات الموقع', 'open navigation menu': 'فتح قائمة التنقل', 'open profile': 'فتح الملف الشخصي', 'close navigation menu': 'إغلاق قائمة التنقل',
     'email address': 'البريد الإلكتروني', password: 'كلمة المرور', 'enter your password': 'أدخل كلمة المرور', 'keep me logged in': 'إبقائي مسجلاً الدخول',
     'signing in...': 'جارٍ تسجيل الدخول...', 'sign in': 'تسجيل الدخول', 'enter your email to receive a reset link': 'أدخل بريدك الإلكتروني لاستلام رابط إعادة التعيين',
+    'you do not have permission to access this page.': 'ليس لديك صلاحية للوصول إلى هذه الصفحة.',
+    'this page does not have a permission configured.': 'لم يتم إعداد صلاحية لهذه الصفحة.',
+    'cannot delete default role': 'لا يمكن حذف الدور الافتراضي',
     'sending...': 'جارٍ الإرسال...', 'send reset link': 'إرسال رابط إعادة التعيين', 'back to login': 'العودة إلى تسجيل الدخول',
     'check your email for the reset link.': 'تحقق من بريدك الإلكتروني لاستلام رابط إعادة التعيين.',
+    'reset link is missing or invalid. please request a new one.': 'رابط إعادة التعيين مفقود أو غير صالح. يرجى طلب رابط جديد.',
     'enter your new password': 'أدخل كلمة المرور الجديدة', 'enter new password': 'أدخل كلمة المرور الجديدة', 'confirm password': 'تأكيد كلمة المرور',
     'confirm new password': 'تأكيد كلمة المرور الجديدة', 'resetting...': 'جارٍ إعادة التعيين...',
     'passwords do not match': 'كلمتا المرور غير متطابقتين', 'password updated successfully! redirecting to login...': 'تم تحديث كلمة المرور بنجاح! جارٍ إعادة التوجيه إلى تسجيل الدخول...',
@@ -273,7 +281,8 @@ const translations: Record<Language, Record<string, string>> = {
     'manage cms pages and content.': 'أدر صفحات المحتوى.', 'monitor customer feedback.': 'تابع آراء العملاء.',
     'manage discounts and promotions.': 'أدر الخصومات والعروض.',
     // Buttons / headers / form actions (kept in sync with app-page-header + app-form-actions usage)
-    all: 'الكل', 'clear filters': 'مسح التصفية', 'saving...': 'جارٍ الحفظ...', 'update status': 'تحديث الحالة',
+    all: 'الكل', 'select all permissions': 'تحديد كل الصلاحيات',
+    'clear filters': 'مسح التصفية', 'saving...': 'جارٍ الحفظ...', 'update status': 'تحديث الحالة',
     'shipment tracking': 'تتبع الشحنة', 'customer since': 'عميل منذ',
     'customer details': 'بيانات العميل', 'order items': 'منتجات الطلب', 'order summary': 'ملخص الطلب', 'shipping address': 'عنوان الشحن',
     subtotal: 'المجموع الفرعي', 'items count': 'عدد المنتجات', 'order date': 'تاريخ الطلب', 'payment status': 'حالة الدفع',
@@ -344,6 +353,66 @@ const translations: Record<Language, Record<string, string>> = {
     'checkout & payments': 'الدفع والمدفوعات', 'enable cash on delivery': 'تفعيل الدفع عند الاستلام', 'default currency': 'العملة الافتراضية',
     'country-based payments': 'مدفوعات حسب الدولة', 'global payment defaults. country-specific payment methods are set per country.': 'الإعدادات الافتراضية للدفع. طرق الدفع الخاصة بكل دولة تُضبط داخل الدولة نفسها.',
     'manage which payment methods are available in each country, and the currency used there.': 'إدارة طرق الدفع المتاحة في كل دولة والعملة المستخدمة فيها.',
+    'role not found': 'الدور غير موجود',
+    'role name already exists': 'اسم الدور مستخدم بالفعل',
+    'not authorized': 'غير مصرح لك',
+    unauthorized: 'غير مصرح لك',
+    'authentication required': 'يلزم تسجيل الدخول',
+    'insufficient permissions': 'ليس لديك الصلاحيات الكافية',
+    'not allowed': 'غير مسموح',
+    'resource not found': 'العنصر غير موجود',
+    'server error': 'حدث خطأ في الخادم',
+    'invalid or expired refresh token': 'رمز تحديث الجلسة غير صالح أو منتهي الصلاحية',
+    'refresh token not found': 'رمز تحديث الجلسة غير موجود',
+    'refresh token expired': 'انتهت صلاحية رمز تحديث الجلسة',
+    'refreshtoken is required': 'رمز تحديث الجلسة مطلوب',
+    'invalid token purpose': 'استخدام الرمز غير صالح',
+    'invalid or expired token': 'الرمز غير صالح أو منتهي الصلاحية',
+    'invalid verification code': 'رمز التحقق غير صالح',
+    'no verification code found. please request a new one.': 'لم يتم العثور على رمز تحقق. يرجى طلب رمز جديد.',
+    'verification code expired. please request a new one.': 'انتهت صلاحية رمز التحقق. يرجى طلب رمز جديد.',
+    'userid and code are required': 'معرّف المستخدم ورمز التحقق مطلوبان',
+    'email is required': 'البريد الإلكتروني مطلوب',
+    'user not found': 'المستخدم غير موجود',
+    'user is not found': 'المستخدم غير موجود',
+    'invalid user id': 'معرّف المستخدم غير صالح',
+    'password is wrong': 'كلمة المرور غير صحيحة',
+    'wasnt created': 'تعذر إنشاء العنصر',
+    'ids array is required': 'قائمة المعرّفات مطلوبة',
+    'invalid product id': 'معرّف المنتج غير صالح',
+    'product not found': 'المنتج غير موجود',
+    'invalid category': 'التصنيف غير صالح',
+    'invalid product!': 'المنتج غير صالح',
+    'category not found': 'التصنيف غير موجود',
+    'orderitems are required': 'منتجات الطلب مطلوبة',
+    'shippingaddress with city and country is required': 'عنوان الشحن والمدينة والدولة مطلوبة',
+    'shippingaddress street and phone are required': 'الشارع ورقم الهاتف مطلوبان لعنوان الشحن',
+    'sessionid is required': 'معرّف الجلسة مطلوب',
+    'payment not completed': 'لم تكتمل عملية الدفع',
+    'order not found': 'الطلب غير موجود',
+    'order is not found': 'الطلب غير موجود',
+    'not allowed to cancel this order': 'غير مسموح بإلغاء هذا الطلب',
+    'order cannot be cancelled in its current state': 'لا يمكن إلغاء الطلب في حالته الحالية',
+    'refund failed, try again': 'فشل الاسترداد، يرجى المحاولة مرة أخرى',
+    'invalid order status': 'حالة الطلب غير صالحة',
+    'only verified purchases can review this product': 'يمكن للمشترين الذين تم التحقق منهم فقط تقييم هذا المنتج',
+    'review not found': 'التقييم غير موجود',
+    'not allowed to delete this review': 'غير مسموح بحذف هذا التقييم',
+    'coupon not found': 'الكوبون غير موجود',
+    'code is required': 'الرمز مطلوب',
+    'page not found': 'الصفحة غير موجودة',
+    'name is required': 'الاسم مطلوب',
+    'a valid email is required': 'يرجى إدخال بريد إلكتروني صالح',
+    'message is required': 'الرسالة مطلوبة',
+    'input is too long': 'النص المدخل أطول من المسموح',
+    'no images uploaded': 'لم يتم رفع أي صور',
+    'no image uploaded': 'لم يتم رفع صورة',
+    'no videos uploaded': 'لم يتم رفع أي مقاطع فيديو',
+    'no video uploaded': 'لم يتم رفع مقطع فيديو',
+    'product already in wishlist': 'المنتج موجود بالفعل في قائمة الأمنيات',
+    'product not in wishlist': 'المنتج غير موجود في قائمة الأمنيات',
+    'address not found': 'العنوان غير موجود',
+    'you do not have permission to perform this action.': 'ليس لديك صلاحية لتنفيذ هذا الإجراء.',
     'You are offline. Check your connection and try again.': 'أنت غير متصل بالإنترنت. تحقق من اتصالك وحاول مرة أخرى.',
     'The server is temporarily unreachable. Please try again.': 'الخادم غير متاح مؤقتًا. يرجى المحاولة مرة أخرى.',
     'You are offline. Some features will not work until you reconnect.': 'أنت غير متصل بالإنترنت. بعض الميزات لن تعمل حتى تعيد الاتصال.',
@@ -369,7 +438,21 @@ export class LanguageService {
 
   translate(value: string): string {
     const key = value.trim().toLowerCase();
-    return translations[this.language()][key] || value;
+    const translation = translations[this.language()][key];
+    if (translation) return translation;
+
+    if (this.language() === 'ar') {
+      const productNotFound = value.trim().match(/^product not found:\s*(.+)$/i);
+      if (productNotFound) return `المنتج غير موجود: ${productNotFound[1]}`;
+
+      const insufficientStock = value.trim().match(/^insufficient stock for\s+(.+)$/i);
+      if (insufficientStock) return `المخزون غير كافٍ للمنتج: ${insufficientStock[1]}`;
+
+      const orderStatusChange = value.trim().match(/^cannot change order from\s+(.+)\s+to\s+(.+)$/i);
+      if (orderStatusChange) return `لا يمكن تغيير حالة الطلب من ${orderStatusChange[1]} إلى ${orderStatusChange[2]}`;
+    }
+
+    return value;
   }
 
   localizedValue(obj: any): string {
